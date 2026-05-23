@@ -3,780 +3,1644 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nattiva Locker — Portafolio de Departamentos</title>
+<title>Nattiva — Portafolio Inmobiliario Surquillo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ===========================================================
+   BASE & VARIABLES
+=========================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #FFFFFF;
+  --off: #F7F5F1;
+  --off2: #F0ECE4;
+  --off3: #E6E0D4;
+  --ink: #16140F;
+  --ink2: #2A2720;
+  --ink3: #3E3A30;
+  --muted: #7A7568;
+  --muted2: #B0AA9E;
+  --muted3: #D4CEBC;
+  --gold: #9A7B2F;
+  --gold2: #C4A04A;
+  --gold3: #D4B86A;
+  --gold-bg: rgba(154, 123, 47, 0.08);
+  --gold-border: rgba(154, 123, 47, 0.18);
+  --red: #8B3A2A;
+  --green: #2A6B3A;
+  --blue: #1A3D6B;
 
-  :root {
-    --gold: #B8975A;
-    --gold-light: #D4B278;
-    --gold-pale: #F5EDD8;
-    --ink: #1A1814;
-    --ink-2: #3D3830;
-    --ink-3: #6B6357;
-    --paper: #FAF8F4;
-    --paper-2: #F2EFE8;
-    --white: #FFFFFF;
-    --border: rgba(184,151,90,0.2);
-    --border-strong: rgba(184,151,90,0.45);
-    --shadow: 0 2px 24px rgba(26,24,20,0.08);
-    --shadow-lg: 0 8px 48px rgba(26,24,20,0.14);
-    --radius: 3px;
-    --radius-lg: 6px;
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
-    --transition: 0.18s cubic-bezier(0.4,0,0.2,1);
-  }
+  --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-sans: 'Outfit', system-ui, sans-serif;
 
-  html { scroll-behavior: smooth; }
-  body { font-family: var(--font-body); background: var(--paper); color: var(--ink); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  --radius: 2px;
+  --radius-md: 6px;
+  --radius-lg: 12px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 0.22s;
+  --shadow-xs: 0 1px 2px rgba(22,20,15,0.06);
+  --shadow-sm: 0 2px 8px rgba(22,20,15,0.08);
+  --shadow-md: 0 8px 32px rgba(22,20,15,0.12);
+  --shadow-lg: 0 24px 64px rgba(22,20,15,0.16);
+}
 
-  /* HEADER */
-  header {
-    background: var(--ink);
-    padding: 0 2rem;
-    position: sticky; top: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 64px;
-    border-bottom: 1px solid rgba(184,151,90,0.3);
-  }
-  .logo { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; color: var(--gold-light); letter-spacing: 0.06em; text-decoration: none; }
-  .logo span { color: rgba(255,255,255,0.4); font-weight: 300; margin: 0 0.4em; }
-  .header-meta { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; }
-  .count-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(184,151,90,0.15); border: 1px solid rgba(184,151,90,0.3); color: var(--gold-light); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
 
-  /* HERO */
-  .hero {
-    background: var(--ink);
-    padding: 3rem 2rem 2.5rem;
-    border-bottom: 1px solid rgba(184,151,90,0.2);
-  }
-  .hero-inner { max-width: 1200px; margin: 0 auto; }
-  .hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 400; color: var(--white); line-height: 1.1; margin-bottom: 0.4rem; }
-  .hero h1 em { color: var(--gold-light); font-style: normal; }
-  .hero p { color: rgba(255,255,255,0.45); font-size: 14px; font-weight: 300; letter-spacing: 0.04em; }
-  .hero-divider { width: 48px; height: 1px; background: var(--gold); margin: 1rem 0; opacity: 0.6; }
+/* ===========================================================
+   CURSOR — PIN INMOBILIARIO
+=========================================================== */
+* { cursor: none !important; }
+#pin-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -100%);
+  transition: opacity .15s;
+  will-change: transform;
+}
+.pin-svg { transition: transform .2s var(--ease); }
+body:has(.card:hover) .pin-svg,
+body:has(.prop-row:hover) .pin-svg,
+body:has(button:hover) .pin-svg { transform: scale(1.25) translateY(-2px); }
+#pin-ring {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(154,123,47,0.35);
+  transition: all .35s var(--ease);
+}
+body:has(.card:hover) #pin-ring,
+body:has(.prop-row:hover) #pin-ring { width: 64px; height: 64px; border-color: rgba(154,123,47,0.2); }
 
-  /* STATS BAR */
-  .stats-bar { background: var(--paper-2); border-bottom: 1px solid var(--border); padding: 0.75rem 2rem; }
-  .stats-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 2.5rem; flex-wrap: wrap; align-items: center; }
-  .stat { display: flex; flex-direction: column; }
-  .stat-val { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--ink); line-height: 1; }
-  .stat-lbl { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
-  .stat-sep { width: 1px; height: 32px; background: var(--border-strong); }
+/* ===========================================================
+   SCROLL BAR
+=========================================================== */
+#scroll-bar {
+  position: fixed; top: 0; left: 0; z-index: 1000;
+  height: 3px; width: 0;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold3) 100%);
+  transition: width .08s linear;
+}
 
-  /* LAYOUT */
-  .layout { max-width: 1200px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
+/* ===========================================================
+   TOP BAR
+=========================================================== */
+.topbar {
+  background: var(--ink);
+  color: var(--muted2);
+  padding: 0.55rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  position: sticky;
+  top: 0;
+  z-index: 300;
+}
+.topbar-left { display: flex; align-items: center; gap: 1.5rem; }
+.topbar-item { display: flex; align-items: center; gap: 6px; }
+.topbar-item svg { opacity: .5; }
+.topbar-right { display: flex; align-items: center; gap: 1.5rem; }
+.live-chip {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold3);
+  padding: 3px 10px;
+  border: 1px solid rgba(212,184,106,0.25);
+  border-radius: 20px;
+}
+.live-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold3);
+  animation: livepulse 2s ease-in-out infinite;
+}
+@keyframes livepulse {
+  0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(212,184,106,0.4); }
+  50% { opacity:.5; box-shadow: 0 0 0 5px rgba(212,184,106,0); }
+}
 
-  /* FILTERS */
-  .filters { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; position: sticky; top: 80px; }
-  .filter-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--ink); letter-spacing: 0.04em; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: space-between; }
-  .filter-title button { font-size: 11px; font-family: var(--font-body); color: var(--gold); background: none; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; padding: 0; transition: color var(--transition); }
-  .filter-title button:hover { color: var(--gold-light); }
-  .filter-section { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
-  .filter-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-  .filter-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); margin-bottom: 0.6rem; }
-  .filter-group { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip { display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 20px; border: 1px solid var(--border-strong); background: transparent; color: var(--ink-2); font-size: 12px; font-family: var(--font-body); cursor: pointer; transition: all var(--transition); font-weight: 400; }
-  .chip:hover { border-color: var(--gold); color: var(--gold); }
-  .chip.active { background: var(--gold); border-color: var(--gold); color: var(--white); font-weight: 500; }
-  .range-row { display: flex; gap: 8px; align-items: center; }
-  .range-input { flex: 1; padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius); font-size: 13px; font-family: var(--font-body); color: var(--ink); background: var(--paper); outline: none; transition: border-color var(--transition); }
-  .range-input:focus { border-color: var(--gold); }
-  .range-sep { color: var(--ink-3); font-size: 12px; }
-  select.filter-select { width: 100%; padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius); font-size: 13px; font-family: var(--font-body); color: var(--ink); background: var(--paper); outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6357' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
-  select.filter-select:focus { border-color: var(--gold); }
+/* ===========================================================
+   HEADER
+=========================================================== */
+header {
+  background: var(--white);
+  border-bottom: 1px solid var(--off3);
+  padding: 0 3rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 35px;
+  z-index: 200;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 3rem; right: 3rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold2), transparent);
+  opacity: 0.4;
+}
+.logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+.logo-emblem {
+  width: 40px; height: 40px;
+  border: 1.5px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+.logo-emblem::before, .logo-emblem::after {
+  content: '';
+  position: absolute;
+  background: var(--gold);
+  opacity: 0.3;
+}
+.logo-emblem::before { width: 1px; height: 100%; }
+.logo-emblem::after  { width: 100%; height: 1px; }
+.logo-emblem-n {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--gold);
+  position: relative; z-index: 1;
+}
+.logo-info {}
+.logo-brand {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.logo-sub {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.hdr-nav { display: flex; align-items: center; gap: 4px; }
+.nav-btn {
+  padding: 7px 16px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  transition: all var(--dur);
+}
+.nav-btn:hover { color: var(--ink); background: var(--off); }
+.nav-btn.active { color: var(--ink); background: var(--off); }
+.hdr-right { display: flex; align-items: center; gap: 10px; }
+.btn-primary {
+  padding: 8px 20px;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--radius);
+  transition: all var(--dur) var(--ease);
+}
+.btn-primary:hover { background: var(--gold); box-shadow: 0 6px 20px rgba(154,123,47,0.3); }
 
-  /* MAIN */
-  .main-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; }
-  .results-label { font-size: 13px; color: var(--ink-3); }
-  .results-label strong { color: var(--ink); font-weight: 500; }
-  .view-toggle { display: flex; border: 1px solid var(--border-strong); border-radius: var(--radius); overflow: hidden; }
-  .view-btn { padding: 6px 12px; background: none; border: none; cursor: pointer; color: var(--ink-3); font-size: 13px; font-family: var(--font-body); transition: all var(--transition); display: flex; align-items: center; gap: 5px; }
-  .view-btn.active { background: var(--gold); color: var(--white); }
-  .view-btn:not(.active):hover { background: var(--paper-2); }
-  .sort-row { display: flex; align-items: center; gap: 8px; }
-  .sort-row label { font-size: 12px; color: var(--ink-3); white-space: nowrap; }
-  .sort-select { padding: 5px 28px 5px 9px; border: 1px solid var(--border-strong); border-radius: var(--radius); font-size: 12px; font-family: var(--font-body); color: var(--ink); background: var(--paper); outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6357' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
-  .sort-select:focus { border-color: var(--gold); }
+/* ===========================================================
+   HERO — SPLIT LAYOUT
+=========================================================== */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 460px;
+  border-bottom: 1px solid var(--off3);
+}
+.hero-left {
+  background: var(--ink);
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(90deg,transparent 0,transparent 59px,rgba(154,123,47,0.04) 60px),
+    repeating-linear-gradient(0deg,transparent 0,transparent 59px,rgba(154,123,47,0.03) 60px);
+}
+.hero-left::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; right: -80px;
+  width: 320px; height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(154,123,47,0.09) 0%, transparent 70%);
+}
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold3);
+  margin-bottom: 1.25rem;
+  position: relative; z-index: 1;
+}
+.hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold3); opacity: .7; }
+.hero-h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 1.25rem;
+  position: relative; z-index: 1;
+  max-width: 460px;
+}
+.hero-h1 em { color: var(--gold3); font-style: italic; }
+.hero-desc {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  max-width: 380px;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  position: relative; z-index: 1;
+}
+.hero-divider { width: 40px; height: 1px; background: linear-gradient(90deg,var(--gold),transparent); margin: 1.5rem 0; position: relative; z-index: 1; }
 
-  /* GRID */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
-  .list { display: flex; flex-direction: column; gap: 0.75rem; }
+.hero-right {
+  background: var(--off);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.kpi-cell {
+  padding: 2.5rem 2rem;
+  border-right: 1px solid var(--off3);
+  border-bottom: 1px solid var(--off3);
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: background var(--dur);
+}
+.kpi-cell:nth-child(even) { border-right: none; }
+.kpi-cell:nth-child(3), .kpi-cell:nth-child(4) { border-bottom: none; }
+.kpi-cell:hover { background: var(--white); }
+.kpi-cell::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity var(--dur);
+}
+.kpi-cell:hover::after { opacity: 1; }
+.kpi-label {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+.kpi-value {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1;
+  margin-top: auto;
+}
+.kpi-value.gold { color: var(--gold); }
+.kpi-sub {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.kpi-trend {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-sans); font-size: 10px; font-weight: 600;
+  padding: 2px 7px; border-radius: 2px; margin-top: 6px;
+}
+.kpi-trend.up { background: rgba(42,107,58,0.1); color: var(--green); }
+.kpi-trend.gold { background: var(--gold-bg); color: var(--gold); }
 
-  /* CARD */
-  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition); cursor: pointer; }
-  .card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-  .card-badge-row { display: flex; gap: 6px; padding: 1rem 1.1rem 0; flex-wrap: wrap; }
-  .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; }
-  .badge-proyecto { background: var(--gold-pale); color: #7A5C1E; border: 1px solid rgba(184,151,90,0.3); }
-  .badge-entrega { background: #EDF7F0; color: #1A6B38; border: 1px solid rgba(40,160,80,0.2); font-size: 10px; }
-  .badge-entrega.urgent { background: #FFF3E0; color: #C55A00; border-color: rgba(197,90,0,0.2); }
-  .badge-vista { background: var(--paper-2); color: var(--ink-3); border: 1px solid var(--border); font-size: 10px; }
-  .card-body { padding: 0.8rem 1.1rem 1rem; }
-  .card-project { font-size: 11px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); margin-bottom: 2px; }
-  .card-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 500; color: var(--ink); line-height: 1.2; margin-bottom: 0.6rem; }
-  .card-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
-  .meta-item { display: flex; flex-direction: column; }
-  .meta-val { font-size: 13px; font-weight: 500; color: var(--ink); }
-  .meta-lbl { font-size: 11px; color: var(--ink-3); }
-  .card-price-row { display: flex; align-items: baseline; justify-content: space-between; padding-top: 0.75rem; border-top: 1px solid var(--border); }
-  .card-price { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; color: var(--ink); }
-  .card-cuota { font-size: 12px; color: var(--ink-3); text-align: right; }
-  .card-cuota strong { display: block; font-size: 13px; color: var(--gold); font-weight: 500; }
-  .card-banco { display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); background: var(--paper-2); border: 1px solid var(--border); padding: 2px 7px; border-radius: 3px; margin-top: 4px; }
+/* ===========================================================
+   FILTER STRIP
+=========================================================== */
+.filter-strip {
+  background: var(--white);
+  border-bottom: 1px solid var(--off3);
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  position: sticky;
+  top: 107px;
+  z-index: 150;
+  box-shadow: var(--shadow-xs);
+}
+.fs-group {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0.75rem 1.5rem;
+  border-right: 1px solid var(--off3);
+  flex-shrink: 0;
+}
+.fs-group:last-child { border-right: none; margin-left: auto; }
+.fs-label {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  white-space: nowrap;
+}
+.fs-chips { display: flex; gap: 4px; }
+.fchip {
+  padding: 4px 11px;
+  border: 1px solid var(--off3);
+  border-radius: var(--radius);
+  background: var(--off);
+  color: var(--muted);
+  font-family: var(--font-sans); font-size: 11.5px; font-weight: 500;
+  white-space: nowrap;
+  transition: all var(--dur) var(--ease);
+}
+.fchip:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-bg); }
+.fchip.active { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.fs-price-wrap { display: flex; align-items: center; gap: 6px; }
+.fs-input {
+  width: 115px; padding: 5px 9px;
+  border: 1px solid var(--off3);
+  border-radius: var(--radius);
+  background: var(--off);
+  font-family: var(--font-sans); font-size: 11.5px; color: var(--ink);
+  outline: none;
+  transition: border-color var(--dur);
+}
+.fs-input:focus { border-color: var(--gold); background: var(--white); }
+.fs-input::placeholder { color: var(--muted3); }
+.fs-sep { color: var(--muted3); font-size: 12px; }
+.fs-sort {
+  padding: 5px 22px 5px 9px;
+  border: 1px solid var(--off3);
+  border-radius: var(--radius);
+  background: var(--off);
+  font-family: var(--font-sans); font-size: 11.5px; color: var(--ink);
+  outline: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23B0AA9E' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 7px center;
+  transition: border-color var(--dur);
+}
+.fs-sort:focus, .fs-sort:hover { border-color: var(--gold); }
+.fs-sort option { background: var(--white); }
+.view-tog {
+  display: flex; border: 1px solid var(--off3); border-radius: var(--radius); overflow: hidden;
+}
+.vbtn {
+  padding: 5px 12px; background: none; border: none;
+  color: var(--muted2); font-family: var(--font-sans); font-size: 11.5px;
+  display: flex; align-items: center; gap: 4px;
+  transition: all var(--dur);
+}
+.vbtn.active { background: var(--ink); color: var(--white); }
+.vbtn:hover:not(.active) { background: var(--off); color: var(--ink); }
+.fs-reset {
+  padding: 5px 14px;
+  border: 1px solid var(--off3);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--muted);
+  font-family: var(--font-sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.05em;
+  transition: all var(--dur);
+}
+.fs-reset:hover { border-color: var(--gold); color: var(--gold); }
 
-  /* LIST ROW */
-  .list-row { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 0.85rem 1.25rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.4fr; gap: 1rem; align-items: center; transition: all var(--transition); cursor: pointer; }
-  .list-row:hover { border-color: var(--gold); box-shadow: var(--shadow); }
-  .list-row-header { background: transparent; border: none; border-bottom: 2px solid var(--border-strong); padding: 0.4rem 1.25rem 0.6rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.4fr; gap: 1rem; }
-  .list-col-h { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); font-weight: 500; }
-  .list-name { font-family: var(--font-display); font-size: 1.05rem; font-weight: 500; color: var(--ink); line-height: 1.2; }
-  .list-sub { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
-  .list-val { font-size: 13px; font-weight: 500; color: var(--ink); }
-  .list-val-sm { font-size: 12px; color: var(--ink-2); }
-  .list-price { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; color: var(--ink); }
-  .list-cuota { font-size: 12px; color: var(--gold); font-weight: 500; display: block; }
+/* ===========================================================
+   ACTIVE TAGS
+=========================================================== */
+#active-tags {
+  min-height: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s var(--ease);
+  background: var(--off);
+  border-bottom: 1px solid var(--off3);
+}
+#active-tags.has-tags {
+  max-height: 60px;
+  padding: 0.55rem 3rem;
+  display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+}
+.atag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--ink); color: var(--white);
+  padding: 3px 10px;
+  border-radius: var(--radius);
+  font-family: var(--font-sans); font-size: 10px; font-weight: 500; letter-spacing: 0.04em;
+}
+.atag button { background: none; border: none; color: rgba(255,255,255,.5); font-size: 14px; line-height: 1; padding: 0 0 0 3px; transition: color var(--dur); }
+.atag button:hover { color: var(--gold3); }
 
-  /* EMPTY */
-  .empty { text-align: center; padding: 4rem 2rem; color: var(--ink-3); }
-  .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; }
-  .empty h3 { font-family: var(--font-display); font-size: 1.4rem; color: var(--ink-2); margin-bottom: 0.4rem; }
-  .empty p { font-size: 13px; }
+/* ===========================================================
+   MAIN LAYOUT
+=========================================================== */
+.app-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 35px - 72px - 50px - 40px);
+}
 
-  /* MODAL */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(26,24,20,0.7); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; pointer-events: none; transition: opacity var(--transition); }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal { background: var(--white); border-radius: var(--radius-lg); max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); transform: translateY(12px) scale(0.98); transition: transform 0.22s cubic-bezier(0.4,0,0.2,1); }
-  .modal-overlay.open .modal { transform: none; }
-  .modal-header { background: var(--ink); padding: 1.5rem; position: relative; }
-  .modal-header h2 { font-family: var(--font-display); font-size: 1.8rem; font-weight: 400; color: var(--white); line-height: 1.15; }
-  .modal-header p { font-size: 12px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.09em; margin-top: 4px; }
-  .modal-close { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.1); border: none; color: var(--white); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background var(--transition); }
-  .modal-close:hover { background: rgba(255,255,255,0.2); }
-  .modal-divider { height: 3px; background: linear-gradient(90deg, var(--gold), transparent); }
-  .modal-body { padding: 1.5rem; }
-  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
-  .modal-field { }
-  .modal-field-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-3); margin-bottom: 3px; }
-  .modal-field-val { font-size: 14px; font-weight: 500; color: var(--ink); }
-  .modal-price-block { background: var(--ink); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; }
-  .modal-price-block .price { font-family: var(--font-display); font-size: 2.2rem; font-weight: 500; color: var(--white); }
-  .modal-price-block .cuota-info { text-align: right; }
-  .modal-price-block .cuota-info p { font-size: 12px; color: rgba(255,255,255,0.4); }
-  .modal-price-block .cuota-info strong { font-size: 1.2rem; color: var(--gold-light); font-family: var(--font-display); display: block; }
-  .badge-restriccion { display: inline-flex; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
-  .badge-restriccion.si { background: #FFF0F0; color: #C0392B; border: 1px solid rgba(192,57,43,0.2); }
-  .badge-restriccion.no { background: #EDF7F0; color: #1A6B38; border: 1px solid rgba(26,107,56,0.2); }
-  .modal-cta { width: 100%; padding: 14px; background: var(--gold); color: var(--white); border: none; border-radius: var(--radius); font-size: 13px; font-family: var(--font-body); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: all var(--transition); }
-  .modal-cta:hover { background: var(--gold-light); }
+/* ===========================================================
+   SIDEBAR
+=========================================================== */
+.sidebar {
+  border-right: 1px solid var(--off3);
+  background: var(--off);
+  position: sticky;
+  top: 157px;
+  height: calc(100vh - 157px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--off3) transparent;
+}
+.sb-module {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--off3);
+}
+.sb-module:last-child { border-bottom: none; }
+.sb-module-title {
+  font-family: var(--font-sans);
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 0.9rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.sb-module-title::after { content: ''; flex: 1; height: 1px; background: var(--off3); }
+/* Stats dashboard */
+.sb-kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.sb-kpi {
+  background: var(--white);
+  border: 1px solid var(--off3);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+}
+.sb-kpi-val {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+}
+.sb-kpi-val.g { color: var(--gold); }
+.sb-kpi-key {
+  font-family: var(--font-sans);
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted2);
+  margin-top: 4px;
+}
+.sb-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip {
+  padding: 3.5px 10px;
+  border: 1px solid var(--off3);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--muted);
+  font-family: var(--font-sans); font-size: 11.5px; font-weight: 500;
+  transition: all var(--dur) var(--ease);
+}
+.chip:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-bg); }
+.chip.active { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.sb-range { display: flex; gap: 5px; align-items: center; }
+.range-in {
+  flex: 1; padding: 6px 8px;
+  border: 1px solid var(--off3); border-radius: var(--radius);
+  background: var(--white);
+  font-family: var(--font-sans); font-size: 11px; color: var(--ink);
+  outline: none; transition: border-color var(--dur);
+}
+.range-in:focus { border-color: var(--gold); }
+.range-in::placeholder { color: var(--muted3); }
+.range-sep { color: var(--muted3); font-size: 11px; }
+.sb-select {
+  width: 100%; padding: 6px 24px 6px 8px;
+  border: 1px solid var(--off3); border-radius: var(--radius);
+  background: var(--white);
+  font-family: var(--font-sans); font-size: 12px; color: var(--ink);
+  outline: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23B0AA9E' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+  transition: border-color var(--dur);
+}
+.sb-select:focus { border-color: var(--gold); }
+.sb-select option { background: var(--white); }
+.btn-reset {
+  width: 100%; margin-top: 1rem; padding: 8px;
+  border: 1px solid var(--off3); border-radius: var(--radius);
+  background: var(--white); color: var(--muted);
+  font-family: var(--font-sans); font-size: 11.5px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: all var(--dur);
+}
+.btn-reset:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
 
-  /* TAG ACTIVOS */
-  .active-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
-  .filter-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--gold-pale); border: 1px solid rgba(184,151,90,0.35); color: #7A5C1E; padding: 3px 9px 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
-  .filter-tag button { background: none; border: none; color: #9B7A34; cursor: pointer; font-size: 14px; line-height: 1; padding: 0 0 0 2px; display: flex; align-items: center; }
+/* ===========================================================
+   CONTENT
+=========================================================== */
+.content {
+  background: var(--white);
+  overflow: hidden;
+}
+.content-bar {
+  padding: 0.85rem 2rem;
+  border-bottom: 1px solid var(--off3);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--white);
+  position: sticky;
+  top: 157px;
+  z-index: 100;
+}
+.content-bar-info {
+  font-family: var(--font-sans);
+  font-size: 12px; color: var(--muted);
+}
+.content-bar-info strong { color: var(--ink); font-weight: 600; }
 
-  /* RESPONSIVE */
-  @media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; }
-    .filters { position: static; }
-    .list-row { grid-template-columns: 1fr 1fr; }
-    .list-row-header { display: none; }
-  }
-  @media (max-width: 600px) {
-    .layout { padding: 1rem; }
-    .hero { padding: 2rem 1rem 1.5rem; }
-    header { padding: 0 1rem; }
-    .stats-bar { padding: 0.75rem 1rem; }
-    .stats-inner { gap: 1.5rem; }
-    .grid { grid-template-columns: 1fr; }
-  }
+/* ===========================================================
+   CARDS GRID
+=========================================================== */
+.cards-wrap { padding: 1.75rem 2rem; }
+@keyframes cardin {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(318px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ---- CARD ---- */
+.card {
+  background: var(--white);
+  border: 1px solid var(--off3);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  animation: cardin .4s var(--ease) both;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur), border-color var(--dur);
+  box-shadow: var(--shadow-xs);
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--gold-border);
+}
+/* Project color indicator */
+.card-indicator {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; z-index: 2;
+}
+.acc-germania   .card-indicator { background: linear-gradient(90deg,#6B4C10,#C4A04A); }
+.acc-torre      .card-indicator { background: linear-gradient(90deg,#0D4A2C,#2AA876); }
+.acc-element    .card-indicator { background: linear-gradient(90deg,#0D2E50,#2E7EC4); }
+.acc-nitoa      .card-indicator { background: linear-gradient(90deg,#4A0D30,#C42E8A); }
+.acc-distrito   .card-indicator { background: linear-gradient(90deg,#4A2A0D,#C47A2E); }
+.acc-aramb      .card-indicator { background: linear-gradient(90deg,#2A0D4A,#6A2EC4); }
+.acc-aura       .card-indicator { background: linear-gradient(90deg,#0D2A4A,#2E5EC4); }
+.acc-oasis      .card-indicator { background: linear-gradient(90deg,#0D3A1A,#2EC45A); }
+
+/* Map area */
+.card-map-area {
+  height: 150px;
+  background: var(--off2);
+  position: relative;
+  border-bottom: 1px solid var(--off3);
+}
+.card-map-area > div:first-child { height: 100%; }
+.map-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(247,245,241,0.6) 100%);
+  pointer-events: none; z-index: 1;
+}
+.map-addr-tag {
+  position: absolute; bottom: 8px; left: 8px; z-index: 2;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--off3);
+  border-radius: var(--radius);
+  padding: 3px 9px;
+  font-family: var(--font-sans); font-size: 9.5px; font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  display: flex; align-items: center; gap: 4px;
+}
+.card-fav {
+  position: absolute; top: 10px; right: 10px; z-index: 3;
+  width: 30px; height: 30px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid var(--off3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  user-select: none;
+  transition: all var(--dur);
+  box-shadow: var(--shadow-xs);
+}
+.card-fav:hover { border-color: var(--gold); box-shadow: var(--shadow-sm); }
+
+/* Card body */
+.card-body { padding: 1.1rem 1.2rem 1.1rem; }
+.card-header-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+.card-project {
+  font-family: var(--font-sans);
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold);
+}
+.card-dev {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  color: var(--muted2);
+  letter-spacing: 0.04em;
+}
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 2px;
+}
+.card-unit {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.03em;
+}
+.tags-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.tag {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2.5px 8px;
+  border-radius: var(--radius);
+  font-family: var(--font-sans); font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.t-green  { background: rgba(42,107,58,0.08); color: #1F6434; border: 1px solid rgba(42,107,58,0.18); }
+.t-amber  { background: rgba(180,120,20,0.08); color: #8B6010; border: 1px solid rgba(180,120,20,0.2); }
+.t-stone  { background: var(--off); color: var(--muted); border: 1px solid var(--off3); }
+.t-blue   { background: rgba(26,61,107,0.07); color: #1A3D6B; border: 1px solid rgba(26,61,107,0.16); }
+.t-red    { background: rgba(139,58,42,0.08); color: #7A2A1A; border: 1px solid rgba(139,58,42,0.18); }
+
+/* Specs mini-grid */
+.specs-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--off3);
+  border: 1px solid var(--off3);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 0.85rem;
+}
+.spec-cell {
+  background: var(--off);
+  padding: 7px 6px;
+  text-align: center;
+  transition: background var(--dur);
+}
+.card:hover .spec-cell { background: var(--off2); }
+.spec-val {
+  display: block;
+  font-family: var(--font-serif); font-size: 1.1rem; font-weight: 400;
+  color: var(--ink); line-height: 1;
+}
+.spec-key {
+  display: block;
+  font-family: var(--font-sans); font-size: 8.5px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted2); margin-top: 2px;
+}
+
+/* Price footer */
+.card-footer {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--off3);
+}
+.price-block {}
+.price-main {
+  font-family: var(--font-serif);
+  font-size: 1.6rem; font-weight: 600;
+  color: var(--ink); line-height: 1;
+}
+.price-usd {
+  font-family: var(--font-sans);
+  font-size: 10px; color: var(--muted2); margin-top: 2px;
+}
+.price-right { text-align: right; }
+.price-cuota {
+  font-family: var(--font-serif); font-size: 1.05rem;
+  color: var(--gold);
+}
+.price-bank {
+  font-family: var(--font-sans);
+  font-size: 9.5px; color: var(--muted2);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-top: 2px;
+}
+.card-cta {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 0.85rem;
+  padding: 9px 14px;
+  background: var(--off);
+  border: 1px solid var(--off3);
+  border-radius: var(--radius);
+  font-family: var(--font-sans); font-size: 11.5px; font-weight: 600;
+  color: var(--ink); letter-spacing: 0.05em; text-transform: uppercase;
+  width: 100%; justify-content: center;
+  transition: all var(--dur) var(--ease);
+}
+.card-cta:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.card-cta-arrow { transition: transform var(--dur) var(--ease); }
+.card-cta:hover .card-cta-arrow { transform: translateX(3px); }
+
+/* ===========================================================
+   LIST VIEW
+=========================================================== */
+.list-view { display: flex; flex-direction: column; }
+.list-header {
+  display: grid;
+  grid-template-columns: 2.3fr 1fr 1.1fr 0.9fr 1fr 1.2fr 36px;
+  gap: 1rem; padding: 0.65rem 1.5rem;
+  background: var(--off); border-bottom: 2px solid var(--off3);
+  position: sticky; top: 0; z-index: 5;
+}
+.lhd {
+  font-family: var(--font-sans); font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted2);
+}
+@keyframes rowin { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
+.prop-row {
+  display: grid;
+  grid-template-columns: 2.3fr 1fr 1.1fr 0.9fr 1fr 1.2fr 36px;
+  gap: 1rem; padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--off3);
+  background: var(--white);
+  align-items: center;
+  animation: rowin .28s var(--ease) both;
+  transition: background var(--dur), transform var(--dur) var(--ease);
+  position: relative;
+}
+.prop-row::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: transparent; transition: background var(--dur);
+}
+.prop-row:hover { background: var(--off); transform: translateX(3px); }
+.prop-row:hover::before { background: var(--gold); }
+.prop-name {
+  font-family: var(--font-serif); font-size: 1.05rem; color: var(--ink); line-height: 1.2;
+}
+.prop-sub { font-family: var(--font-sans); font-size: 10px; color: var(--muted); margin-top: 2px; }
+.lv { font-family: var(--font-sans); font-size: 12.5px; color: var(--ink); font-weight: 500; }
+.lv2 { font-family: var(--font-sans); font-size: 10.5px; color: var(--muted2); display: block; margin-top: 1px; }
+.lprice { font-family: var(--font-serif); font-size: 1.1rem; color: var(--ink); font-weight: 400; }
+.lcuota { font-family: var(--font-sans); font-size: 10px; color: var(--gold); display: block; margin-top: 2px; }
+.row-map-btn {
+  width: 30px; height: 30px;
+  border: 1px solid var(--off3); border-radius: var(--radius-md);
+  background: var(--off); display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: all var(--dur);
+}
+.row-map-btn:hover { background: var(--gold-bg); border-color: var(--gold); }
+
+/* ===========================================================
+   EMPTY
+=========================================================== */
+.empty-state {
+  padding: 6rem 2rem; text-align: center;
+}
+.empty-icon { font-size: 2.5rem; margin-bottom: 1.2rem; opacity: .4; }
+.empty-title { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 300; color: var(--muted); margin-bottom: 0.5rem; }
+.empty-desc { font-family: var(--font-sans); font-size: 12px; color: var(--muted2); letter-spacing: 0.04em; }
+
+/* ===========================================================
+   MODAL
+=========================================================== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 600;
+  background: rgba(22,20,15,0.55);
+  backdrop-filter: blur(16px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s var(--ease);
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  max-width: 720px; width: 100%;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 40px 100px rgba(22,20,15,0.3), 0 0 0 1px var(--gold-border);
+  transform: translateY(20px) scale(0.97);
+  transition: transform .35s var(--ease);
+  scrollbar-width: thin; scrollbar-color: var(--off3) transparent;
+}
+.modal-overlay.open .modal { transform: none; }
+
+/* Modal header map */
+.modal-map-zone {
+  height: 240px; position: relative; overflow: hidden;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.modal-map-zone > div { height: 100%; }
+.modal-top-close {
+  position: absolute; top: 1rem; right: 1rem; z-index: 10;
+  width: 34px; height: 34px;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+  border: 1px solid var(--off3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--ink);
+  transition: all var(--dur); box-shadow: var(--shadow-sm);
+}
+.modal-top-close:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.modal-proj-badge {
+  position: absolute; top: 1rem; left: 1rem; z-index: 10;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+  border: 1px solid var(--gold-border);
+  padding: 5px 12px; border-radius: var(--radius);
+  font-family: var(--font-sans); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold);
+}
+/* Modal content */
+.modal-content { padding: 2rem 2.25rem; }
+.modal-eyebrow {
+  font-family: var(--font-sans); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted2); margin-bottom: 0.4rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.modal-eyebrow::before { content:''; width:20px; height:1px; background:var(--gold); }
+.modal-title {
+  font-family: var(--font-serif); font-size: 2.1rem; font-weight: 300;
+  color: var(--ink); line-height: 1.08; margin-bottom: 0.3rem;
+}
+.modal-sub {
+  font-family: var(--font-sans); font-size: 11px;
+  color: var(--muted2); letter-spacing: 0.04em; margin-bottom: 1.5rem;
+}
+/* Price band */
+.modal-price-band {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--off3); border-radius: var(--radius-lg);
+  overflow: hidden; margin-bottom: 1.75rem;
+}
+.mpb-left {
+  padding: 1.25rem 1.5rem; background: var(--ink);
+}
+.mpb-right {
+  padding: 1.25rem 1.5rem; background: var(--gold-bg);
+  border-left: 1px solid var(--gold-border);
+}
+.mpb-label {
+  font-family: var(--font-sans); font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px;
+}
+.mpb-left .mpb-label { color: rgba(255,255,255,.45); }
+.mpb-right .mpb-label { color: var(--gold); }
+.mpb-price {
+  font-family: var(--font-serif); font-size: 2.1rem; font-weight: 300;
+  color: var(--white); line-height: 1;
+}
+.mpb-usd { font-family: var(--font-sans); font-size: 10.5px; color: rgba(255,255,255,.35); margin-top: 4px; }
+.mpb-cuota-val {
+  font-family: var(--font-serif); font-size: 1.5rem; font-weight: 300;
+  color: var(--gold); line-height: 1; margin-top: 4px;
+}
+.mpb-bank { font-family: var(--font-sans); font-size: 10px; color: var(--gold); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+/* Sections */
+.modal-section { margin-bottom: 1.5rem; }
+.modal-section-hd {
+  font-family: var(--font-sans); font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted2); margin-bottom: 0.75rem;
+  padding-bottom: 0.45rem; border-bottom: 1px solid var(--off3);
+}
+.m-specs3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.m-spec {
+  background: var(--off); border: 1px solid var(--off3);
+  border-radius: var(--radius-md); padding: 0.85rem; text-align: center;
+}
+.m-spec-val {
+  font-family: var(--font-serif); font-size: 1.3rem; font-weight: 400;
+  color: var(--ink); display: block;
+}
+.m-spec-key {
+  font-family: var(--font-sans); font-size: 9px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted2); margin-top: 3px; display: block;
+}
+/* Detail grid */
+.m-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.m-detail {
+  background: var(--off); border: 1px solid var(--off3);
+  border-radius: var(--radius-md); padding: 0.65rem 0.85rem;
+  display: flex; flex-direction: column;
+}
+.m-detail-key { font-family: var(--font-sans); font-size: 9.5px; font-weight: 600; letter-spacing:.12em; text-transform:uppercase; color: var(--muted2); margin-bottom: 2px; }
+.m-detail-val { font-family: var(--font-sans); font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.badge { display:inline-flex; padding:2px 9px; border-radius:var(--radius); font-family:var(--font-sans); font-size:10px; font-weight:700; }
+.badge-red { background:rgba(139,58,42,0.09); color:var(--red); border:1px solid rgba(139,58,42,0.2); }
+.badge-green { background:rgba(42,107,58,0.09); color:var(--green); border:1px solid rgba(42,107,58,0.2); }
+/* Inline map section */
+.modal-map-inline {
+  height: 200px; border-radius: var(--radius-lg); overflow: hidden;
+  border: 1px solid var(--off3); position: relative;
+}
+.m-map-tag {
+  position: absolute; bottom: 8px; left: 8px; z-index: 10;
+  background: rgba(255,255,255,.95); backdrop-filter:blur(8px);
+  border: 1px solid var(--off3); padding: 3px 10px;
+  border-radius: var(--radius);
+  font-family: var(--font-sans); font-size: 9.5px; font-weight: 500;
+  color: var(--muted); letter-spacing:.06em;
+}
+.modal-cta {
+  width: 100%; margin-top: 1.5rem; padding: 14px;
+  background: var(--ink); color: var(--white);
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font-sans); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all var(--dur) var(--ease);
+}
+.modal-cta:hover { background: var(--gold); box-shadow: 0 8px 28px rgba(154,123,47,0.35); }
+.modal-cta span { transition: transform var(--dur) var(--ease); }
+.modal-cta:hover span { transform: translateX(4px); }
+
+/* ===========================================================
+   LEAFLET THEME OVERRIDES
+=========================================================== */
+.leaflet-container { font-family: var(--font-sans) !important; background: var(--off2) !important; }
+.leaflet-control-zoom { border: 1px solid var(--off3) !important; border-radius: var(--radius-md) !important; overflow: hidden; }
+.leaflet-control-zoom a { color: var(--ink) !important; border-bottom: 1px solid var(--off3) !important; }
+.leaflet-control-zoom a:hover { background: var(--off) !important; }
+.nattiva-popup .leaflet-popup-content-wrapper {
+  background: var(--white); border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 0;
+}
+.nattiva-popup .leaflet-popup-content { margin: 0; }
+.nattiva-popup .leaflet-popup-tip { background: var(--white); }
+.popup-body { padding: 12px 16px; }
+.popup-proj { font-family:var(--font-sans); font-size:9.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:3px; }
+.popup-name { font-family:var(--font-serif); font-size:1.05rem; color:var(--ink); margin-bottom:4px; }
+.popup-price { font-family:var(--font-serif); font-size:1.1rem; font-weight:500; color:var(--ink); }
+
+/* ===========================================================
+   RESPONSIVE
+=========================================================== */
+@media (max-width: 1100px) { .app-body { grid-template-columns: 250px 1fr; } }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { grid-template-columns: repeat(4,1fr); grid-template-rows: 1fr; }
+  .app-body { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  header, .topbar, .hero-left, .filter-strip .fs-group, .cards-wrap { padding-left: 1.25rem; padding-right: 1.25rem; }
+  * { cursor: auto !important; }
+  #pin-cursor, #pin-ring { display: none; }
+}
+@media (max-width: 640px) {
+  .hero-right { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+  .grid-view { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 
+<!-- CURSOR PIN -->
+<div id="pin-cursor">
+  <svg class="pin-svg" width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 0C6.27 0 0 6.27 0 14C0 24.5 14 36 14 36C14 36 28 24.5 28 14C28 6.27 21.73 0 14 0Z" fill="#16140F"/>
+    <circle cx="14" cy="14" r="5" fill="white" opacity="0.9"/>
+    <path d="M14 0C6.27 0 0 6.27 0 14C0 24.5 14 36 14 36C14 36 28 24.5 28 14C28 6.27 21.73 0 14 0Z" stroke="rgba(154,123,47,0.6)" stroke-width="1"/>
+  </svg>
+</div>
+<div id="pin-ring"></div>
+
+<!-- SCROLL BAR -->
+<div id="scroll-bar"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-item">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1"/><path d="M6 3v3l2 2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      <span>Actualizado hoy</span>
+    </div>
+    <div class="topbar-item">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1L7.5 4.5H11L8.5 6.5L9.5 10L6 8L2.5 10L3.5 6.5L1 4.5H4.5L6 1Z" stroke="currentColor" stroke-width="1" fill="none"/></svg>
+      <span>Portafolio Exclusivo Nattiva · Surquillo, Lima</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-chip">
+      <span class="live-dot"></span>
+      <span id="hcount">—</span> disponibles
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
 <header>
-  <a href="#" class="logo">Nattiva<span>·</span>Locker</a>
-  <div class="count-badge" id="header-count">
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#B8975A" opacity="0.7"/><circle cx="5" cy="5" r="2" fill="#B8975A"/></svg>
-    <span id="header-count-num">—</span> inmuebles disponibles
+  <a href="#" class="logo">
+    <div class="logo-emblem"><span class="logo-emblem-n">N</span></div>
+    <div class="logo-info">
+      <div class="logo-brand">Nattiva</div>
+      <div class="logo-sub">Portafolio Inmobiliario</div>
+    </div>
+  </a>
+  <nav class="hdr-nav">
+    <button class="nav-btn active" onclick="setView('grid')">Vista Grid</button>
+    <button class="nav-btn" onclick="setView('list')">Vista Lista</button>
+  </nav>
+  <div class="hdr-right">
+    <button class="btn-primary">Contactar Asesor →</button>
   </div>
 </header>
 
-<div class="hero">
-  <div class="hero-inner">
-    <h1>Portafolio <em>Exclusivo</em><br>Surquillo, Lima</h1>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Portafolio Curado · Surquillo · Lima · 2025–2028</div>
+    <h1 class="hero-h1">Departamentos de<br><em>primer nivel</em><br>en Surquillo</h1>
     <div class="hero-divider"></div>
-    <p>Departamentos seleccionados · Múltiples proyectos · Entrega inmediata y en planos</p>
+    <p class="hero-desc">Selección curada de los mejores proyectos del distrito. Múltiples desarrolladoras, un solo lugar. Entrega inmediata y en planos.</p>
+  </div>
+  <div class="hero-right">
+    <div class="kpi-cell">
+      <span class="kpi-label">Unidades disponibles</span>
+      <div>
+        <div class="kpi-value gold" id="h-total">—</div>
+        <div class="kpi-sub">en 8 proyectos activos</div>
+      </div>
+    </div>
+    <div class="kpi-cell">
+      <span class="kpi-label">Precio mínimo</span>
+      <div>
+        <div class="kpi-value" id="h-min">—</div>
+        <div class="kpi-trend gold">S/ soles</div>
+      </div>
+    </div>
+    <div class="kpi-cell">
+      <span class="kpi-label">Precio promedio</span>
+      <div>
+        <div class="kpi-value" id="h-avg">—</div>
+        <div class="kpi-sub">Surquillo 2025</div>
+      </div>
+    </div>
+    <div class="kpi-cell">
+      <span class="kpi-label">Cuota mínima</span>
+      <div>
+        <div class="kpi-value" id="h-cuota">—</div>
+        <div class="kpi-trend up">↑ estimada</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER STRIP -->
+<div class="filter-strip">
+  <div class="fs-group">
+    <span class="fs-label">Vista</span>
+    <div class="fs-chips" id="qf-vi"></div>
+  </div>
+  <div class="fs-group">
+    <span class="fs-label">Dormitorios</span>
+    <div class="fs-chips" id="qf-dr"></div>
+  </div>
+  <div class="fs-group">
+    <span class="fs-label">Precio S/</span>
+    <div class="fs-price-wrap">
+      <input type="number" class="fs-input" id="qpmin" placeholder="Mínimo" step="10000">
+      <span class="fs-sep">–</span>
+      <input type="number" class="fs-input" id="qpmax" placeholder="Máximo" step="10000">
+    </div>
+  </div>
+  <div class="fs-group">
+    <select class="fs-sort" id="srt">
+      <option value="precio-asc">Precio ↑</option>
+      <option value="precio-desc">Precio ↓</option>
+      <option value="area-desc">Mayor área</option>
+      <option value="area-asc">Menor área</option>
+      <option value="cuota-asc">Cuota ↑</option>
+    </select>
+    <div class="view-tog">
+      <button class="vbtn active" id="vg" onclick="setView('grid')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect width="5" height="5" rx="1"/><rect x="7" width="5" height="5" rx="1"/><rect y="7" width="5" height="5" rx="1"/><rect x="7" y="7" width="5" height="5" rx="1"/></svg>
+      </button>
+      <button class="vbtn" id="vl" onclick="setView('list')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect y="0" width="12" height="2" rx="1"/><rect y="5" width="12" height="2" rx="1"/><rect y="10" width="12" height="2" rx="1"/></svg>
+      </button>
+    </div>
+    <button class="fs-reset" onclick="resetF()">Limpiar</button>
   </div>
 </div>
 
-<div class="stats-bar">
-  <div class="stats-inner" id="stats-bar">
-    <div class="stat"><span class="stat-val" id="s-total">—</span><span class="stat-lbl">Inmuebles</span></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><span class="stat-val" id="s-min">—</span><span class="stat-lbl">Precio mínimo</span></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><span class="stat-val" id="s-max">—</span><span class="stat-lbl">Precio máximo</span></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><span class="stat-val" id="s-avg">—</span><span class="stat-lbl">Precio promedio</span></div>
-    <div class="stat-sep"></div>
-    <div class="stat"><span class="stat-val" id="s-proyectos">—</span><span class="stat-lbl">Proyectos</span></div>
-  </div>
-</div>
+<!-- ACTIVE TAGS -->
+<div id="active-tags"></div>
 
-<div class="layout">
-  <!-- FILTERS -->
-  <aside class="filters">
-    <div class="filter-title">
-      Filtros
-      <button onclick="resetFilters()">Limpiar</button>
-    </div>
-
-    <div class="filter-section">
-      <div class="filter-label">Proyecto</div>
-      <div class="filter-group" id="filter-proyecto"></div>
-    </div>
-
-    <div class="filter-section">
-      <div class="filter-label">Dormitorios</div>
-      <div class="filter-group" id="filter-dorms"></div>
-    </div>
-
-    <div class="filter-section">
-      <div class="filter-label">Vista</div>
-      <div class="filter-group" id="filter-vista"></div>
-    </div>
-
-    <div class="filter-section">
-      <div class="filter-label">Precio (S/)</div>
-      <div class="range-row">
-        <input type="number" class="range-input" id="precio-min" placeholder="Mín" step="10000">
-        <span class="range-sep">—</span>
-        <input type="number" class="range-input" id="precio-max" placeholder="Máx" step="10000">
+<!-- APP BODY -->
+<div class="app-body">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-module">
+      <div class="sb-module-title">Resumen</div>
+      <div class="sb-kpi-grid">
+        <div class="sb-kpi"><div class="sb-kpi-val g" id="sc">—</div><div class="sb-kpi-key">Resultados</div></div>
+        <div class="sb-kpi"><div class="sb-kpi-val" id="spro">—</div><div class="sb-kpi-key">Proyectos</div></div>
+        <div class="sb-kpi"><div class="sb-kpi-val" id="smin">—</div><div class="sb-kpi-key">Precio min</div></div>
+        <div class="sb-kpi"><div class="sb-kpi-val" id="smax">—</div><div class="sb-kpi-key">Precio máx</div></div>
       </div>
     </div>
-
-    <div class="filter-section">
-      <div class="filter-label">Área total (m²)</div>
-      <div class="range-row">
-        <input type="number" class="range-input" id="area-min" placeholder="Mín">
-        <span class="range-sep">—</span>
-        <input type="number" class="range-input" id="area-max" placeholder="Máx">
+    <div class="sb-module">
+      <div class="sb-module-title">Proyecto</div>
+      <div class="sb-chips" id="fp"></div>
+    </div>
+    <div class="sb-module">
+      <div class="sb-module-title">Dormitorios</div>
+      <div class="sb-chips" id="fd"></div>
+    </div>
+    <div class="sb-module">
+      <div class="sb-module-title">Vista</div>
+      <div class="sb-chips" id="fv"></div>
+    </div>
+    <div class="sb-module">
+      <div class="sb-module-title">Área total (m²)</div>
+      <div class="sb-range">
+        <input class="range-in" type="number" id="amin" placeholder="Mín">
+        <span class="range-sep">–</span>
+        <input class="range-in" type="number" id="amax" placeholder="Máx">
       </div>
     </div>
-
-    <div class="filter-section">
-      <div class="filter-label">Entrega</div>
-      <div class="filter-group" id="filter-entrega"></div>
+    <div class="sb-module">
+      <div class="sb-module-title">Entrega</div>
+      <div class="sb-chips" id="fe"></div>
     </div>
-
-    <div class="filter-section">
-      <div class="filter-label">Banco</div>
-      <select class="filter-select" id="filter-banco">
-        <option value="">Todos los bancos</option>
-      </select>
+    <div class="sb-module">
+      <div class="sb-module-title">Banco</div>
+      <select class="sb-select" id="fbn"><option value="">Todos los bancos</option></select>
     </div>
-
-    <div class="filter-section">
-      <div class="filter-label">Restricción VIS</div>
-      <div class="filter-group" id="filter-vis"></div>
+    <div class="sb-module">
+      <div class="sb-module-title">Restricción VIS</div>
+      <div class="sb-chips" id="fvis"></div>
+    </div>
+    <div style="padding:0 1.5rem 1.5rem">
+      <button class="btn-reset" onclick="resetF()">✕ Limpiar todos los filtros</button>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
-  <main>
-    <div class="main-header">
-      <div class="results-label">Mostrando <strong id="results-count">—</strong> inmuebles</div>
-      <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
-        <div class="sort-row">
-          <label>Ordenar:</label>
-          <select class="sort-select" id="sort-select">
-            <option value="precio-asc">Precio ↑</option>
-            <option value="precio-desc">Precio ↓</option>
-            <option value="area-desc">Área ↓</option>
-            <option value="area-asc">Área ↑</option>
-            <option value="cuota-asc">Cuota ↑</option>
-          </select>
-        </div>
-        <div class="view-toggle">
-          <button class="view-btn active" id="btn-grid" onclick="setView('grid')">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
-            Grid
-          </button>
-          <button class="view-btn" id="btn-list" onclick="setView('list')">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="14" height="2" rx="1"/><rect x="0" y="6" width="14" height="2" rx="1"/><rect x="0" y="12" width="14" height="2" rx="1"/></svg>
-            Lista
-          </button>
-        </div>
-      </div>
+  <!-- CONTENT -->
+  <main class="content">
+    <div class="content-bar">
+      <span class="content-bar-info">Mostrando <strong id="rc">—</strong> propiedades</span>
     </div>
-
-    <div class="active-filters" id="active-filters"></div>
-    <div id="results-container"></div>
+    <div class="cards-wrap" id="res"></div>
   </main>
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+<div class="modal-overlay" id="modal-overlay" onclick="handleMOClick(event)">
   <div class="modal" id="modal-content"></div>
 </div>
 
 <script>
-const RAW = [
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"604",modelo:"P4-P18-X04",techada:70.6,libre:0,total:70.6,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:545000,entrega:"Dic-27",vis:"NO",cuota:4885,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"ALBAMAR",proyecto:"AURA",inmueble:"1604",modelo:"D",techada:56.7,libre:0,total:56.7,vista:"ESQUINA",dorms:2,moneda:"SOLES",precio:406900,entrega:"Abr-27",vis:null,cuota:3647,banco:"INTERBANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRUPO LAR",proyecto:"DISTRITO 34",inmueble:"1208",modelo:"F2 B2",techada:55.71,libre:1.62,total:57.33,vista:"VISTA F1",dorms:2,moneda:"SOLES",precio:444900,entrega:"INMEDIATA",vis:"NO",cuota:3988,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1709",modelo:"P4-P18-X09",techada:57.3,libre:0,total:57.3,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:384000,entrega:"Dic-27",vis:"NO",cuota:3442,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"2401",modelo:"X01",techada:69.22,libre:0,total:69.22,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:428000,entrega:"Mar-28",vis:"SI",cuota:3836,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1213",modelo:"P4-P18-X13",techada:40,libre:0,total:40,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:342000,entrega:"Dic-27",vis:"NO",cuota:3066,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"304",modelo:"X04",techada:55.39,libre:0,total:55.39,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:383000,entrega:"Mar-28",vis:"SI",cuota:3433,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRUPO LAR",proyecto:"DISTRITO 34",inmueble:"1309",modelo:"F2 B7",techada:54.63,libre:3.19,total:57.82,vista:"VISTA F1",dorms:2,moneda:"SOLES",precio:443462,entrega:"INMEDIATA",vis:"NO",cuota:3975,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6204",modelo:"TIPO-21",techada:73.18,libre:0,total:73.18,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:619878,entrega:"Mar-28",vis:null,cuota:5556,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6804",modelo:"TIPO-13",techada:59.17,libre:0,total:59.17,vista:"PENDIENTE",dorms:2,moneda:"SOLES",precio:501205,entrega:"Mar-28",vis:null,cuota:4493,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1804",modelo:"TIPO 4A",techada:39.87,libre:0,total:39.87,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:361911,entrega:"Dic-26",vis:"SÍ",cuota:3244,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"208",modelo:"TIPO 9A",techada:36.21,libre:9.67,total:45.88,vista:"RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:359530,entrega:"Dic-26",vis:"SÍ",cuota:3223,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1904",modelo:"X04",techada:55.39,libre:0,total:55.39,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:403000,entrega:"Mar-28",vis:"SI",cuota:3612,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1610",modelo:"X10",techada:37.58,libre:0,total:37.58,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:305000,entrega:"Dic-27",vis:"SI",cuota:2734,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"612",modelo:"TIPO 12B",techada:40.19,libre:0,total:40.19,vista:"RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:332551,entrega:"Dic-26",vis:"SÍ",cuota:2981,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"407",modelo:"X07",techada:28.97,libre:0,total:28.97,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:264000,entrega:"Dic-27",vis:"SI",cuota:2366,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"411",modelo:"P4-P18-X11",techada:55.9,libre:0,total:55.9,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:412000,entrega:"Dic-27",vis:"NO",cuota:3693,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"2206",modelo:"X06-22",techada:77.34,libre:0,total:77.34,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:601000,entrega:"Dic-27",vis:"SI",cuota:5387,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6604",modelo:"TIPO-21",techada:73.18,libre:0,total:73.18,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:619878,entrega:"Mar-28",vis:null,cuota:5556,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1403",modelo:"X03",techada:63.02,libre:0,total:63.02,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:386000,entrega:"Mar-28",vis:"SI",cuota:3460,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"2216",modelo:"X16-21 AL 23",techada:35.5,libre:0,total:35.5,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:291000,entrega:"Dic-27",vis:"SI",cuota:2608,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1104",modelo:"TIPO 4A",techada:39.87,libre:0,total:39.87,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:353027,entrega:"Dic-26",vis:"SÍ",cuota:3164,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1709",modelo:"X09",techada:26.16,libre:0,total:26.16,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:235000,entrega:"Dic-27",vis:"SI",cuota:2106,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1302",modelo:"TIPO 2A",techada:28.91,libre:0,total:28.91,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:286450,entrega:"Dic-26",vis:"SÍ",cuota:2568,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1208",modelo:"TIPO 8B",techada:55.77,libre:0,total:55.77,vista:"TOMÁS MARSANO/RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:442460,entrega:"Dic-26",vis:"SÍ",cuota:3966,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"805",modelo:"X05-A",techada:39.96,libre:0,total:39.96,vista:"EXTERNA",dorms:1,moneda:"SOLES",precio:359000,entrega:"Dic-27",vis:"SI",cuota:3218,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6803",modelo:"TIPO-20",techada:74.33,libre:0,total:74.33,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:629619,entrega:"Mar-28",vis:null,cuota:5644,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"906",modelo:"X06",techada:78.84,libre:0,total:78.84,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:613000,entrega:"Dic-27",vis:"SI",cuota:5495,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"203",modelo:"X03",techada:63.77,libre:0,total:63.77,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:372000,entrega:"Mar-28",vis:"SI",cuota:3334,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6102",modelo:"TIPO-8",techada:58.25,libre:12.18,total:70.43,vista:"PENDIENTE",dorms:2,moneda:"SOLES",precio:544998,entrega:"Mar-28",vis:null,cuota:4885,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1011",modelo:"X11",techada:34.57,libre:0,total:34.57,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:305000,entrega:"Dic-27",vis:"SI",cuota:2734,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"609",modelo:"X09",techada:26.9,libre:0,total:26.9,vista:"INTERNA",dorms:0,moneda:"SOLES",precio:193000,entrega:"Mar-28",vis:"SI",cuota:1730,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRUPO LAR",proyecto:"DISTRITO 34",inmueble:"207",modelo:"F2 A2",techada:63.28,libre:4.79,total:68.07,vista:"INTERNA",dorms:2.5,moneda:"SOLES",precio:540531,entrega:"INMEDIATA",vis:"NO",cuota:4845,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1203",modelo:"X03-A",techada:60.85,libre:0,total:60.85,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:501000,entrega:"Dic-27",vis:"SI",cuota:4491,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"2306",modelo:"X06",techada:56.09,libre:0,total:56.09,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:391000,entrega:"Mar-28",vis:"SI",cuota:3505,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1904",modelo:"P19-P20-X04",techada:70.6,libre:0,total:70.6,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:535000,entrega:"Dic-27",vis:"NO",cuota:4796,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1205",modelo:"P4-P18-X05",techada:68.3,libre:0,total:68.3,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:454000,entrega:"Dic-27",vis:"NO",cuota:4070,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1009",modelo:"X09",techada:26.9,libre:0,total:26.9,vista:"INTERNA",dorms:0,moneda:"SOLES",precio:197000,entrega:"Mar-28",vis:"SI",cuota:1766,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"405",modelo:"X05-A",techada:39.96,libre:0,total:39.96,vista:"EXTERNA",dorms:1,moneda:"SOLES",precio:360000,entrega:"Dic-27",vis:"SI",cuota:3227,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1712",modelo:"X12-16 A 20",techada:57.9,libre:0,total:57.9,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:468000,entrega:"Dic-27",vis:"SI",cuota:4195,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1602",modelo:"X02-B",techada:40.39,libre:0,total:40.39,vista:"EXTERNA",dorms:1,moneda:"SOLES",precio:343000,entrega:"Dic-27",vis:"SI",cuota:3075,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1404",modelo:"X04",techada:55.39,libre:0,total:55.39,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:399000,entrega:"Mar-28",vis:"SI",cuota:3577,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1502",modelo:"X02",techada:51.66,libre:0,total:51.66,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:372000,entrega:"Mar-28",vis:"SI",cuota:3334,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1701",modelo:"X01",techada:69.22,libre:0,total:69.22,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:424000,entrega:"Mar-28",vis:"SI",cuota:3801,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6203",modelo:"TIPO-20",techada:74.33,libre:0,total:74.33,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:629619,entrega:"Mar-28",vis:null,cuota:5644,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"61201",modelo:"TIPO-10",techada:42.57,libre:0,total:42.57,vista:"PENDIENTE",dorms:1,moneda:"SOLES",precio:360593,entrega:"Mar-28",vis:null,cuota:3232,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1002",modelo:"X02-B",techada:40.39,libre:0,total:40.39,vista:"EXTERNA",dorms:1,moneda:"SOLES",precio:346000,entrega:"Dic-27",vis:"SI",cuota:3101,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1008",modelo:"X08",techada:26.72,libre:0,total:26.72,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:243000,entrega:"Dic-27",vis:"SI",cuota:2178,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"904",modelo:"TIPO 4A",techada:39.87,libre:0,total:39.87,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:350488,entrega:"Dic-26",vis:"SÍ",cuota:3142,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1411",modelo:"TIPO 11C",techada:41.41,libre:0,total:41.41,vista:"RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:341311,entrega:"Dic-26",vis:"SÍ",cuota:3059,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"61204",modelo:"TIPO-13",techada:59.17,libre:0,total:59.17,vista:"PENDIENTE",dorms:2,moneda:"SOLES",precio:501205,entrega:"Mar-28",vis:null,cuota:4493,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1402",modelo:"TIPO 2A",techada:28.91,libre:0,total:28.91,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:287371,entrega:"Dic-26",vis:"SÍ",cuota:2576,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1202",modelo:"TIPO 2A",techada:28.91,libre:0,total:28.91,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:285530,entrega:"Dic-26",vis:"SÍ",cuota:2559,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1601",modelo:"TIPO 1A",techada:30.72,libre:0,total:30.72,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:295136,entrega:"Dic-26",vis:"SÍ",cuota:2646,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1412",modelo:"P4-P18-X12",techada:56.8,libre:0,total:56.8,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:418000,entrega:"Dic-27",vis:"NO",cuota:3747,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1612",modelo:"P4-P18-X12",techada:56.8,libre:0,total:56.8,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:415000,entrega:"Dic-27",vis:"NO",cuota:3720,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1302",modelo:"X02-B",techada:40.39,libre:0,total:40.39,vista:"EXTERNA",dorms:1,moneda:"SOLES",precio:344000,entrega:"Dic-27",vis:"SI",cuota:3084,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6301",modelo:"TIPO-18",techada:55.47,libre:0,total:55.47,vista:"PENDIENTE",dorms:2,moneda:"SOLES",precio:469864,entrega:"Mar-28",vis:null,cuota:4212,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6807",modelo:"TIPO-16",techada:74.24,libre:0,total:74.24,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:628856,entrega:"Mar-28",vis:null,cuota:5637,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"2201",modelo:"X01-22",techada:57.56,libre:0,total:57.56,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:462000,entrega:"Dic-27",vis:"SI",cuota:4141,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"204",modelo:"X05",techada:64.31,libre:0,total:64.31,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:404000,entrega:"Mar-28",vis:"SI",cuota:3621,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"2311",modelo:"P22-P23-X12",techada:56.8,libre:0,total:56.8,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:419000,entrega:"Dic-27",vis:"NO",cuota:3756,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"702",modelo:"TIPO 2A",techada:28.91,libre:0,total:28.91,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:280929,entrega:"Dic-26",vis:"SÍ",cuota:2518,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"2110",modelo:"X10",techada:37.58,libre:0,total:37.58,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:302000,entrega:"Dic-27",vis:"SI",cuota:2707,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6501",modelo:"TIPO-10",techada:42.57,libre:0,total:42.57,vista:"PENDIENTE",dorms:1,moneda:"SOLES",precio:360593,entrega:"Mar-28",vis:null,cuota:3232,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"605",modelo:"TIPO 5B",techada:39.87,libre:0,total:39.87,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:346681,entrega:"Dic-26",vis:"SÍ",cuota:3108,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"510",modelo:"X10",techada:48.75,libre:0,total:48.75,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:327000,entrega:"Mar-28",vis:"SI",cuota:2931,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1012",modelo:"X12",techada:27.92,libre:0,total:27.92,vista:"INTERNA",dorms:0,moneda:"SOLES",precio:196000,entrega:"Mar-28",vis:"SI",cuota:1757,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1206",modelo:"X06",techada:56.09,libre:0,total:56.09,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:384000,entrega:"Mar-28",vis:"SI",cuota:3442,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"805",modelo:"X05",techada:63.87,libre:0,total:63.87,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:415000,entrega:"Mar-28",vis:"SI",cuota:3720,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1201",modelo:"X01-12.15",techada:57.55,libre:0,total:57.55,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:468000,entrega:"Dic-27",vis:"SI",cuota:4195,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1304",modelo:"P4-P18-X04",techada:70.6,libre:0,total:70.6,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:538000,entrega:"Dic-27",vis:"NO",cuota:4822,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"504",modelo:"X04-B",techada:59.95,libre:0,total:59.95,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:502000,entrega:"Dic-27",vis:"SI",cuota:4500,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"2608",modelo:"P26-P27-X12",techada:55,libre:0,total:55,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:427000,entrega:"Dic-27",vis:"NO",cuota:3827,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"2306",modelo:"X06-23",techada:77.04,libre:0,total:77.04,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:596000,entrega:"Dic-27",vis:"SI",cuota:5342,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRUPO LAR",proyecto:"DISTRITO 34",inmueble:"803",modelo:"F2 A2",techada:63.28,libre:4.79,total:68.07,vista:"INTERNA",dorms:2.5,moneda:"SOLES",precio:539361,entrega:"INMEDIATA",vis:"NO",cuota:4835,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1301",modelo:"X01",techada:69.66,libre:0,total:69.66,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:424000,entrega:"Mar-28",vis:"SI",cuota:3801,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"ALBAMAR",proyecto:"OASIS",inmueble:"606",modelo:"F",techada:74.38,libre:0,total:74.38,vista:"INTERNA",dorms:3,moneda:"SOLES",precio:614000,entrega:"Nov-26",vis:"NO",cuota:5504,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"2109",modelo:"X09",techada:27.32,libre:0,total:27.32,vista:"INTERNA",dorms:0,moneda:"SOLES",precio:203000,entrega:"Mar-28",vis:"SI",cuota:1820,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"801",modelo:"X01",techada:70.1,libre:0,total:70.1,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:422000,entrega:"Mar-28",vis:"SI",cuota:3783,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1503",modelo:"P4-P18-X03",techada:65.1,libre:0,total:65.1,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:495000,entrega:"Dic-27",vis:"NO",cuota:4437,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"915",modelo:"X15",techada:57.5,libre:0,total:57.5,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:457000,entrega:"Dic-27",vis:"SI",cuota:4096,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1710",modelo:"X10",techada:37.58,libre:0,total:37.58,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:305000,entrega:"Dic-27",vis:"SI",cuota:2734,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"409",modelo:"X09",techada:26.16,libre:0,total:26.16,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:239000,entrega:"Dic-27",vis:"SI",cuota:2142,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRUPO LAR",proyecto:"DISTRITO 34",inmueble:"1201",modelo:"F2 B1",techada:54.65,libre:3.19,total:57.84,vista:"VISTA F1",dorms:2,moneda:"SOLES",precio:452127,entrega:"INMEDIATA",vis:"NO",cuota:4053,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"2305",modelo:"X05",techada:63.87,libre:0,total:63.87,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:425000,entrega:"Mar-28",vis:"SI",cuota:3810,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6308",modelo:"TIPO-17",techada:75.26,libre:0,total:75.26,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:637496,entrega:"Mar-28",vis:null,cuota:5714,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"512",modelo:"TIPO 12B",techada:40.19,libre:0,total:40.19,vista:"RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:331272,entrega:"Dic-26",vis:"SÍ",cuota:2969,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"61207",modelo:"TIPO-16",techada:74.24,libre:0,total:74.24,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:628856,entrega:"Mar-28",vis:null,cuota:5637,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6402",modelo:"TIPO-11",techada:43.1,libre:0,total:43.1,vista:"PENDIENTE",dorms:1,moneda:"SOLES",precio:365082,entrega:"Mar-28",vis:null,cuota:3272,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"ALBAMAR",proyecto:"AURA",inmueble:"304",modelo:"D",techada:56.7,libre:0,total:56.7,vista:"ESQUINA",dorms:2,moneda:"SOLES",precio:422700,entrega:"Abr-27",vis:null,cuota:3789,banco:"INTERBANK"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"403",modelo:"X03",techada:63.02,libre:0,total:63.02,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:368000,entrega:"Mar-28",vis:"SI",cuota:3299,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1906",modelo:"X06",techada:56.09,libre:0,total:56.09,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:389000,entrega:"Mar-28",vis:"SI",cuota:3487,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"2105",modelo:"TIPO 5B",techada:39.87,libre:0,total:39.87,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:371740,entrega:"Dic-26",vis:"SÍ",cuota:3332,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1411",modelo:"P4-P18-X11",techada:55.9,libre:0,total:55.9,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:402000,entrega:"Dic-27",vis:"NO",cuota:3603,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1007",modelo:"X07",techada:28.97,libre:0,total:28.97,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:262000,entrega:"Dic-27",vis:"SI",cuota:2348,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"406",modelo:"X06",techada:56.09,libre:0,total:56.09,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:369000,entrega:"Mar-28",vis:"SI",cuota:3308,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"61303",modelo:"TIPO-20",techada:74.33,libre:0,total:74.33,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:629619,entrega:"Mar-28",vis:null,cuota:5644,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"205",modelo:"X06",techada:56.09,libre:0,total:56.09,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:369000,entrega:"Mar-28",vis:"SI",cuota:3308,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"905",modelo:"X05-B",techada:39.91,libre:0,total:39.91,vista:"EXTERNA",dorms:1,moneda:"SOLES",precio:362000,entrega:"Dic-27",vis:"SI",cuota:3245,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"808",modelo:"P4-P18-X08",techada:41.4,libre:0,total:41.4,vista:"EXTERNA",dorms:1,moneda:"SOLES",precio:365000,entrega:"Dic-27",vis:"NO",cuota:3272,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"905",modelo:"TIPO 5B",techada:39.87,libre:0,total:39.87,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:350488,entrega:"Dic-26",vis:"SÍ",cuota:3142,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"708",modelo:"TIPO 8B",techada:55.77,libre:0,total:55.77,vista:"TOMÁS MARSANO/RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:433583,entrega:"Dic-26",vis:"SÍ",cuota:3886,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1307",modelo:"X07",techada:28.97,libre:0,total:28.97,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:261000,entrega:"Dic-27",vis:"SI",cuota:2340,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRUPO LAR",proyecto:"DISTRITO 34",inmueble:"1403",modelo:"F2 B2",techada:55.71,libre:1.62,total:57.33,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:449377,entrega:"INMEDIATA",vis:"NO",cuota:4028,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"707",modelo:"X07",techada:28.97,libre:0,total:28.97,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:263000,entrega:"Dic-27",vis:"SI",cuota:2357,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRUPO LAR",proyecto:"DISTRITO 34",inmueble:"210",modelo:"F2 A6",techada:41.18,libre:1.87,total:43.05,vista:"VISTA F1",dorms:1,moneda:"SOLES",precio:356914,entrega:"INMEDIATA",vis:"NO",cuota:3199,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"ALBAMAR",proyecto:"AURA",inmueble:"502",modelo:"B",techada:70.33,libre:0,total:70.33,vista:"AV. TOMAS MARSANO",dorms:3,moneda:"SOLES",precio:483900,entrega:"Abr-27",vis:null,cuota:4338,banco:"INTERBANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1311",modelo:"TIPO 11C",techada:41.41,libre:0,total:41.41,vista:"RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:339993,entrega:"Dic-26",vis:"SÍ",cuota:3048,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"610",modelo:"X10",techada:48.75,libre:0,total:48.75,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:327000,entrega:"Mar-28",vis:"SI",cuota:2931,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1611",modelo:"P4-P18-X11",techada:55.9,libre:0,total:55.9,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:399000,entrega:"Dic-27",vis:"NO",cuota:3577,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1506",modelo:"TIPO 6A",techada:39.87,libre:0,total:39.87,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:358104,entrega:"Dic-26",vis:"SÍ",cuota:3210,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1306",modelo:"P4-P18-X06",techada:53.9,libre:0,total:53.9,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:454000,entrega:"Dic-27",vis:"NO",cuota:4070,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"2009",modelo:"TIPO 16A",techada:57.43,libre:0,total:57.43,vista:"RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:496485,entrega:"Dic-26",vis:"SÍ",cuota:4450,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"2713",modelo:"X13",techada:40.05,libre:0,total:40.05,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:254000,entrega:"Mar-28",vis:"SI",cuota:2277,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"1902",modelo:"TIPO 2A",techada:28.91,libre:0,total:28.91,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:291972,entrega:"Dic-26",vis:"SÍ",cuota:2617,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"2305",modelo:"TIPO 18A",techada:67.07,libre:10.88,total:77.95,vista:"TOMÁS MARSANO",dorms:2,moneda:"SOLES",precio:691230,entrega:"Dic-26",vis:"SÍ",cuota:6196,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"402",modelo:"X02-B",techada:40.39,libre:0,total:40.39,vista:"EXTERNA",dorms:1,moneda:"SOLES",precio:349000,entrega:"Dic-27",vis:"SI",cuota:3128,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1808",modelo:"X08",techada:36.83,libre:0,total:36.83,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:243000,entrega:"Mar-28",vis:"SI",cuota:2178,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"61304",modelo:"TIPO-13",techada:59.17,libre:0,total:59.17,vista:"PENDIENTE",dorms:2,moneda:"SOLES",precio:501205,entrega:"Mar-28",vis:null,cuota:4493,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"103",modelo:"X09A",techada:26.16,libre:3.62,total:29.78,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:236000,entrega:"Dic-27",vis:"SI",cuota:2115,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"61002",modelo:"TIPO-11",techada:43.1,libre:0,total:43.1,vista:"PENDIENTE",dorms:1,moneda:"SOLES",precio:365082,entrega:"Mar-28",vis:null,cuota:3272,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"ALBAMAR",proyecto:"AURA",inmueble:"1205",modelo:"E",techada:29.62,libre:0,total:29.62,vista:"CALLE",dorms:1,moneda:"SOLES",precio:246500,entrega:"Abr-27",vis:null,cuota:2210,banco:"INTERBANK"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6703",modelo:"TIPO-20",techada:74.33,libre:0,total:74.33,vista:"PENDIENTE",dorms:3,moneda:"SOLES",precio:629619,entrega:"Mar-28",vis:null,cuota:5644,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"2209",modelo:"P22-P23-X10",techada:41.5,libre:0,total:41.5,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:295000,entrega:"Dic-27",vis:"NO",cuota:2644,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"912",modelo:"TIPO 12B",techada:40.19,libre:0,total:40.19,vista:"RICARDO ANGULO",dorms:1,moneda:"SOLES",precio:342722,entrega:"Dic-26",vis:"SÍ",cuota:3072,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"EDIFICA",proyecto:"ELEMENT",inmueble:"2301",modelo:"TIPO 1B",techada:30.31,libre:0,total:30.31,vista:"TOMÁS MARSANO",dorms:1,moneda:"SOLES",precio:298086,entrega:"Dic-26",vis:"SÍ",cuota:2672,banco:"SCOTIABANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1314",modelo:"X14",techada:38.4,libre:0,total:38.4,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:313000,entrega:"Dic-27",vis:"SI",cuota:2806,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1001",modelo:"X01",techada:69.66,libre:0,total:69.66,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:422000,entrega:"Mar-28",vis:"SI",cuota:3783,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1706",modelo:"X06",techada:56.09,libre:0,total:56.09,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:388000,entrega:"Mar-28",vis:"SI",cuota:3478,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1910",modelo:"P19-P20-X10",techada:41.5,libre:0,total:41.5,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:288000,entrega:"Dic-27",vis:"NO",cuota:2582,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"ALBAMAR",proyecto:"OASIS",inmueble:"902",modelo:"B",techada:47.27,libre:0,total:47.27,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:400300,entrega:"Nov-26",vis:"NO",cuota:3588,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRUPO LAR",proyecto:"DISTRITO 34",inmueble:"1308",modelo:"F2 B2",techada:55.71,libre:1.62,total:57.33,vista:"VISTA F1",dorms:2,moneda:"SOLES",precio:451601,entrega:"INMEDIATA",vis:"NO",cuota:4048,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"402",modelo:"X02",techada:51.66,libre:0,total:51.66,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:357000,entrega:"Mar-28",vis:"SI",cuota:3200,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"2505",modelo:"X05",techada:63.87,libre:0,total:63.87,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:419000,entrega:"Mar-28",vis:"SI",cuota:3756,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"306",modelo:"X06",techada:79.48,libre:0,total:79.48,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:619000,entrega:"Dic-27",vis:"SI",cuota:5549,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"VITAIN",proyecto:"NITOA 6",inmueble:"6105",modelo:"TIPO-05",techada:41.43,libre:7,total:48.43,vista:"PENDIENTE",dorms:1,moneda:"SOLES",precio:380584,entrega:"Mar-28",vis:null,cuota:3411,banco:null},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"908",modelo:"X08",techada:37.03,libre:0,total:37.03,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:240000,entrega:"Mar-28",vis:"SI",cuota:2151,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"ALBAMAR",proyecto:"AURA",inmueble:"505",modelo:"E",techada:29.62,libre:0,total:29.62,vista:"CALLE",dorms:1,moneda:"SOLES",precio:251700,entrega:"Abr-27",vis:null,cuota:2256,banco:"INTERBANK"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"105",modelo:"X11-1",techada:34.12,libre:7.05,total:41.17,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:326000,entrega:"Dic-27",vis:"SI",cuota:2922,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"406",modelo:"X06-4 Y 5",techada:79.51,libre:0,total:79.51,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:616000,entrega:"Dic-27",vis:"SI",cuota:5522,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1013",modelo:"X13-7 AL 10",techada:55.64,libre:0,total:55.64,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:447000,entrega:"Dic-27",vis:"SI",cuota:4007,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"2413",modelo:"X13",techada:40.05,libre:0,total:40.05,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:252000,entrega:"Mar-28",vis:"SI",cuota:2259,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1505",modelo:"X05",techada:63.87,libre:0,total:63.87,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:419000,entrega:"Mar-28",vis:"SI",cuota:3756,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"910",modelo:"X10",techada:48.97,libre:0,total:48.97,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:340000,entrega:"Mar-28",vis:"SI",cuota:3048,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"AMMA",proyecto:"TORRE MARSANO 28",inmueble:"1809",modelo:"X09",techada:27.32,libre:0,total:27.32,vista:"INTERNA",dorms:0,moneda:"SOLES",precio:202000,entrega:"Mar-28",vis:"SI",cuota:1811,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1310",modelo:"X10",techada:37.58,libre:0,total:37.58,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:306000,entrega:"Dic-27",vis:"SI",cuota:2743,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1505",modelo:"P4-P18-X05",techada:68.3,libre:0,total:68.3,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:451000,entrega:"Dic-27",vis:"NO",cuota:4043,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"ALBAMAR",proyecto:"AURA",inmueble:"302",modelo:"B",techada:70.33,libre:0,total:70.33,vista:"AV. TOMAS MARSANO",dorms:3,moneda:"SOLES",precio:486800,entrega:"Abr-27",vis:null,cuota:4364,banco:"INTERBANK"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"2109",modelo:"P21-X10",techada:41.5,libre:0,total:41.5,vista:"INTERNA",dorms:1,moneda:"SOLES",precio:295000,entrega:"Dic-27",vis:"NO",cuota:2644,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1004",modelo:"P4-P18-X04",techada:70.6,libre:0,total:70.6,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:541000,entrega:"Dic-27",vis:"NO",cuota:4849,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"313",modelo:"X13-2 AL 6",techada:56.35,libre:0,total:56.35,vista:"INTERNA",dorms:2,moneda:"SOLES",precio:457000,entrega:"Dic-27",vis:"SI",cuota:4096,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"V&V",proyecto:"GERMANIA",inmueble:"1603",modelo:"P4-P18-X03",techada:65.1,libre:0,total:65.1,vista:"EXTERNA",dorms:3,moneda:"SOLES",precio:495000,entrega:"Dic-27",vis:"NO",cuota:4437,banco:"FIDEICOMISO"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"804",modelo:"X04-B",techada:59.95,libre:0,total:59.95,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:500000,entrega:"Dic-27",vis:"SI",cuota:4482,banco:"BCP"},
-  {distrito:"SURQUILLO",desarrolladora:"GRATTO INMOBILIARIA",proyecto:"ARAMBURÚ 934",inmueble:"1103",modelo:"X03-C",techada:60.97,libre:0,total:60.97,vista:"EXTERNA",dorms:2,moneda:"SOLES",precio:507000,entrega:"Dic-27",vis:"SI",cuota:4545,banco:"BCP"}
-];
+// ============================================================
+// CURSOR — PIN
+// ============================================================
+const pinEl = document.getElementById('pin-cursor');
+const ringEl = document.getElementById('pin-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  pinEl.style.left = mx + 'px';
+  pinEl.style.top  = my + 'px';
+});
+(function animRing() {
+  rx += (mx - rx) * 0.16;
+  ry += (my - ry) * 0.16;
+  ringEl.style.left = rx + 'px';
+  ringEl.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
 
-// State
-let filters = { proyecto: [], dorms: [], vista: [], vis: [], entrega: [], banco: '', precioMin: '', precioMax: '', areaMin: '', areaMax: '' };
-let viewMode = 'grid';
-let sortBy = 'precio-asc';
+// SCROLL
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  document.getElementById('scroll-bar').style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+});
 
-function fmt(n) { return 'S/ ' + Math.round(n).toLocaleString('es-PE'); }
-function fmtArea(n) { return n.toFixed(1) + ' m²'; }
-function visNorm(v) { return v ? v.toUpperCase().replace('SÍ','SI') : '—'; }
+// ============================================================
+// DATA
+// ============================================================
+const D=[{d:"V&V",p:"GERMANIA",u:"604",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:545000,en:"Dic-27",vs:"NO",cu:4885,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"AURA",u:"1604",m:"D",tc:56.7,li:0,to:56.7,vi:"ESQUINA",dr:2,pr:406900,en:"Abr-27",vs:null,cu:3647,bk:"INTERBANK"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1208",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"VISTA F1",dr:2,pr:444900,en:"INMEDIATA",vs:"NO",cu:3988,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1709",m:"P4-P18-X09",tc:57.3,li:0,to:57.3,vi:"INTERNA",dr:2,pr:384000,en:"Dic-27",vs:"NO",cu:3442,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2401",m:"X01",tc:69.22,li:0,to:69.22,vi:"EXTERNA",dr:3,pr:428000,en:"Mar-28",vs:"SI",cu:3836,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1213",m:"P4-P18-X13",tc:40,li:0,to:40,vi:"INTERNA",dr:1,pr:342000,en:"Dic-27",vs:"NO",cu:3066,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"304",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:383000,en:"Mar-28",vs:"SI",cu:3433,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1309",m:"F2 B7",tc:54.63,li:3.19,to:57.82,vi:"VISTA F1",dr:2,pr:443462,en:"INMEDIATA",vs:"NO",cu:3975,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6204",m:"TIPO-21",tc:73.18,li:0,to:73.18,vi:"PENDIENTE",dr:3,pr:619878,en:"Mar-28",vs:null,cu:5556,bk:null},{d:"VITAIN",p:"NITOA 6",u:"6804",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:null,cu:4493,bk:null},{d:"EDIFICA",p:"ELEMENT",u:"1804",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMÁS MARSANO",dr:1,pr:361911,en:"Dic-26",vs:"SÍ",cu:3244,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"208",m:"TIPO 9A",tc:36.21,li:9.67,to:45.88,vi:"RICARDO ANGULO",dr:1,pr:359530,en:"Dic-26",vs:"SÍ",cu:3223,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1904",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:403000,en:"Mar-28",vs:"SI",cu:3612,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1610",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:305000,en:"Dic-27",vs:"SI",cu:2734,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"612",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:332551,en:"Dic-26",vs:"SÍ",cu:2981,bk:"SCOTIABANK"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"407",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:264000,en:"Dic-27",vs:"SI",cu:2366,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"411",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:412000,en:"Dic-27",vs:"NO",cu:3693,bk:"FIDEICOMISO"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"2206",m:"X06-22",tc:77.34,li:0,to:77.34,vi:"EXTERNA",dr:3,pr:601000,en:"Dic-27",vs:"SI",cu:5387,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6604",m:"TIPO-21",tc:73.18,li:0,to:73.18,vi:"PENDIENTE",dr:3,pr:619878,en:"Mar-28",vs:null,cu:5556,bk:null},{d:"AMMA",p:"TORRE MARSANO 28",u:"1403",m:"X03",tc:63.02,li:0,to:63.02,vi:"EXTERNA",dr:3,pr:386000,en:"Mar-28",vs:"SI",cu:3460,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"2216",m:"X16-21 AL 23",tc:35.5,li:0,to:35.5,vi:"INTERNA",dr:1,pr:291000,en:"Dic-27",vs:"SI",cu:2608,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1104",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMÁS MARSANO",dr:1,pr:353027,en:"Dic-26",vs:"SÍ",cu:3164,bk:"SCOTIABANK"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1709",m:"X09",tc:26.16,li:0,to:26.16,vi:"INTERNA",dr:1,pr:235000,en:"Dic-27",vs:"SI",cu:2106,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1302",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMÁS MARSANO",dr:1,pr:286450,en:"Dic-26",vs:"SÍ",cu:2568,bk:"SCOTIABANK"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"805",m:"X05-A",tc:39.96,li:0,to:39.96,vi:"EXTERNA",dr:1,pr:359000,en:"Dic-27",vs:"SI",cu:3218,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"906",m:"X06",tc:78.84,li:0,to:78.84,vi:"EXTERNA",dr:3,pr:613000,en:"Dic-27",vs:"SI",cu:5495,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"203",m:"X03",tc:63.77,li:0,to:63.77,vi:"EXTERNA",dr:3,pr:372000,en:"Mar-28",vs:"SI",cu:3334,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6102",m:"TIPO-8",tc:58.25,li:12.18,to:70.43,vi:"PENDIENTE",dr:2,pr:544998,en:"Mar-28",vs:null,cu:4885,bk:null},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1011",m:"X11",tc:34.57,li:0,to:34.57,vi:"INTERNA",dr:1,pr:305000,en:"Dic-27",vs:"SI",cu:2734,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"609",m:"X09",tc:26.9,li:0,to:26.9,vi:"INTERNA",dr:0,pr:193000,en:"Mar-28",vs:"SI",cu:1730,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"207",m:"F2 A2",tc:63.28,li:4.79,to:68.07,vi:"INTERNA",dr:2.5,pr:540531,en:"INMEDIATA",vs:"NO",cu:4845,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1203",m:"X03-A",tc:60.85,li:0,to:60.85,vi:"EXTERNA",dr:2,pr:501000,en:"Dic-27",vs:"SI",cu:4491,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2306",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:391000,en:"Mar-28",vs:"SI",cu:3505,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1904",m:"P19-P20-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:535000,en:"Dic-27",vs:"NO",cu:4796,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1205",m:"P4-P18-X05",tc:68.3,li:0,to:68.3,vi:"EXTERNA",dr:3,pr:454000,en:"Dic-27",vs:"NO",cu:4070,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1009",m:"X09",tc:26.9,li:0,to:26.9,vi:"INTERNA",dr:0,pr:197000,en:"Mar-28",vs:"SI",cu:1766,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"405",m:"X05-A",tc:39.96,li:0,to:39.96,vi:"EXTERNA",dr:1,pr:360000,en:"Dic-27",vs:"SI",cu:3227,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1712",m:"X12-16 A 20",tc:57.9,li:0,to:57.9,vi:"INTERNA",dr:2,pr:468000,en:"Dic-27",vs:"SI",cu:4195,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1602",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:343000,en:"Dic-27",vs:"SI",cu:3075,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1404",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:399000,en:"Mar-28",vs:"SI",cu:3577,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1502",m:"X02",tc:51.66,li:0,to:51.66,vi:"EXTERNA",dr:2,pr:372000,en:"Mar-28",vs:"SI",cu:3334,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1701",m:"X01",tc:69.22,li:0,to:69.22,vi:"EXTERNA",dr:3,pr:424000,en:"Mar-28",vs:"SI",cu:3801,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6203",m:"TIPO-20",tc:74.33,li:0,to:74.33,vi:"PENDIENTE",dr:3,pr:629619,en:"Mar-28",vs:null,cu:5644,bk:null},{d:"VITAIN",p:"NITOA 6",u:"61201",m:"TIPO-10",tc:42.57,li:0,to:42.57,vi:"PENDIENTE",dr:1,pr:360593,en:"Mar-28",vs:null,cu:3232,bk:null},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1002",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:346000,en:"Dic-27",vs:"SI",cu:3101,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1008",m:"X08",tc:26.72,li:0,to:26.72,vi:"INTERNA",dr:1,pr:243000,en:"Dic-27",vs:"SI",cu:2178,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"904",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMÁS MARSANO",dr:1,pr:350488,en:"Dic-26",vs:"SÍ",cu:3142,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1411",m:"TIPO 11C",tc:41.41,li:0,to:41.41,vi:"RICARDO ANGULO",dr:1,pr:341311,en:"Dic-26",vs:"SÍ",cu:3059,bk:"SCOTIABANK"},{d:"VITAIN",p:"NITOA 6",u:"61204",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:null,cu:4493,bk:null},{d:"EDIFICA",p:"ELEMENT",u:"1402",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMÁS MARSANO",dr:1,pr:287371,en:"Dic-26",vs:"SÍ",cu:2576,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1202",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMÁS MARSANO",dr:1,pr:285530,en:"Dic-26",vs:"SÍ",cu:2559,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1601",m:"TIPO 1A",tc:30.72,li:0,to:30.72,vi:"TOMÁS MARSANO",dr:1,pr:295136,en:"Dic-26",vs:"SÍ",cu:2646,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1412",m:"P4-P18-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:418000,en:"Dic-27",vs:"NO",cu:3747,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1612",m:"P4-P18-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:415000,en:"Dic-27",vs:"NO",cu:3720,bk:"FIDEICOMISO"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1302",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:344000,en:"Dic-27",vs:"SI",cu:3084,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6301",m:"TIPO-18",tc:55.47,li:0,to:55.47,vi:"PENDIENTE",dr:2,pr:469864,en:"Mar-28",vs:null,cu:4212,bk:null},{d:"VITAIN",p:"NITOA 6",u:"6807",m:"TIPO-16",tc:74.24,li:0,to:74.24,vi:"PENDIENTE",dr:3,pr:628856,en:"Mar-28",vs:null,cu:5637,bk:null},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"2201",m:"X01-22",tc:57.56,li:0,to:57.56,vi:"EXTERNA",dr:2,pr:462000,en:"Dic-27",vs:"SI",cu:4141,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"204",m:"X05",tc:64.31,li:0,to:64.31,vi:"EXTERNA",dr:3,pr:404000,en:"Mar-28",vs:"SI",cu:3621,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"2311",m:"P22-P23-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:419000,en:"Dic-27",vs:"NO",cu:3756,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"702",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMÁS MARSANO",dr:1,pr:280929,en:"Dic-26",vs:"SÍ",cu:2518,bk:"SCOTIABANK"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"2110",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:302000,en:"Dic-27",vs:"SI",cu:2707,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6501",m:"TIPO-10",tc:42.57,li:0,to:42.57,vi:"PENDIENTE",dr:1,pr:360593,en:"Mar-28",vs:null,cu:3232,bk:null},{d:"EDIFICA",p:"ELEMENT",u:"605",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMÁS MARSANO",dr:1,pr:346681,en:"Dic-26",vs:"SÍ",cu:3108,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"510",m:"X10",tc:48.75,li:0,to:48.75,vi:"INTERNA",dr:2,pr:327000,en:"Mar-28",vs:"SI",cu:2931,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1012",m:"X12",tc:27.92,li:0,to:27.92,vi:"INTERNA",dr:0,pr:196000,en:"Mar-28",vs:"SI",cu:1757,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1206",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:384000,en:"Mar-28",vs:"SI",cu:3442,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"805",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:415000,en:"Mar-28",vs:"SI",cu:3720,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1201",m:"X01-12.15",tc:57.55,li:0,to:57.55,vi:"EXTERNA",dr:2,pr:468000,en:"Dic-27",vs:"SI",cu:4195,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1304",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:538000,en:"Dic-27",vs:"NO",cu:4822,bk:"FIDEICOMISO"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"504",m:"X04-B",tc:59.95,li:0,to:59.95,vi:"EXTERNA",dr:2,pr:502000,en:"Dic-27",vs:"SI",cu:4500,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"2608",m:"P26-P27-X12",tc:55,li:0,to:55,vi:"INTERNA",dr:2,pr:427000,en:"Dic-27",vs:"NO",cu:3827,bk:"FIDEICOMISO"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"2306",m:"X06-23",tc:77.04,li:0,to:77.04,vi:"EXTERNA",dr:3,pr:596000,en:"Dic-27",vs:"SI",cu:5342,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"803",m:"F2 A2",tc:63.28,li:4.79,to:68.07,vi:"INTERNA",dr:2.5,pr:539361,en:"INMEDIATA",vs:"NO",cu:4835,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1301",m:"X01",tc:69.66,li:0,to:69.66,vi:"EXTERNA",dr:3,pr:424000,en:"Mar-28",vs:"SI",cu:3801,bk:"BCP"},{d:"ALBAMAR",p:"OASIS",u:"606",m:"F",tc:74.38,li:0,to:74.38,vi:"INTERNA",dr:3,pr:614000,en:"Nov-26",vs:"NO",cu:5504,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2109",m:"X09",tc:27.32,li:0,to:27.32,vi:"INTERNA",dr:0,pr:203000,en:"Mar-28",vs:"SI",cu:1820,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"801",m:"X01",tc:70.1,li:0,to:70.1,vi:"EXTERNA",dr:3,pr:422000,en:"Mar-28",vs:"SI",cu:3783,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1503",m:"P4-P18-X03",tc:65.1,li:0,to:65.1,vi:"EXTERNA",dr:3,pr:495000,en:"Dic-27",vs:"NO",cu:4437,bk:"FIDEICOMISO"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"915",m:"X15",tc:57.5,li:0,to:57.5,vi:"INTERNA",dr:2,pr:457000,en:"Dic-27",vs:"SI",cu:4096,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"409",m:"X09",tc:26.16,li:0,to:26.16,vi:"INTERNA",dr:1,pr:239000,en:"Dic-27",vs:"SI",cu:2142,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1201",m:"F2 B1",tc:54.65,li:3.19,to:57.84,vi:"VISTA F1",dr:2,pr:452127,en:"INMEDIATA",vs:"NO",cu:4053,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2305",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:425000,en:"Mar-28",vs:"SI",cu:3810,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6308",m:"TIPO-17",tc:75.26,li:0,to:75.26,vi:"PENDIENTE",dr:3,pr:637496,en:"Mar-28",vs:null,cu:5714,bk:null},{d:"EDIFICA",p:"ELEMENT",u:"512",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:331272,en:"Dic-26",vs:"SÍ",cu:2969,bk:"SCOTIABANK"},{d:"VITAIN",p:"NITOA 6",u:"6402",m:"TIPO-11",tc:43.1,li:0,to:43.1,vi:"PENDIENTE",dr:1,pr:365082,en:"Mar-28",vs:null,cu:3272,bk:null},{d:"ALBAMAR",p:"AURA",u:"304",m:"D",tc:56.7,li:0,to:56.7,vi:"ESQUINA",dr:2,pr:422700,en:"Abr-27",vs:null,cu:3789,bk:"INTERBANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"403",m:"X03",tc:63.02,li:0,to:63.02,vi:"EXTERNA",dr:3,pr:368000,en:"Mar-28",vs:"SI",cu:3299,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1906",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:389000,en:"Mar-28",vs:"SI",cu:3487,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"2105",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMÁS MARSANO",dr:1,pr:371740,en:"Dic-26",vs:"SÍ",cu:3332,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1411",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:402000,en:"Dic-27",vs:"NO",cu:3603,bk:"FIDEICOMISO"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1007",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:262000,en:"Dic-27",vs:"SI",cu:2348,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"406",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:369000,en:"Mar-28",vs:"SI",cu:3308,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"205",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:369000,en:"Mar-28",vs:"SI",cu:3308,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"905",m:"X05-B",tc:39.91,li:0,to:39.91,vi:"EXTERNA",dr:1,pr:362000,en:"Dic-27",vs:"SI",cu:3245,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"808",m:"P4-P18-X08",tc:41.4,li:0,to:41.4,vi:"EXTERNA",dr:1,pr:365000,en:"Dic-27",vs:"NO",cu:3272,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"905",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMÁS MARSANO",dr:1,pr:350488,en:"Dic-26",vs:"SÍ",cu:3142,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"708",m:"TIPO 8B",tc:55.77,li:0,to:55.77,vi:"TOMÁS MARSANO/RICARDO ANGULO",dr:1,pr:433583,en:"Dic-26",vs:"SÍ",cu:3886,bk:"SCOTIABANK"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1307",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:261000,en:"Dic-27",vs:"SI",cu:2340,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1403",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"INTERNA",dr:2,pr:449377,en:"INMEDIATA",vs:"NO",cu:4028,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"707",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:263000,en:"Dic-27",vs:"SI",cu:2357,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"210",m:"F2 A6",tc:41.18,li:1.87,to:43.05,vi:"VISTA F1",dr:1,pr:356914,en:"INMEDIATA",vs:"NO",cu:3199,bk:"BCP"},{d:"ALBAMAR",p:"AURA",u:"502",m:"B",tc:70.33,li:0,to:70.33,vi:"AV. TOMAS MARSANO",dr:3,pr:483900,en:"Abr-27",vs:null,cu:4338,bk:"INTERBANK"},{d:"EDIFICA",p:"ELEMENT",u:"1311",m:"TIPO 11C",tc:41.41,li:0,to:41.41,vi:"RICARDO ANGULO",dr:1,pr:339993,en:"Dic-26",vs:"SÍ",cu:3048,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"610",m:"X10",tc:48.75,li:0,to:48.75,vi:"INTERNA",dr:2,pr:327000,en:"Mar-28",vs:"SI",cu:2931,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1611",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:399000,en:"Dic-27",vs:"NO",cu:3577,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"1506",m:"TIPO 6A",tc:39.87,li:0,to:39.87,vi:"TOMÁS MARSANO",dr:1,pr:358104,en:"Dic-26",vs:"SÍ",cu:3210,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1306",m:"P4-P18-X06",tc:53.9,li:0,to:53.9,vi:"EXTERNA",dr:2,pr:454000,en:"Dic-27",vs:"NO",cu:4070,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"2009",m:"TIPO 16A",tc:57.43,li:0,to:57.43,vi:"RICARDO ANGULO",dr:1,pr:496485,en:"Dic-26",vs:"SÍ",cu:4450,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2713",m:"X13",tc:40.05,li:0,to:40.05,vi:"INTERNA",dr:1,pr:254000,en:"Mar-28",vs:"SI",cu:2277,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1902",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMÁS MARSANO",dr:1,pr:291972,en:"Dic-26",vs:"SÍ",cu:2617,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"2305",m:"TIPO 18A",tc:67.07,li:10.88,to:77.95,vi:"TOMÁS MARSANO",dr:2,pr:691230,en:"Dic-26",vs:"SÍ",cu:6196,bk:"SCOTIABANK"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"402",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:349000,en:"Dic-27",vs:"SI",cu:3128,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1808",m:"X08",tc:36.83,li:0,to:36.83,vi:"INTERNA",dr:1,pr:243000,en:"Mar-28",vs:"SI",cu:2178,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"61304",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:null,cu:4493,bk:null},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"103",m:"X09A",tc:26.16,li:3.62,to:29.78,vi:"INTERNA",dr:1,pr:236000,en:"Dic-27",vs:"SI",cu:2115,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"61002",m:"TIPO-11",tc:43.1,li:0,to:43.1,vi:"PENDIENTE",dr:1,pr:365082,en:"Mar-28",vs:null,cu:3272,bk:null},{d:"ALBAMAR",p:"AURA",u:"1205",m:"E",tc:29.62,li:0,to:29.62,vi:"CALLE",dr:1,pr:246500,en:"Abr-27",vs:null,cu:2210,bk:"INTERBANK"},{d:"VITAIN",p:"NITOA 6",u:"6703",m:"TIPO-20",tc:74.33,li:0,to:74.33,vi:"PENDIENTE",dr:3,pr:629619,en:"Mar-28",vs:null,cu:5644,bk:null},{d:"V&V",p:"GERMANIA",u:"2209",m:"P22-P23-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:295000,en:"Dic-27",vs:"NO",cu:2644,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"912",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:342722,en:"Dic-26",vs:"SÍ",cu:3072,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"2301",m:"TIPO 1B",tc:30.31,li:0,to:30.31,vi:"TOMÁS MARSANO",dr:1,pr:298086,en:"Dic-26",vs:"SÍ",cu:2672,bk:"SCOTIABANK"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1314",m:"X14",tc:38.4,li:0,to:38.4,vi:"INTERNA",dr:1,pr:313000,en:"Dic-27",vs:"SI",cu:2806,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1001",m:"X01",tc:69.66,li:0,to:69.66,vi:"EXTERNA",dr:3,pr:422000,en:"Mar-28",vs:"SI",cu:3783,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1706",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:388000,en:"Mar-28",vs:"SI",cu:3478,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1910",m:"P19-P20-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:288000,en:"Dic-27",vs:"NO",cu:2582,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"OASIS",u:"902",m:"B",tc:47.27,li:0,to:47.27,vi:"INTERNA",dr:1,pr:400300,en:"Nov-26",vs:"NO",cu:3588,bk:"FIDEICOMISO"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1308",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"VISTA F1",dr:2,pr:451601,en:"INMEDIATA",vs:"NO",cu:4048,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"402",m:"X02",tc:51.66,li:0,to:51.66,vi:"EXTERNA",dr:2,pr:357000,en:"Mar-28",vs:"SI",cu:3200,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2505",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:419000,en:"Mar-28",vs:"SI",cu:3756,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"306",m:"X06",tc:79.48,li:0,to:79.48,vi:"EXTERNA",dr:3,pr:619000,en:"Dic-27",vs:"SI",cu:5549,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6105",m:"TIPO-05",tc:41.43,li:7,to:48.43,vi:"PENDIENTE",dr:1,pr:380584,en:"Mar-28",vs:null,cu:3411,bk:null},{d:"AMMA",p:"TORRE MARSANO 28",u:"908",m:"X08",tc:37.03,li:0,to:37.03,vi:"INTERNA",dr:1,pr:240000,en:"Mar-28",vs:"SI",cu:2151,bk:"BCP"},{d:"ALBAMAR",p:"AURA",u:"505",m:"E",tc:29.62,li:0,to:29.62,vi:"CALLE",dr:1,pr:251700,en:"Abr-27",vs:null,cu:2256,bk:"INTERBANK"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"105",m:"X11-1",tc:34.12,li:7.05,to:41.17,vi:"INTERNA",dr:1,pr:326000,en:"Dic-27",vs:"SI",cu:2922,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"406",m:"X06-4 Y 5",tc:79.51,li:0,to:79.51,vi:"EXTERNA",dr:3,pr:616000,en:"Dic-27",vs:"SI",cu:5522,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1013",m:"X13-7 AL 10",tc:55.64,li:0,to:55.64,vi:"INTERNA",dr:2,pr:447000,en:"Dic-27",vs:"SI",cu:4007,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2413",m:"X13",tc:40.05,li:0,to:40.05,vi:"INTERNA",dr:1,pr:252000,en:"Mar-28",vs:"SI",cu:2259,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1505",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:419000,en:"Mar-28",vs:"SI",cu:3756,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"910",m:"X10",tc:48.97,li:0,to:48.97,vi:"INTERNA",dr:2,pr:340000,en:"Mar-28",vs:"SI",cu:3048,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1809",m:"X09",tc:27.32,li:0,to:27.32,vi:"INTERNA",dr:0,pr:202000,en:"Mar-28",vs:"SI",cu:1811,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1310",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:306000,en:"Dic-27",vs:"SI",cu:2743,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1505",m:"P4-P18-X05",tc:68.3,li:0,to:68.3,vi:"EXTERNA",dr:3,pr:451000,en:"Dic-27",vs:"NO",cu:4043,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"AURA",u:"302",m:"B",tc:70.33,li:0,to:70.33,vi:"AV. TOMAS MARSANO",dr:3,pr:486800,en:"Abr-27",vs:null,cu:4364,bk:"INTERBANK"},{d:"V&V",p:"GERMANIA",u:"2109",m:"P21-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:295000,en:"Dic-27",vs:"NO",cu:2644,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1004",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:541000,en:"Dic-27",vs:"NO",cu:4849,bk:"FIDEICOMISO"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"313",m:"X13-2 AL 6",tc:56.35,li:0,to:56.35,vi:"INTERNA",dr:2,pr:457000,en:"Dic-27",vs:"SI",cu:4096,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1603",m:"P4-P18-X03",tc:65.1,li:0,to:65.1,vi:"EXTERNA",dr:3,pr:495000,en:"Dic-27",vs:"NO",cu:4437,bk:"FIDEICOMISO"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"804",m:"X04-B",tc:59.95,li:0,to:59.95,vi:"EXTERNA",dr:2,pr:500000,en:"Dic-27",vs:"SI",cu:4482,bk:"BCP"},{d:"GRATTO INMOBILIARIA",p:"ARAMBURÚ 934",u:"1103",m:"X03-C",tc:60.97,li:0,to:60.97,vi:"EXTERNA",dr:2,pr:507000,en:"Dic-27",vs:"SI",cu:4545,bk:"BCP"}];
 
-function getFiltered() {
-  let d = [...RAW];
-  if (filters.proyecto.length) d = d.filter(r => filters.proyecto.includes(r.proyecto));
-  if (filters.dorms.length) d = d.filter(r => filters.dorms.some(fd => {
-    if(fd === '0') return r.dorms === 0;
-    if(fd === '1') return r.dorms === 1;
-    if(fd === '2') return r.dorms >= 2 && r.dorms < 3;
-    if(fd === '2.5') return r.dorms === 2.5;
-    if(fd === '3+') return r.dorms >= 3;
-    return false;
-  }));
-  if (filters.vista.length) d = d.filter(r => filters.vista.some(v => r.vista && r.vista.toUpperCase().includes(v)));
-  if (filters.vis.length) d = d.filter(r => filters.vis.some(v => visNorm(r.vis) === v));
-  if (filters.entrega.length) d = d.filter(r => filters.entrega.includes(r.entrega));
-  if (filters.banco) d = d.filter(r => r.banco === filters.banco);
-  if (filters.precioMin) d = d.filter(r => r.precio >= +filters.precioMin);
-  if (filters.precioMax) d = d.filter(r => r.precio <= +filters.precioMax);
-  if (filters.areaMin) d = d.filter(r => r.total >= +filters.areaMin);
-  if (filters.areaMax) d = d.filter(r => r.total <= +filters.areaMax);
-  // sort
-  d.sort((a,b) => {
-    if(sortBy === 'precio-asc') return a.precio - b.precio;
-    if(sortBy === 'precio-desc') return b.precio - a.precio;
-    if(sortBy === 'area-desc') return b.total - a.total;
-    if(sortBy === 'area-asc') return a.total - b.total;
-    if(sortBy === 'cuota-asc') return a.cuota - b.cuota;
-    return 0;
-  });
-  return d;
+// COORDS
+const PC = {
+  'GERMANIA':          {lat:-12.1020,lng:-77.0098,addr:'Jr. Domingo M. Luján, Surquillo'},
+  'TORRE MARSANO 28':  {lat:-12.1078,lng:-77.0025,addr:'Av. Tomás Marsano 28, Surquillo'},
+  'ELEMENT':           {lat:-12.1055,lng:-77.0070,addr:'Av. Ricardo Angulo, Surquillo'},
+  'NITOA 6':           {lat:-12.1035,lng:-77.0050,addr:'Jr. Nitoa 6, Surquillo'},
+  'DISTRITO 34':       {lat:-12.1065,lng:-77.0080,addr:'Calle 34, Surquillo'},
+  'ARAMBURÚ 934':      {lat:-12.1092,lng:-77.0041,addr:'Av. Aramburú 934, Surquillo'},
+  'AURA':              {lat:-12.1048,lng:-77.0062,addr:'Av. Tomás Marsano, Surquillo'},
+  'OASIS':             {lat:-12.1030,lng:-77.0088,addr:'Surquillo, Lima'},
+};
+const gc = p => PC[p] || {lat:-12.1050,lng:-77.0065,addr:'Surquillo, Lima'};
+const AM = {'GERMANIA':'acc-germania','TORRE MARSANO 28':'acc-torre','ELEMENT':'acc-element','NITOA 6':'acc-nitoa','DISTRITO 34':'acc-distrito','ARAMBURÚ 934':'acc-aramb','AURA':'acc-aura','OASIS':'acc-oasis'};
+const ga = p => AM[p] || 'acc-germania';
+
+let F = {p:[],dr:[],vi:[],vs:[],en:[],bk:'',pm:'',px:'',am:'',ax:''};
+let vw = 'grid', so = 'precio-asc';
+const fmt  = n => 'S/ ' + Math.round(n).toLocaleString('es-PE');
+const fmtU = n => 'USD ' + Math.round(n/3.74).toLocaleString('en-US');
+const fA   = n => n.toFixed(1) + ' m²';
+const vn   = v => v ? v.toUpperCase().replace('SÍ','SI') : '—';
+const dL   = d => ({0:'Studio',1:'1 Dormitorio',2:'2 Dormitorios',2.5:'2.5 Dormitorios',3:'3 Dormitorios'}[d] || d+' dorms.');
+const dS   = d => ({0:'Studio',1:'1 dorm.',2:'2 dorms.',2.5:'2.5',3:'3 dorms.'}[d] || d+' dorms.');
+
+function etag(e) {
+  if(e==='INMEDIATA') return '<span class="tag t-green">Entrega Inmediata</span>';
+  if(e==='Nov-26'||e==='Dic-26') return `<span class="tag t-green">${e}</span>`;
+  if(e.includes('-27')||e.includes('Abr')) return `<span class="tag t-amber">${e}</span>`;
+  return `<span class="tag t-stone">${e}</span>`;
 }
-
-function toggleChip(arr, val) {
-  const i = arr.indexOf(val);
-  if (i >= 0) arr.splice(i, 1); else arr.push(val);
+function getFil() {
+  let x = [...D];
+  if(F.p.length) x=x.filter(r=>F.p.includes(r.p));
+  if(F.dr.length) x=x.filter(r=>F.dr.some(f=>{if(f==='0')return r.dr===0;if(f==='1')return r.dr===1;if(f==='2')return r.dr>=2&&r.dr<3;if(f==='2.5')return r.dr===2.5;if(f==='3+')return r.dr>=3;return false}));
+  if(F.vi.length) x=x.filter(r=>F.vi.some(v=>r.vi&&r.vi.toUpperCase().includes(v)));
+  if(F.vs.length) x=x.filter(r=>F.vs.some(v=>vn(r.vs)===v));
+  if(F.en.length) x=x.filter(r=>F.en.includes(r.en));
+  if(F.bk) x=x.filter(r=>r.bk===F.bk);
+  if(F.pm) x=x.filter(r=>r.pr>=+F.pm);
+  if(F.px) x=x.filter(r=>r.pr<=+F.px);
+  if(F.am) x=x.filter(r=>r.to>=+F.am);
+  if(F.ax) x=x.filter(r=>r.to<=+F.ax);
+  x.sort((a,b)=>{if(so==='precio-asc')return a.pr-b.pr;if(so==='precio-desc')return b.pr-a.pr;if(so==='area-desc')return b.to-a.to;if(so==='area-asc')return a.to-b.to;if(so==='cuota-asc')return a.cu-b.cu;return 0});
+  return x;
 }
-
-function buildFilters() {
-  // Proyecto chips
-  const proyectos = [...new Set(RAW.map(r => r.proyecto))].sort();
-  const fp = document.getElementById('filter-proyecto');
-  fp.innerHTML = proyectos.map(p => `<button class="chip" onclick="toggleFilter('proyecto','${p}')">${p}</button>`).join('');
-  // Dorms
-  const dorms = [['0','Studio'],['1','1 dorm'],['2','2 dorms'],['2.5','2.5 dorms'],['3+','3+ dorms']];
-  const fd = document.getElementById('filter-dorms');
-  fd.innerHTML = dorms.map(([v,l]) => `<button class="chip" onclick="toggleFilter('dorms','${v}')">${l}</button>`).join('');
-  // Vista
-  const vistas = [['EXTERNA','Externa'],['INTERNA','Interna'],['PENDIENTE','Pendiente']];
-  const fv = document.getElementById('filter-vista');
-  fv.innerHTML = vistas.map(([v,l]) => `<button class="chip" onclick="toggleFilter('vista','${v}')">${l}</button>`).join('');
-  // Vis
-  const vis = [['SI','Con restricción'],['NO','Sin restricción']];
-  const fvis = document.getElementById('filter-vis');
-  fvis.innerHTML = vis.map(([v,l]) => `<button class="chip" onclick="toggleFilter('vis','${v}')">${l}</button>`).join('');
-  // Entrega
-  const entregas = [...new Set(RAW.map(r => r.entrega))].sort();
-  const fe = document.getElementById('filter-entrega');
-  fe.innerHTML = entregas.map(e => `<button class="chip ${e==='INMEDIATA'?'chip-urgent':''}" onclick="toggleFilter('entrega','${e}')">${e}</button>`).join('');
-  // Banco
-  const bancos = [...new Set(RAW.map(r => r.banco).filter(Boolean))].sort();
-  const fb = document.getElementById('filter-banco');
-  fb.innerHTML = '<option value="">Todos los bancos</option>' + bancos.map(b => `<option value="${b}">${b}</option>`).join('');
-  fb.addEventListener('change', e => { filters.banco = e.target.value; render(); });
-  // Range inputs
-  ['precio-min','precio-max','area-min','area-max'].forEach(id => {
-    document.getElementById(id).addEventListener('input', e => {
-      const key = id.replace('-','').replace('min','Min').replace('max','Max');
-      if(id==='precio-min') filters.precioMin = e.target.value;
-      else if(id==='precio-max') filters.precioMax = e.target.value;
-      else if(id==='area-min') filters.areaMin = e.target.value;
-      else if(id==='area-max') filters.areaMax = e.target.value;
-      render();
-    });
-  });
-  // Sort
-  document.getElementById('sort-select').addEventListener('change', e => { sortBy = e.target.value; render(); });
-}
-
-function toggleFilter(type, val) {
-  if(['proyecto','dorms','vista','vis','entrega'].includes(type)) {
-    toggleChip(filters[type], val);
-  }
+function togF(k,v){const a=F[k];const i=a.indexOf(v);if(i>=0)a.splice(i,1);else a.push(v);render();}
+function resetF(){
+  F={p:[],dr:[],vi:[],vs:[],en:[],bk:'',pm:'',px:'',am:'',ax:''};
+  document.querySelectorAll('.chip,.fchip').forEach(c=>c.classList.remove('active'));
+  document.getElementById('fbn').value='';
+  ['amin','amax','qpmin','qpmax'].forEach(id=>document.getElementById(id).value='');
   render();
 }
-
-function resetFilters() {
-  filters = { proyecto:[], dorms:[], vista:[], vis:[], entrega:[], banco:'', precioMin:'', precioMax:'', areaMin:'', areaMax:'' };
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  document.getElementById('filter-banco').value = '';
-  ['precio-min','precio-max','area-min','area-max'].forEach(id => document.getElementById(id).value = '');
-  render();
-}
-
 function setView(v) {
-  viewMode = v;
-  document.getElementById('btn-grid').classList.toggle('active', v==='grid');
-  document.getElementById('btn-list').classList.toggle('active', v==='list');
+  vw = v;
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',i===(v==='grid'?0:1)));
+  document.getElementById('vg').classList.toggle('active',v==='grid');
+  document.getElementById('vl').classList.toggle('active',v==='list');
   render();
 }
 
-function updateChips() {
-  document.querySelectorAll('.chip').forEach(chip => {
-    const onclick = chip.getAttribute('onclick') || '';
-    const m = onclick.match(/toggleFilter\('(\w+)','(.+?)'\)/);
-    if(m) {
-      const [,type,val] = m;
-      chip.classList.toggle('active', filters[type] && filters[type].includes(val));
-    }
+// MAP POOL
+const mapPool = {};
+function initCardMap(id, lat, lng) {
+  if(mapPool[id]) return;
+  const el = document.getElementById(id);
+  if(!el) return;
+  const m = L.map(id, {
+    center:[lat,lng], zoom:16,
+    zoomControl:false, attributionControl:false,
+    dragging:false, scrollWheelZoom:false,
+    doubleClickZoom:false, touchZoom:false,
+  });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(m);
+  L.divIcon && L.marker([lat,lng], {
+    icon: L.divIcon({
+      className:'',
+      html:`<div style="position:relative;width:20px;height:26px"><div style="width:20px;height:26px;background:#16140F;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.35)"><div style="width:6px;height:6px;background:white;border-radius:50%;position:absolute;top:4px;left:4px"></div></div></div>`,
+      iconSize:[20,26], iconAnchor:[10,26]
+    })
+  }).addTo(m);
+  mapPool[id] = m;
+}
+function initModalMap(id, lat, lng) {
+  if(mapPool['m_'+id]) return;
+  const el = document.getElementById(id);
+  if(!el) return;
+  const m = L.map(id, {
+    center:[lat,lng], zoom:16,
+    zoomControl:true, attributionControl:false,
+  });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(m);
+  L.marker([lat,lng], {
+    icon: L.divIcon({
+      className:'',
+      html:`<div style="position:relative;width:26px;height:34px"><div style="width:26px;height:34px;background:#16140F;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2.5px solid white;box-shadow:0 3px 12px rgba(0,0,0,0.4)"><div style="width:8px;height:8px;background:white;border-radius:50%;position:absolute;top:5px;left:5px"></div></div></div>`,
+      iconSize:[26,34], iconAnchor:[13,34]
+    })
+  }).addTo(m);
+  mapPool['m_'+id] = m;
+}
+
+function buildUI() {
+  const ps = [...new Set(D.map(r=>r.p))].sort();
+  document.getElementById('fp').innerHTML = ps.map(p=>`<button class="chip" onclick="togF('p','${p}')">${p}</button>`).join('');
+  document.getElementById('fd').innerHTML = [['0','Studio'],['1','1'],['2','2'],['2.5','2.5'],['3+','3+']].map(([v,l])=>`<button class="chip" onclick="togF('dr','${v}')">${l}</button>`).join('');
+  document.getElementById('fv').innerHTML = [['EXTERNA','Externa'],['INTERNA','Interna'],['PENDIENTE','Pendiente']].map(([v,l])=>`<button class="chip" onclick="togF('vi','${v}')">${l}</button>`).join('');
+  document.getElementById('fvis').innerHTML = [['SI','Con VIS'],['NO','Sin VIS']].map(([v,l])=>`<button class="chip" onclick="togF('vs','${v}')">${l}</button>`).join('');
+  const ens = [...new Set(D.map(r=>r.en))].sort();
+  document.getElementById('fe').innerHTML = ens.map(e=>`<button class="chip" onclick="togF('en','${e}')">${e}</button>`).join('');
+  const bks = [...new Set(D.map(r=>r.bk).filter(Boolean))].sort();
+  const fb = document.getElementById('fbn');
+  fb.innerHTML = '<option value="">Todos los bancos</option>' + bks.map(b=>`<option value="${b}">${b}</option>`).join('');
+  fb.onchange = e => { F.bk = e.target.value; render(); };
+  document.getElementById('srt').onchange = e => { so = e.target.value; render(); };
+  // Quick filters
+  document.getElementById('qf-vi').innerHTML = [['EXTERNA','Externa'],['INTERNA','Interna']].map(([v,l])=>`<button class="fchip" onclick="togQF('vi','${v}',this)">${l}</button>`).join('');
+  document.getElementById('qf-dr').innerHTML = [['1','1 dorm'],['2','2 dorms'],['3','3 dorms']].map(([v,l])=>`<button class="fchip" onclick="togQF('dr','${v}',this)">${l}</button>`).join('');
+  document.getElementById('qpmin').oninput = e => { F.pm = e.target.value; render(); };
+  document.getElementById('qpmax').oninput = e => { F.px = e.target.value; render(); };
+  document.getElementById('amin').oninput = e => { F.am = e.target.value; render(); };
+  document.getElementById('amax').oninput = e => { F.ax = e.target.value; render(); };
+  // Hero stats
+  const ps2 = D.map(r=>r.pr);
+  const cus = D.map(r=>r.cu).filter(Boolean);
+  document.getElementById('h-total').textContent = D.length;
+  document.getElementById('h-min').textContent = fmt(Math.min(...ps2));
+  document.getElementById('h-avg').textContent = fmt(ps2.reduce((a,b)=>a+b,0)/ps2.length);
+  document.getElementById('h-cuota').textContent = 'S/ '+Math.min(...cus).toLocaleString('es-PE')+'/mes';
+  document.getElementById('hcount').textContent = D.length;
+}
+function togQF(k,v,btn) { togF(k,v); btn.classList.toggle('active'); }
+function updChips() {
+  document.querySelectorAll('.chip').forEach(c=>{
+    const m=(c.getAttribute('onclick')||'').match(/togF\('(\w+)','(.+?)'\)/);
+    if(m) c.classList.toggle('active', F[m[1]]&&F[m[1]].includes(m[2]));
   });
 }
-
-function renderActiveFilters(data) {
-  const tags = [];
-  if(filters.proyecto.length) filters.proyecto.forEach(p => tags.push([`Proyecto: ${p}`,'proyecto',p]));
-  if(filters.dorms.length) filters.dorms.forEach(d => tags.push([`Dorms: ${d}`,'dorms',d]));
-  if(filters.vista.length) filters.vista.forEach(v => tags.push([`Vista: ${v}`,'vista',v]));
-  if(filters.vis.length) filters.vis.forEach(v => tags.push([`VIS: ${v}`,'vis',v]));
-  if(filters.entrega.length) filters.entrega.forEach(e => tags.push([`Entrega: ${e}`,'entrega',e]));
-  if(filters.banco) tags.push([`Banco: ${filters.banco}`,'banco',null]);
-  if(filters.precioMin) tags.push([`Precio ≥ S/ ${(+filters.precioMin).toLocaleString()}`,'precioMin',null]);
-  if(filters.precioMax) tags.push([`Precio ≤ S/ ${(+filters.precioMax).toLocaleString()}`,'precioMax',null]);
-  if(filters.areaMin) tags.push([`Área ≥ ${filters.areaMin} m²`,'areaMin',null]);
-  if(filters.areaMax) tags.push([`Área ≤ ${filters.areaMax} m²`,'areaMax',null]);
-  const af = document.getElementById('active-filters');
-  af.innerHTML = tags.map(([lbl,type,val]) => `<span class="filter-tag">${lbl}<button onclick="removeFilter('${type}',${val?`'${val}'`:'null'})">×</button></span>`).join('');
+function updStats(x) {
+  const n = x.length;
+  document.getElementById('rc').textContent = n;
+  document.getElementById('sc').textContent = n;
+  document.getElementById('hcount').textContent = n;
+  if(!n){['smin','smax','spro'].forEach(id=>document.getElementById(id).textContent='—');return;}
+  const ps = x.map(r=>r.pr);
+  document.getElementById('smin').textContent = fmt(Math.min(...ps));
+  document.getElementById('smax').textContent = fmt(Math.max(...ps));
+  document.getElementById('spro').textContent = new Set(x.map(r=>r.p)).size;
 }
-
-function removeFilter(type, val) {
-  if(val && ['proyecto','dorms','vista','vis','entrega'].includes(type)) {
-    const i = filters[type].indexOf(val);
-    if(i>=0) filters[type].splice(i,1);
-  } else {
-    if(type==='banco') { filters.banco=''; document.getElementById('filter-banco').value=''; }
-    if(type==='precioMin') { filters.precioMin=''; document.getElementById('precio-min').value=''; }
-    if(type==='precioMax') { filters.precioMax=''; document.getElementById('precio-max').value=''; }
-    if(type==='areaMin') { filters.areaMin=''; document.getElementById('area-min').value=''; }
-    if(type==='areaMax') { filters.areaMax=''; document.getElementById('area-max').value=''; }
-  }
+function updTags() {
+  const t = [];
+  F.p.forEach(v=>t.push([`Proyecto: ${v}`,'p',v]));
+  F.dr.forEach(v=>t.push([`Dorms: ${v}`,'dr',v]));
+  F.vi.forEach(v=>t.push([`Vista: ${v}`,'vi',v]));
+  F.vs.forEach(v=>t.push([`VIS: ${v}`,'vs',v]));
+  F.en.forEach(v=>t.push([`Entrega: ${v}`,'en',v]));
+  if(F.bk) t.push([`Banco: ${F.bk}`,'bk',null]);
+  if(F.pm) t.push([`Precio ≥ ${fmt(+F.pm)}`,'pm',null]);
+  if(F.px) t.push([`Precio ≤ ${fmt(+F.px)}`,'px',null]);
+  if(F.am) t.push([`Área ≥ ${F.am}m²`,'am',null]);
+  if(F.ax) t.push([`Área ≤ ${F.ax}m²`,'ax',null]);
+  const el = document.getElementById('active-tags');
+  el.innerHTML = t.map(([l,k,v])=>`<span class="atag">${l}<button onclick="rmTag('${k}',${v?`'${v}'`:'null'})">×</button></span>`).join('');
+  el.classList.toggle('has-tags', t.length > 0);
+}
+function rmTag(k,v){
+  if(v&&['p','dr','vi','vs','en'].includes(k)){const i=F[k].indexOf(v);if(i>=0)F[k].splice(i,1);}
+  else{F[k]='';const m={bk:'fbn',pm:'qpmin',px:'qpmax',am:'amin',ax:'amax'};if(m[k])document.getElementById(m[k]).value='';}
   render();
 }
 
-function renderStats(data) {
-  document.getElementById('s-total').textContent = data.length;
-  document.getElementById('header-count-num').textContent = data.length;
-  if(!data.length) return;
-  const prices = data.map(r=>r.precio);
-  document.getElementById('s-min').textContent = fmt(Math.min(...prices));
-  document.getElementById('s-max').textContent = fmt(Math.max(...prices));
-  document.getElementById('s-avg').textContent = fmt(prices.reduce((a,b)=>a+b,0)/prices.length);
-  document.getElementById('s-proyectos').textContent = new Set(data.map(r=>r.proyecto)).size;
-}
-
-function dormLabel(d) {
-  if(d===0) return 'Studio';
-  if(d===1) return '1 dorm.';
-  if(d===1.5) return '1.5 dorms.';
-  if(d===2) return '2 dorms.';
-  if(d===2.5) return '2.5 dorms.';
-  if(d===3) return '3 dorms.';
-  return d + ' dorms.';
-}
-
-function entregaBadgeClass(e) {
-  if(e==='INMEDIATA' || e==='Nov-26' || e==='Dic-26') return 'badge-entrega urgent';
-  return 'badge-entrega';
-}
-
-function cardHTML(r) {
-  return `<div class="card" onclick="openModal(${RAW.indexOf(r)})">
-    <div class="card-badge-row">
-      <span class="badge badge-proyecto">${r.proyecto}</span>
-      <span class="badge ${entregaBadgeClass(r.entrega)}">${r.entrega}</span>
-      ${r.libre > 0 ? `<span class="badge badge-vista">+${fmtArea(r.libre)} libre</span>` : ''}
+function cHTML(r, i) {
+  const idx = D.indexOf(r);
+  const acc = ga(r.p);
+  const coords = gc(r.p);
+  const mapId = `cm${idx}`;
+  const isVis = r.vs && vn(r.vs)==='SI';
+  return `<div class="card ${acc}" style="animation-delay:${(i%20)*0.028}s" onclick="openM(${idx})">
+  <div class="card-indicator"></div>
+  <div class="card-map-area">
+    <div id="${mapId}"></div>
+    <div class="map-overlay"></div>
+    <div class="map-addr-tag">
+      <svg width="8" height="10" viewBox="0 0 8 10" fill="none"><path d="M4 0C1.79 0 0 1.79 0 4C0 7 4 10 4 10C4 10 8 7 8 4C8 1.79 6.21 0 4 0Z" fill="#9A7B2F"/></svg>
+      ${coords.addr.split(',')[0]}
     </div>
-    <div class="card-body">
-      <div class="card-project">${r.desarrolladora} · Unidad ${r.inmueble}</div>
-      <div class="card-title">${dormLabel(r.dorms)} · ${fmtArea(r.total)}</div>
-      <div class="card-meta">
-        <div class="meta-item"><span class="meta-val">${fmtArea(r.techada)}</span><span class="meta-lbl">Techada</span></div>
-        <div class="meta-item"><span class="meta-val">${r.vista}</span><span class="meta-lbl">Vista</span></div>
-        <div class="meta-item"><span class="meta-val">${r.modelo}</span><span class="meta-lbl">Modelo</span></div>
+    <div class="card-fav" onclick="event.stopPropagation();this.innerHTML=this.innerHTML==='♡'?'♥':'♡'">♡</div>
+  </div>
+  <div class="card-body">
+    <div class="card-header-row">
+      <span class="card-project">${r.p}</span>
+      <span class="card-dev">${r.d}</span>
+    </div>
+    <div class="card-title">${dS(r.dr)}</div>
+    <div class="card-unit">Unidad ${r.u} · Modelo ${r.m}</div>
+    <div class="tags-row">
+      ${etag(r.en)}
+      ${r.li>0 ? `<span class="tag t-blue">+${fA(r.li)} libre</span>` : ''}
+      ${isVis ? '<span class="tag t-red">VIS</span>' : ''}
+    </div>
+    <div class="specs-grid">
+      <div class="spec-cell"><span class="spec-val">${fA(r.to)}</span><span class="spec-key">Total</span></div>
+      <div class="spec-cell"><span class="spec-val">${fA(r.tc)}</span><span class="spec-key">Techada</span></div>
+      <div class="spec-cell"><span class="spec-val">${r.vi.split('/')[0].substring(0,10)}</span><span class="spec-key">Vista</span></div>
+    </div>
+    <div class="card-footer">
+      <div class="price-block">
+        <div class="price-main">${fmt(r.pr)}</div>
+        <div class="price-usd">${fmtU(r.pr)}</div>
       </div>
-      <div class="card-price-row">
-        <div>
-          <div class="card-price">${fmt(r.precio)}</div>
-          ${r.banco ? `<span class="card-banco">${r.banco}</span>` : ''}
-        </div>
-        <div class="card-cuota">Cuota aprox.<strong>S/ ${r.cuota ? r.cuota.toLocaleString('es-PE') : '—'}/mes</strong></div>
+      <div class="price-right">
+        ${r.cu ? `<div class="price-cuota">S/ ${r.cu.toLocaleString('es-PE')}/mes</div>` : ''}
+        ${r.bk ? `<div class="price-bank">${r.bk}</div>` : ''}
       </div>
     </div>
-  </div>`;
+    <button class="card-cta">Ver detalle <span class="card-cta-arrow">→</span></button>
+  </div>
+</div>`;
 }
 
-function listRowHTML(r) {
-  return `<div class="list-row" onclick="openModal(${RAW.indexOf(r)})">
-    <div>
-      <div class="list-name">${r.proyecto}</div>
-      <div class="list-sub">${r.desarrolladora} · Unidad ${r.inmueble} · ${r.modelo}</div>
-    </div>
-    <div><span class="list-val">${dormLabel(r.dorms)}</span></div>
-    <div><span class="list-val">${fmtArea(r.total)}</span><span class="list-val-sm" style="display:block;font-size:11px;color:var(--ink-3)">${r.vista}</span></div>
-    <div><span class="badge ${entregaBadgeClass(r.entrega)}">${r.entrega}</span></div>
-    <div><span class="list-val">${r.banco || '—'}</span></div>
-    <div>
-      <span class="list-price">${fmt(r.precio)}</span>
-      ${r.cuota ? `<span class="list-cuota">S/ ${r.cuota.toLocaleString('es-PE')}/mes</span>` : ''}
-    </div>
+function lHTML(r, i) {
+  const idx = D.indexOf(r);
+  return `<div class="prop-row" style="animation-delay:${i*0.014}s" onclick="openM(${idx})">
+    <div><div class="prop-name">${r.p}</div><div class="prop-sub">${r.d} · Unidad ${r.u} · ${r.m}</div></div>
+    <div><span class="lv">${dS(r.dr)}</span></div>
+    <div><span class="lv">${fA(r.to)}</span><span class="lv2">${r.vi.substring(0,16)}</span></div>
+    <div>${etag(r.en)}</div>
+    <div><span class="lv">${r.bk||'—'}</span></div>
+    <div><span class="lprice">${fmt(r.pr)}</span>${r.cu?`<span class="lcuota">S/ ${r.cu.toLocaleString('es-PE')}/mes</span>`:''}</div>
+    <div><button class="row-map-btn" onclick="event.stopPropagation();openM(${idx})">📍</button></div>
   </div>`;
 }
 
 function render() {
-  const data = getFiltered();
-  updateChips();
-  renderActiveFilters(data);
-  renderStats(data);
-  document.getElementById('results-count').textContent = data.length;
-  const c = document.getElementById('results-container');
-  if(!data.length) {
-    c.innerHTML = `<div class="empty"><div class="empty-icon">🏢</div><h3>Sin resultados</h3><p>Ajusta los filtros para ver más inmuebles.</p></div>`;
+  const x = getFil();
+  updChips(); updTags(); updStats(x);
+  const c = document.getElementById('res');
+  if(!x.length) {
+    c.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">Sin resultados</div><div class="empty-desc">Ajusta los filtros para encontrar propiedades.</div></div>`;
     return;
   }
-  if(viewMode === 'grid') {
-    c.innerHTML = `<div class="grid">${data.map(cardHTML).join('')}</div>`;
+  if(vw === 'grid') {
+    c.innerHTML = `<div class="grid-view">${x.map((r,i)=>cHTML(r,i)).join('')}</div>`;
+    // Lazy-load maps via IntersectionObserver
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(e.isIntersecting) {
+          const id = e.target.id;
+          const idx = parseInt(id.replace('cm',''));
+          const r = D[idx];
+          const coord = gc(r.p);
+          setTimeout(() => initCardMap(id, coord.lat, coord.lng), 30);
+          obs.unobserve(e.target);
+        }
+      });
+    }, {threshold: 0.1});
+    document.querySelectorAll('[id^="cm"]').forEach(el => obs.observe(el));
   } else {
-    c.innerHTML = `<div class="list">
-      <div class="list-row-header">
-        <span class="list-col-h">Proyecto / Unidad</span>
-        <span class="list-col-h">Dorms</span>
-        <span class="list-col-h">Área / Vista</span>
-        <span class="list-col-h">Entrega</span>
-        <span class="list-col-h">Banco</span>
-        <span class="list-col-h">Precio / Cuota</span>
+    c.innerHTML = `<div class="list-view">
+      <div class="list-header">
+        <span class="lhd">Proyecto / Unidad</span>
+        <span class="lhd">Dormitorios</span>
+        <span class="lhd">Área / Vista</span>
+        <span class="lhd">Entrega</span>
+        <span class="lhd">Banco</span>
+        <span class="lhd">Precio / Cuota</span>
+        <span class="lhd">Mapa</span>
       </div>
-      ${data.map(listRowHTML).join('')}
+      ${x.map((r,i)=>lHTML(r,i)).join('')}
     </div>`;
   }
 }
 
-function openModal(idx) {
-  const r = RAW[idx];
-  const isVis = r.vis && visNorm(r.vis) === 'SI';
+function openM(idx) {
+  const r = D[idx];
+  const isVis = r.vs && vn(r.vs)==='SI';
+  const coord = gc(r.p);
+  const acc = ga(r.p);
+  const mhId = `mh${idx}`, mbId = `mb${idx}`;
+
   document.getElementById('modal-content').innerHTML = `
-    <div class="modal-header">
-      <p>${r.proyecto} · ${r.desarrolladora}</p>
-      <h2>${dormLabel(r.dorms)}<br>${fmtArea(r.total)}</h2>
-      <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-map-zone" id="${mhId}">
+      <div class="modal-proj-badge">${r.p}</div>
+      <button class="modal-top-close" onclick="closeM()">×</button>
     </div>
-    <div class="modal-divider"></div>
-    <div class="modal-body">
-      <div class="modal-price-block">
-        <div class="price">${fmt(r.precio)}</div>
-        <div class="cuota-info">
-          <p>Cuota mensual aprox.</p>
-          <strong>S/ ${r.cuota ? r.cuota.toLocaleString('es-PE') : '—'}</strong>
-          ${r.banco ? `<span style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.06em;">${r.banco}</span>` : ''}
+    <div class="card-indicator ${acc}" style="height:3px"></div>
+    <div class="modal-content">
+      <div class="modal-eyebrow">${r.d} · Surquillo, Lima</div>
+      <div class="modal-title">${dL(r.dr)}</div>
+      <div class="modal-sub">Unidad ${r.u} · Modelo ${r.m} · ${r.vi} · ${coord.addr}</div>
+      <div class="modal-price-band">
+        <div class="mpb-left">
+          <div class="mpb-label">Precio de venta</div>
+          <div class="mpb-price">${fmt(r.pr)}</div>
+          <div class="mpb-usd">${fmtU(r.pr)}</div>
+        </div>
+        <div class="mpb-right">
+          <div class="mpb-label">Cuota estimada</div>
+          <div class="mpb-cuota-val">S/ ${r.cu ? r.cu.toLocaleString('es-PE') : '—'}/mes</div>
+          ${r.bk ? `<div class="mpb-bank">${r.bk}</div>` : ''}
         </div>
       </div>
-      <div class="modal-grid">
-        <div class="modal-field"><div class="modal-field-lbl">Unidad</div><div class="modal-field-val">${r.inmueble}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">Modelo</div><div class="modal-field-val">${r.modelo}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">Área techada</div><div class="modal-field-val">${fmtArea(r.techada)}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">Área libre</div><div class="modal-field-val">${fmtArea(r.libre)}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">Área total</div><div class="modal-field-val">${fmtArea(r.total)}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">Vista</div><div class="modal-field-val">${r.vista}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">Dormitorios</div><div class="modal-field-val">${dormLabel(r.dorms)}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">F. Entrega</div><div class="modal-field-val">${r.entrega}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">Distrito</div><div class="modal-field-val">${r.distrito}</div></div>
-        <div class="modal-field"><div class="modal-field-lbl">Restricción VIS</div><div class="modal-field-val"><span class="badge-restriccion ${r.vis ? (isVis ? 'si' : 'no') : ''}">${r.vis || 'N/D'}</span></div></div>
+      <div class="modal-section">
+        <div class="modal-section-hd">Superficies</div>
+        <div class="m-specs3">
+          <div class="m-spec"><span class="m-spec-val">${fA(r.tc)}</span><span class="m-spec-key">Área Techada</span></div>
+          <div class="m-spec"><span class="m-spec-val">${fA(r.li)}</span><span class="m-spec-key">Área Libre</span></div>
+          <div class="m-spec"><span class="m-spec-val">${fA(r.to)}</span><span class="m-spec-key">Área Total</span></div>
+        </div>
       </div>
-      <button class="modal-cta">Consultar disponibilidad</button>
+      <div class="modal-section">
+        <div class="modal-section-hd">Ubicación</div>
+        <div class="modal-map-inline" id="${mbId}">
+          <div class="m-map-tag">📍 ${coord.addr}</div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-hd">Ficha técnica</div>
+        <div class="m-detail-grid">
+          <div class="m-detail"><span class="m-detail-key">Dormitorios</span><span class="m-detail-val">${dL(r.dr)}</span></div>
+          <div class="m-detail"><span class="m-detail-key">Vista</span><span class="m-detail-val">${r.vi}</span></div>
+          <div class="m-detail"><span class="m-detail-key">Entrega</span><span class="m-detail-val">${r.en}</span></div>
+          <div class="m-detail"><span class="m-detail-key">Desarrolladora</span><span class="m-detail-val">${r.d}</span></div>
+          <div class="m-detail"><span class="m-detail-key">Distrito</span><span class="m-detail-val">Surquillo, Lima</span></div>
+          <div class="m-detail"><span class="m-detail-key">Restricción VIS</span><span class="m-detail-val"><span class="${isVis?'badge badge-red':'badge badge-green'}">${r.vs||'N/D'}</span></span></div>
+        </div>
+      </div>
+      <button class="modal-cta">Consultar disponibilidad <span>→</span></button>
     </div>`;
-  document.getElementById('modal').classList.add('open');
+
+  document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-}
 
-function closeModal(e) {
-  if(!e || e.target.id === 'modal') {
-    document.getElementById('modal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
+  // Init maps
+  setTimeout(() => {
+    initModalMap(mhId, coord.lat, coord.lng);
+    initModalMap(mbId, coord.lat, coord.lng);
+    setTimeout(() => {
+      if(mapPool['m_'+mhId]) mapPool['m_'+mhId].invalidateSize();
+      if(mapPool['m_'+mbId]) mapPool['m_'+mbId].invalidateSize();
+    }, 360);
+  }, 60);
 }
+function closeM() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleMOClick(e) { if(e.target.id==='modal-overlay') closeM(); }
 
-document.addEventListener('DOMContentLoaded', () => {
-  buildFilters();
-  render();
-});
+document.addEventListener('DOMContentLoaded', () => { buildUI(); render(); });
 </script>
 </body>
 </html>
