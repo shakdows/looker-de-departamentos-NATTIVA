@@ -782,17 +782,14 @@ function render(){
   if(!x.length){res.innerHTML='<div class="empty"><span class="ei">∅</span><div class="et">Sin resultados</div><div class="es">Ajusta los filtros</div></div>';return;}
   if(vw==='grid'){
     res.innerHTML=`<div class="grid-wrap"><div class="grid">${x.map((r,i)=>cardHTML(r,i)).join('')}</div></div>`;
-    const io=new IntersectionObserver(entries=>{
-      entries.forEach(e=>{
-        if(!e.isIntersecting)return;
-        const id=e.target.id.replace('-w','');
+    // Load maps with small delay after render
+    setTimeout(()=>{
+      document.querySelectorAll('[id$="-w"]').forEach(el=>{
+        const id=el.id.replace('-w','');
         const idx=parseInt(id.replace('cm',''));
-        const co=gc(D[idx]?D[idx].p:'GERMANIA');
-        setTimeout(()=>mkMap(id,co.lat,co.lng,co.color),20);
-        io.unobserve(e.target);
+        if(D[idx]){const co=gc(D[idx].p);mkMap(id,co.lat,co.lng,co.color);}
       });
-    },{threshold:.1});
-    document.querySelectorAll('[id$="-w"]').forEach(el=>io.observe(el));
+    },100);
     document.querySelectorAll('.card').forEach(c=>addTilt(c));
   } else {
     res.innerHTML=`<div class="list-view"><div class="l-hdr">${['Proyecto / Unidad','Dorms','Área / Vista','Entrega','Banco','Precio / Cuota',''].map(h=>`<span class="lh">${h}</span>`).join('')}</div>${x.map((r,i)=>rowHTML(r,i)).join('')}</div>`;
