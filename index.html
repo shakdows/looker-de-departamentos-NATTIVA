@@ -292,205 +292,210 @@ header.stuck{
 .kpi-cell:nth-child(4){animation:fadeUp .6s var(--spring) .45s both}
 
 /* ════════════════════════════════════════════════════════
-   FILTER SYSTEM — Premium floating bar
+   FILTER BAR — PROFESSIONAL SINGLE BAR
 ════════════════════════════════════════════════════════ */
 .filter-wrap{
   position:sticky;top:106px;z-index:550;
   background:var(--white);
-  border-bottom:2px solid var(--g5);
-  box-shadow:0 4px 24px rgba(0,0,0,.06);
+  border-bottom:1.5px solid var(--g5);
+  box-shadow:0 2px 16px rgba(0,0,0,.06);
 }
-/* Top bar with tabs + controls */
-.filter-topbar{
+.filter-bar{
   display:flex;align-items:center;
   padding:0 2rem;
-  border-bottom:1px solid var(--g5);
   gap:0;
-  min-height:52px;
-}
-.view-tab{
-  display:flex;align-items:center;gap:7px;
-  padding:.9rem 1.2rem .75rem;
-  font-family:var(--sans);font-size:11px;font-weight:600;
-  letter-spacing:.06em;text-transform:uppercase;
-  color:var(--g3);background:none;border:none;
-  border-bottom:2.5px solid transparent;
-  margin-bottom:-2px;
-  transition:all .2s;
-}
-.view-tab:hover{color:var(--ink)}
-.view-tab.on{color:var(--red);border-bottom-color:var(--red)}
-.ft-divider{width:1px;height:20px;background:var(--g5);align-self:center;margin:0 .5rem}
-.ft-right{margin-left:auto;display:flex;align-items:center;gap:12px}
-.ft-count{font-family:var(--sans);font-size:12px;color:var(--g2);white-space:nowrap}
-.ft-count strong{color:var(--ink);font-weight:700}
-.ft-sort{
-  display:flex;align-items:center;gap:5px;
-  padding:5px 20px 5px 10px;
-  border:1.5px solid var(--g5);border-radius:4px;
-  background:var(--g7);
-  font-family:var(--sans);font-size:11px;font-weight:500;color:var(--g1);
-  outline:none;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23AAA' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 7px center;
-  transition:border-color .18s;
-}
-.ft-sort:focus{border-color:var(--red)}
-.ft-sort option{background:var(--white)}
-
-/* Chip filter row */
-.filter-chipbar{
-  display:flex;align-items:stretch;
+  height:56px;
   overflow-x:auto;
-  border-bottom:1px solid var(--g5);
   scrollbar-width:none;
 }
-.filter-chipbar::-webkit-scrollbar{display:none}
-.fc-group{
-  display:flex;align-items:center;gap:8px;
-  padding:.55rem 1.25rem;
-  border-right:1px solid var(--g5);
-  flex-shrink:0;
-  background:var(--white);
-  transition:background .2s;
+.filter-bar::-webkit-scrollbar{display:none}
+/* LEFT: view toggles */
+.fb-views{display:flex;align-items:center;gap:2px;padding-right:1.25rem;border-right:1.5px solid var(--g5);flex-shrink:0}
+.vt{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 13px;border-radius:6px;
+  font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--g3);background:none;border:1.5px solid transparent;
+  transition:all .18s;
 }
-.fc-group:last-child{border-right:none;margin-left:auto}
-.fc-lbl{
-  font-family:var(--sans);font-size:8.5px;font-weight:800;
-  letter-spacing:.22em;text-transform:uppercase;
-  color:var(--g3);white-space:nowrap;
-  padding-right:4px;
-  border-right:1px solid var(--g5);
+.vt:hover{color:var(--ink);background:var(--g6);border-color:var(--g5)}
+.vt.on{color:var(--white);background:var(--ink);border-color:var(--ink)}
+/* MIDDLE: filter chips */
+.fb-filters{
+  display:flex;align-items:center;gap:6px;
+  padding:0 1.25rem;
+  flex:1;overflow-x:auto;scrollbar-width:none;
 }
-/* CHIPS — pill style with brand color active state */
-.chips{display:flex;gap:4px;flex-wrap:wrap}
+.fb-filters::-webkit-scrollbar{display:none}
+.fb-sep{width:1px;height:20px;background:var(--g5);flex-shrink:0;margin:0 4px}
+.fb-lbl{font-family:var(--sans);font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--g3);white-space:nowrap;flex-shrink:0}
+/* Chips */
 .chip,.fchip,.dchip{
-  padding:5px 13px;
-  border-radius:20px;
-  border:1.5px solid var(--g4);
-  background:var(--white);
-  color:var(--g1);
-  font-family:var(--sans);font-size:11px;font-weight:600;
-  white-space:nowrap;
-  transition:all .2s var(--ease2);
-  position:relative;
+  padding:5px 12px;border-radius:20px;
+  border:1.5px solid var(--g4);background:var(--white);
+  color:var(--g1);font-family:var(--sans);font-size:11px;font-weight:500;
+  white-space:nowrap;transition:all .18s;flex-shrink:0;
 }
-.chip:hover,.fchip:hover,.dchip:hover{
-  border-color:var(--red);color:var(--red);
-  background:var(--red-l);
-  transform:translateY(-1px);
-  box-shadow:0 2px 8px rgba(179,32,42,.15);
-}
-.chip.on,.fchip.on,.dchip.on{
-  background:var(--red);border-color:var(--red);color:var(--white);
-  font-weight:700;
-  box-shadow:0 3px 12px rgba(179,32,42,.3);
-}
-/* Price inputs */
-.price-row{display:flex;align-items:center;gap:6px}
+.chip:hover,.fchip:hover,.dchip:hover{border-color:var(--red);color:var(--red);background:var(--red-l);transform:translateY(-1px)}
+.chip.on,.fchip.on,.dchip.on{background:var(--red);border-color:var(--red);color:var(--white);font-weight:600}
+/* Price range */
+.fb-price{display:flex;align-items:center;gap:5px;flex-shrink:0}
 .p-input{
-  width:112px;padding:5px 10px;
-  border:1.5px solid var(--g4);border-radius:4px;
+  width:100px;padding:5px 8px;
+  border:1.5px solid var(--g4);border-radius:6px;
   background:var(--g7);color:var(--ink);
   font-family:var(--sans);font-size:11px;
-  outline:none;transition:all .18s;
+  outline:none;transition:border-color .18s;
 }
-.p-input:focus{border-color:var(--red);background:var(--white);box-shadow:0 0 0 3px rgba(179,32,42,.08)}
+.p-input:focus{border-color:var(--red)}
 .p-input::placeholder{color:var(--g3)}
-.p-sep{color:var(--g3);font-size:12px}
-/* More filters */
+.p-sep{color:var(--g3);font-size:11px}
+/* RIGHT: sort + more */
+.fb-right{
+  display:flex;align-items:center;gap:8px;
+  padding-left:1.25rem;border-left:1.5px solid var(--g5);flex-shrink:0;
+}
+.ft-count{font-family:var(--sans);font-size:11.5px;color:var(--g2);white-space:nowrap}
+.ft-count strong{color:var(--ink);font-weight:700}
+.ft-sort{
+  padding:5px 20px 5px 9px;
+  border:1.5px solid var(--g4);border-radius:6px;
+  background:var(--g7);font-family:var(--sans);font-size:11px;color:var(--g1);
+  outline:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23AAA' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 6px center;
+  transition:border-color .18s;flex-shrink:0;
+}
+.ft-sort:focus{border-color:var(--red)}
 .btn-more{
-  display:flex;align-items:center;gap:6px;
-  padding:6px 14px;border:1.5px solid var(--g4);border-radius:4px;
+  display:flex;align-items:center;gap:5px;
+  padding:6px 13px;border:1.5px solid var(--g4);border-radius:6px;
   background:var(--white);color:var(--g2);
-  font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
-  transition:all .2s;white-space:nowrap;
+  font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  white-space:nowrap;transition:all .18s;flex-shrink:0;
 }
 .btn-more:hover{border-color:var(--red);color:var(--red);background:var(--red-l)}
 .btn-more.on{background:var(--red);border-color:var(--red);color:var(--white)}
-.btn-more .arr{transition:transform .3s var(--spring);display:inline-block;font-size:10px}
+.btn-more .arr{transition:transform .3s;font-size:9px}
 .btn-more.on .arr{transform:rotate(180deg)}
-.badge{
-  background:var(--white);color:var(--red);
-  border-radius:10px;padding:1px 6px;
-  font-size:9px;font-weight:800;
-  display:none;
-}
-.btn-more.on .badge{background:rgba(255,255,255,.25);color:var(--white)}
+.badge{background:rgba(255,255,255,.25);color:var(--white);border-radius:10px;padding:1px 6px;font-size:9px;font-weight:800;display:none}
 .badge.show{display:inline-block}
 .btn-clr{
-  padding:6px 12px;border:1.5px solid var(--g4);border-radius:4px;
-  background:none;color:var(--g3);
-  font-family:var(--sans);font-size:10.5px;font-weight:700;
-  transition:all .18s;
+  padding:5px 10px;border:1.5px solid var(--g4);border-radius:6px;
+  background:none;color:var(--g3);font-family:var(--sans);font-size:10px;font-weight:700;
+  transition:all .18s;white-space:nowrap;flex-shrink:0;
 }
 .btn-clr:hover{color:var(--red);border-color:var(--red);background:var(--red-l)}
 /* Drawer */
 .filter-drawer{
   max-height:0;overflow:hidden;
-  transition:max-height .5s var(--spring);
-  background:var(--g7);
+  transition:max-height .45s var(--spring);
+  background:var(--g7);border-top:0px solid var(--g5);
 }
-.filter-drawer.open{max-height:260px;border-top:1px solid var(--g5)}
+.filter-drawer.open{max-height:220px;border-top:1px solid var(--g5)}
 .drawer-body{
-  padding:1.5rem 2rem;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
-  gap:1.5rem 2.5rem;
+  padding:1.25rem 2rem;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1.25rem 2rem;
 }
-.dg-ttl{
-  font-family:var(--sans);font-size:8.5px;font-weight:800;
-  letter-spacing:.22em;text-transform:uppercase;
-  color:var(--g3);margin-bottom:.6rem;
-  display:flex;align-items:center;gap:8px;
-}
+.dg-ttl{font-family:var(--sans);font-size:8.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--g3);margin-bottom:.5rem;display:flex;align-items:center;gap:7px}
 .dg-ttl::after{content:'';flex:1;height:1px;background:var(--g5)}
 .dg-chips{display:flex;flex-wrap:wrap;gap:4px}
 .dg-range{display:flex;gap:5px;align-items:center}
-.d-in{flex:1;padding:6px 9px;border:1.5px solid var(--g4);border-radius:4px;background:var(--white);font-family:var(--sans);font-size:11px;color:var(--ink);outline:none;transition:all .18s}
-.d-in:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(179,32,42,.08)}
+.d-in{flex:1;padding:5.5px 8px;border:1.5px solid var(--g4);border-radius:4px;background:var(--white);font-family:var(--sans);font-size:11px;color:var(--ink);outline:none;transition:all .18s}
+.d-in:focus{border-color:var(--red)}
 .d-in::placeholder{color:var(--g3)}
 .d-sep{color:var(--g3);font-size:11px}
-.d-sel{
-  width:100%;padding:6px 24px 6px 9px;border:1.5px solid var(--g4);border-radius:4px;
-  background:var(--white);font-family:var(--sans);font-size:12px;color:var(--ink);
-  outline:none;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23AAA' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 8px center;
-  transition:border-color .18s;
-}
+.d-sel{width:100%;padding:6px 22px 6px 8px;border:1.5px solid var(--g4);border-radius:4px;background:var(--white);font-family:var(--sans);font-size:12px;color:var(--ink);outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23AAA' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;transition:border-color .18s}
 .d-sel:focus{border-color:var(--red)}
-/* Active filter tags */
+/* Active tags */
 #active-tags{
-  display:none;align-items:center;flex-wrap:wrap;gap:6px;
-  padding:.65rem 2rem;
-  background:var(--red-l);
-  border-top:1px solid var(--red-b);
+  display:none;align-items:center;flex-wrap:wrap;gap:5px;
+  padding:.55rem 2rem;background:var(--red-l);border-top:1px solid var(--red-b);
 }
 #active-tags.show{display:flex}
 .atag{
-  display:inline-flex;align-items:center;gap:5px;
-  background:var(--white);color:var(--red);
-  border:1.5px solid var(--red-b);
-  padding:4px 10px 4px 12px;border-radius:20px;
-  font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.04em;
-  box-shadow:0 1px 4px rgba(179,32,42,.12);
+  display:inline-flex;align-items:center;gap:4px;
+  background:var(--white);color:var(--red);border:1.5px solid var(--red-b);
+  padding:3px 9px 3px 11px;border-radius:20px;
+  font-family:var(--sans);font-size:9.5px;font-weight:700;
   transition:all .15s;
 }
 .atag:hover{background:var(--red);color:var(--white)}
-.atag-x{
-  background:none;border:none;
-  color:var(--red);font-size:14px;line-height:1;padding:0;
-  opacity:.6;transition:opacity .15s;
+.atag-x{background:none;border:none;color:inherit;font-size:13px;line-height:1;padding:0;opacity:.6}
+
+/* ════════════════════════════════════════════════════════
+   MAP BAR — collapsible horizontal map above listings
+════════════════════════════════════════════════════════ */
+.map-bar{
+  background:var(--ink);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  overflow:hidden;
+  transition:max-height .45s var(--spring);
+  max-height:320px;
 }
-.atag:hover .atag-x{color:var(--white);opacity:1}
+.map-bar.collapsed{max-height:0}
+.map-bar-inner{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  height:280px;
+}
+/* Map stats sidebar */
+.map-sidebar{
+  padding:1.25rem 1.25rem 1rem;
+  display:flex;flex-direction:column;gap:1rem;
+  border-right:1px solid rgba(255,255,255,.07);
+  overflow-y:auto;
+}
+.map-sidebar-ttl{
+  font-family:var(--sans);font-size:8.5px;font-weight:800;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);
+  display:flex;align-items:center;gap:6px;
+}
+.map-sidebar-ttl::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--red);animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+.map-kpis{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mkpi{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);
+  border-radius:6px;padding:.6rem .65rem;text-align:center;transition:background .2s;
+}
+.mkpi:hover{background:rgba(179,32,42,.15);border-color:rgba(179,32,42,.3)}
+.mkpi-v{font-family:var(--serif);font-size:1.1rem;color:var(--white);line-height:1;display:block}
+.mkpi-v.r{color:#F07070}
+.mkpi-k{font-family:var(--sans);font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);display:block;margin-top:2px}
+/* Zone pills in map */
+.map-zones{display:flex;flex-wrap:wrap;gap:4px}
+.zpill{
+  padding:3.5px 9px;border:1px solid rgba(255,255,255,.12);border-radius:20px;
+  background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);
+  font-family:var(--sans);font-size:10px;font-weight:600;
+  transition:all .18s;white-space:nowrap;
+}
+.zpill:hover{border-color:rgba(179,32,42,.4);color:rgba(255,255,255,.85);background:rgba(179,32,42,.12)}
+.zpill.on{background:var(--red);border-color:var(--red);color:var(--white)}
+/* Map container */
+#main-map{height:100%!important}
+.leaflet-container{font-family:var(--sans)!important}
+.leaflet-control-zoom{border:none!important;border-radius:6px!important;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.3)!important}
+.leaflet-control-zoom a{background:rgba(20,20,20,.9)!important;color:rgba(255,255,255,.8)!important;border:none!important;border-bottom:1px solid rgba(255,255,255,.1)!important;width:32px!important;height:32px!important;line-height:32px!important}
+.leaflet-control-zoom a:hover{background:var(--red)!important;color:white!important}
+.leaflet-attribution{display:none!important}
+.n-pop .leaflet-popup-content-wrapper{background:var(--white);border:1.5px solid var(--red-b);border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.14);padding:0;overflow:hidden}
+.n-pop .leaflet-popup-content{margin:0;min-width:165px}
+.n-pop .leaflet-popup-tip-container{display:none}
+.pop-top{background:var(--red);padding:.55rem .85rem;display:flex;justify-content:space-between;align-items:center}
+.pop-proj{font-family:var(--sans);font-size:8.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.9)}
+.pop-count{font-family:var(--sans);font-size:9px;font-weight:700;color:rgba(255,255,255,.65);background:rgba(255,255,255,.15);padding:2px 7px;border-radius:10px}
+.pop-body{padding:.65rem .85rem}
+.pop-name{font-family:var(--serif);font-size:1rem;color:var(--ink);margin-bottom:2px}
+.pop-price{font-family:var(--serif);font-size:.9rem;color:var(--red)}
+.pop-min{font-family:var(--sans);font-size:8.5px;color:var(--g3);margin-top:1px}
 
 /* ════════════════════════════════════════════════════════
    APP LAYOUT — MAP LEFT + LISTINGS RIGHT
 ════════════════════════════════════════════════════════ */
 .app-shell{
-  display:grid;
-  grid-template-columns:380px 1fr;
+  display:flex;
+  flex-direction:column;
   min-height:70vh;
 }
 
@@ -597,7 +602,7 @@ header.stuck{
 /* ════════════════════════════════════════════════════════
    LISTINGS — RIGHT PANEL
 ════════════════════════════════════════════════════════ */
-.listings{background:var(--g7);overflow-y:auto;min-height:60vh}
+.listings{background:var(--g7);overflow-y:auto}
 
 /* Grid */
 .grid-wrap{padding:1.5rem}
@@ -869,6 +874,15 @@ header.stuck{
 .mc-arr{transition:transform .25s var(--spring);font-size:16px}
 .m-cta:hover .mc-arr{transform:translateX(6px)}
 
+.btn-map{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 11px;border:1.5px solid var(--g4);border-radius:6px;
+  background:var(--white);color:var(--g2);
+  font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  white-space:nowrap;transition:all .18s;flex-shrink:0;
+}
+.btn-map:hover{border-color:var(--red);color:var(--red);background:var(--red-l)}
+.btn-map.on{background:var(--ink);border-color:var(--ink);color:var(--white)}
 /* RESPONSIVE */
 @media(max-width:1100px){.app-shell{grid-template-columns:320px 1fr}.grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}}
 @media(max-width:900px){
@@ -954,21 +968,48 @@ header.stuck{
   </div>
 </section>
 
-<!-- ── FILTER SYSTEM ──────────────────────────────────── -->
+<!-- ── FILTER BAR ───────────────────────────────────────── -->
 <div class="filter-wrap" id="fw">
-  <!-- Tabs row -->
-  <div class="filter-topbar">
-    <button class="view-tab on" id="vg" onclick="setView('grid')">
-      <svg width="12" height="12" fill="currentColor" viewBox="0 0 12 12"><rect width="5" height="5" rx="1.2"/><rect x="7" width="5" height="5" rx="1.2"/><rect y="7" width="5" height="5" rx="1.2"/><rect x="7" y="7" width="5" height="5" rx="1.2"/></svg>
-      Grid
-    </button>
-    <button class="view-tab" id="vl" onclick="setView('list')">
-      <svg width="12" height="12" fill="currentColor" viewBox="0 0 12 12"><rect y="0" width="12" height="2" rx="1"/><rect y="5" width="12" height="2" rx="1"/><rect y="10" width="12" height="2" rx="1"/></svg>
-      Lista
-    </button>
-    <div class="ft-divider"></div>
-    <div class="ft-right">
-      <span class="ft-count">Mostrando <strong id="rc">—</strong> propiedades</span>
+  <div class="filter-bar">
+    <!-- View toggles -->
+    <div class="fb-views">
+      <button class="vt on" id="vg" onclick="setView('grid')">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 12 12"><rect width="5" height="5" rx="1"/><rect x="7" width="5" height="5" rx="1"/><rect y="7" width="5" height="5" rx="1"/><rect x="7" y="7" width="5" height="5" rx="1"/></svg>
+        Grid
+      </button>
+      <button class="vt" id="vl" onclick="setView('list')">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 12 12"><rect y="0" width="12" height="2" rx="1"/><rect y="5" width="12" height="2" rx="1"/><rect y="10" width="12" height="2" rx="1"/></svg>
+        Lista
+      </button>
+    </div>
+    <!-- Chips filters -->
+    <div class="fb-filters">
+      <span class="fb-lbl">Vista</span>
+      <button class="fchip" onclick="togQ('vi','EXTERNA',this)">Externa</button>
+      <button class="fchip" onclick="togQ('vi','INTERNA',this)">Interna</button>
+      <div class="fb-sep"></div>
+      <span class="fb-lbl">Dorms</span>
+      <button class="fchip" onclick="togQ('dr','1',this)">1 dorm</button>
+      <button class="fchip" onclick="togQ('dr','2',this)">2 dorms</button>
+      <button class="fchip" onclick="togQ('dr','3',this)">3 dorms</button>
+      <div class="fb-sep"></div>
+      <span class="fb-lbl">Precio S/</span>
+      <div class="fb-price">
+        <input type="number" class="p-input" id="qpmin" placeholder="Mínimo" step="10000">
+        <span class="p-sep">–</span>
+        <input type="number" class="p-input" id="qpmax" placeholder="Máximo" step="10000">
+      </div>
+      <div class="fb-sep"></div>
+      <span class="fb-lbl">Zona</span>
+      <div id="zone-chips" style="display:flex;gap:4px;flex-shrink:0"></div>
+    </div>
+    <!-- Right: count + sort + more -->
+    <div class="fb-right">
+      <button class="btn-map" id="btn-map" onclick="toggleMap()" title="Mostrar/ocultar mapa">
+        <svg width="14" height="14" fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 1L1 3v10l4-2 4 2 4-2V1l-4 2-4-2z"/><line x1="5" y1="1" x2="5" y2="11"/><line x1="9" y1="3" x2="9" y2="13"/></svg>
+        Mapa
+      </button>
+      <span class="ft-count">Mostrando <strong id="rc">—</strong></span>
       <select class="ft-sort" id="srt">
         <option value="precio-asc">Precio ↑</option>
         <option value="precio-desc">Precio ↓</option>
@@ -976,34 +1017,12 @@ header.stuck{
         <option value="area-asc">Menor área</option>
         <option value="cuota-asc">Cuota ↑</option>
       </select>
-    </div>
-  </div>
-  <!-- Chip bar -->
-  <div class="filter-chipbar">
-    <div class="fc-group">
-      <span class="fc-lbl">Vista</span>
-      <div class="chips" id="qfv"></div>
-    </div>
-    <div class="fc-group">
-      <span class="fc-lbl">Dorms</span>
-      <div class="chips" id="qfd"></div>
-    </div>
-    <div class="fc-group">
-      <span class="fc-lbl">Precio S/</span>
-      <div class="price-row">
-        <input type="number" class="p-input" id="qpmin" placeholder="Mínimo" step="10000">
-        <span class="p-sep">–</span>
-        <input type="number" class="p-input" id="qpmax" placeholder="Máximo" step="10000">
-      </div>
-    </div>
-    <div class="fc-group">
       <button class="btn-more" id="btn-more" onclick="toggleDrawer()">
-        <svg width="13" height="11" fill="none" viewBox="0 0 13 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1=".5" y1="1.5" x2="12.5" y2="1.5"/><line x1="2.5" y1="5.5" x2="10.5" y2="5.5"/><line x1="4.5" y1="9.5" x2="8.5" y2="9.5"/></svg>
-        Filtros avanzados
-        <span class="badge" id="fbadge">0</span>
+        <svg width="12" height="10" fill="none" viewBox="0 0 12 10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="0" y1="1.5" x2="12" y2="1.5"/><line x1="2" y1="5" x2="10" y2="5"/><line x1="4" y1="8.5" x2="8" y2="8.5"/></svg>
+        Filtros <span class="badge" id="fbadge">0</span>
         <span class="arr">▾</span>
       </button>
-      <button class="btn-clr" onclick="resetF()">✕ Limpiar</button>
+      <button class="btn-clr" onclick="resetF()">✕</button>
     </div>
   </div>
   <!-- Drawer -->
@@ -1013,38 +1032,38 @@ header.stuck{
       <div><div class="dg-ttl">Entrega</div><div class="dg-chips" id="fe"></div></div>
       <div><div class="dg-ttl">Vista detallada</div><div class="dg-chips" id="fv"></div></div>
       <div><div class="dg-ttl">Área total (m²)</div><div class="dg-range"><input class="d-in" type="number" id="amin" placeholder="Mín m²"><span class="d-sep">–</span><input class="d-in" type="number" id="amax" placeholder="Máx m²"></div></div>
-      <div><div class="dg-ttl">Banco financiador</div><select class="d-sel" id="fbn"><option value="">Todos los bancos</option></select></div>
-      <div><div class="dg-ttl">Restricción VIS</div><div class="dg-chips" id="fvis"></div></div>
+      <div><div class="dg-ttl">Banco</div><select class="d-sel" id="fbn"><option value="">Todos</option></select></div>
+      <div><div class="dg-ttl">VIS</div><div class="dg-chips" id="fvis"></div></div>
     </div>
   </div>
-  <!-- Active tags -->
+  <!-- Active filter tags -->
   <div id="active-tags"></div>
 </div>
-
 <!-- ── APP SHELL ──────────────────────────────────────── -->
 <div class="app-shell">
 
-  <!-- MAP PANEL -->
-  <div class="map-panel">
-    <div class="mp-hd">
-      <div class="mp-title">📍 Filtrar por zona</div>
-      <div class="mp-stats">
-        <div class="mp-stat"><span class="mps-v r" id="ms-n">—</span><span class="mps-k">Unidades</span></div>
-        <div class="mp-stat"><span class="mps-v" id="ms-min">—</span><span class="mps-k">Desde</span></div>
-        <div class="mp-stat"><span class="mps-v" id="ms-p">—</span><span class="mps-k">Proyectos</span></div>
-        <div class="mp-stat"><span class="mps-v" id="ms-cu">—</span><span class="mps-k">Cuota mín</span></div>
+  <!-- MAP BAR — collapsible horizontal -->
+  <div class="map-bar" id="map-bar">
+    <div class="map-bar-inner">
+      <!-- Sidebar with stats + zone pills -->
+      <div class="map-sidebar">
+        <div class="map-sidebar-ttl">Filtrar por zona</div>
+        <div class="map-kpis">
+          <div class="mkpi"><span class="mkpi-v r" id="ms-n">—</span><span class="mkpi-k">Unidades</span></div>
+          <div class="mkpi"><span class="mkpi-v" id="ms-min">—</span><span class="mkpi-k">Desde</span></div>
+          <div class="mkpi"><span class="mkpi-v" id="ms-p">—</span><span class="mkpi-k">Proyectos</span></div>
+          <div class="mkpi"><span class="mkpi-v" id="ms-cu">—</span><span class="mkpi-k">Cuota mín</span></div>
+        </div>
+        <div class="map-zones" id="zone-row"></div>
       </div>
+      <!-- Map -->
+      <div id="main-map"></div>
     </div>
-    <div class="zone-row" id="zone-row"></div>
-    <div id="main-map"></div>
   </div>
 
   <!-- LISTINGS -->
-  <div class="listings" id="listings">
-    <div id="res"></div>
-  </div>
+  <div class="listings" style="min-height:60vh"><div id="res"></div></div>
 </div>
-
 <!-- ── MODAL ──────────────────────────────────────────── -->
 <div class="m-bg" id="mbg" onclick="handleBg(event)">
   <div class="modal" id="modal"></div>
@@ -1342,9 +1361,14 @@ function buildUI() {
   document.getElementById('srt').onchange = e => { so=e.target.value; render(); };
 
   // Zone pills
-  document.getElementById('zone-row').innerHTML =
-    '<button class="zpill on" data-p="" onclick="filterZone(\'\',this)">Todos</button>' +
+  // Zone pills - map sidebar
+  const zpHTML = '<button class="zpill on" data-p="" onclick="filterZone(\'\',this)">Todos</button>' +
     ps.map(p=>`<button class="zpill" data-p="${p}" onclick="filterZone('${p}',this)">${p}</button>`).join('');
+  const zrEl = document.getElementById('zone-row');
+  if(zrEl) zrEl.innerHTML = zpHTML;
+  // Compact zone chips in filter bar
+  const zcEl = document.getElementById('zone-chips');
+  if(zcEl) zcEl.innerHTML = ps.map(p=>`<button class="fchip" data-p="${p}" onclick="filterZoneChip('${p}',this)">${p.length>12?p.split(' ')[0]:p}</button>`).join('');
 
   // Stats (with counter animation)
   const pr = D.map(r=>r.pr), cu = D.map(r=>r.cu).filter(Boolean);
@@ -1371,10 +1395,24 @@ function buildUI() {
 function filterZone(proj, btn) {
   F.p = proj ? [proj] : [];
   document.querySelectorAll('.zpill').forEach(z=>z.classList.toggle('on',z.dataset.p===proj));
+  document.querySelectorAll('#zone-chips .fchip').forEach(z=>z.classList.toggle('on',z.dataset.p===proj));
   if(mainMap) {
     if(proj && PC[proj]) mainMap.setView([PC[proj].lat,PC[proj].lng], 16);
     else mainMap.setView([-12.106,-77.006], 15);
   }
+  render();
+}
+function filterZoneChip(proj, btn) {
+  F.p = proj ? [proj] : [];
+  document.querySelectorAll('#zone-chips .fchip').forEach(z=>z.classList.toggle('on',z.dataset.p===proj));
+  document.querySelectorAll('.zpill').forEach(z=>z.classList.toggle('on',z.dataset.p===proj));
+  if(mainMap) {
+    if(proj && PC[proj]) mainMap.setView([PC[proj].lat,PC[proj].lng], 16);
+    else mainMap.setView([-12.106,-77.006], 15);
+  }
+  // Show map if collapsed
+  const mb = document.getElementById('map-bar');
+  if(mb && mb.classList.contains('collapsed')) mb.classList.remove('collapsed');
   render();
 }
 
