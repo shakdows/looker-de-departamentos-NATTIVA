@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>nattiva — Portafolio Surquillo</title>
+<title>nattiva — Portafolio Lima</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -175,10 +175,10 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
 .mimg{background-size:cover;background-position:center top;background-repeat:no-repeat}
 
 .cmap>[id]{height:100%!important;width:100%!important}
-.cmg{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(255,255,255,.55) 100%);pointer-events:none;z-index:1}
-.cmc{position:absolute;bottom:8px;left:9px;z-index:2;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border:1px solid var(--g4);border-radius:3px;padding:3px 8px;font-size:9px;font-weight:600;color:var(--g1);display:flex;align-items:center;gap:4px}
+.cmg{position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(255,255,255,.55) 100%);pointer-events:none;z-index:790}
+.cmc{position:absolute;bottom:8px;left:9px;z-index:800;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border:1px solid var(--g4);border-radius:3px;padding:3px 8px;font-size:9px;font-weight:600;color:var(--g1);display:flex;align-items:center;gap:4px}
 .cmd{width:5px;height:5px;border-radius:50%;background:var(--r);flex-shrink:0}
-.cfav{position:absolute;top:8px;right:8px;z-index:3;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.95);border:1.5px solid var(--g4);display:flex;align-items:center;justify-content:center;font-size:13px;user-select:none;transition:all .2s}
+.cfav{position:absolute;top:8px;right:8px;z-index:801;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.95);border:1.5px solid var(--g4);display:flex;align-items:center;justify-content:center;font-size:13px;user-select:none;transition:all .2s}
 .cfav:hover{border-color:var(--r);transform:scale(1.12)}
 .cbody{padding:1rem 1.1rem}
 .cmeta{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.3rem}
@@ -331,6 +331,66 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
 
 .mcta-broch{background:var(--w)!important;color:var(--ink)!important;border:1.5px solid var(--g4)!important;margin-bottom:.6rem;text-decoration:none;display:flex}
 .mcta-broch:hover{border-color:var(--r)!important;color:var(--r)!important;background:var(--rl)!important;box-shadow:none!important;transform:none!important}
+
+/* ===== COMPARADOR DE UNIDADES ===== */
+/* Boton comparar en cards */
+.ccmp{position:absolute;top:11px;left:11px;z-index:800;padding:6px 12px;background:rgba(20,20,25,.82);backdrop-filter:blur(6px);color:#fff;border:1.5px solid rgba(255,255,255,.25);border-radius:18px;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:all .2s}
+.ccmp:hover{background:var(--r);border-color:var(--r)}
+.ccmp.on{background:var(--r);border-color:var(--r);box-shadow:0 2px 12px rgba(179,32,42,.4)}
+
+/* Barra flotante */
+.cmpbar{position:fixed;left:50%;bottom:-120px;transform:translateX(-50%);z-index:920;width:min(940px,calc(100% - 2.5rem));background:var(--ink);border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.32),0 0 0 1px rgba(255,255,255,.06);display:flex;align-items:center;gap:1rem;padding:.85rem 1.25rem;transition:bottom .42s var(--ease);opacity:0;pointer-events:none}
+.cmpbar.show{bottom:1.5rem;opacity:1;pointer-events:all}
+.cmpbar-l{display:flex;align-items:center;gap:11px;flex-shrink:0}
+.cmpbar-ico{font-size:22px;color:#F07070;line-height:1}
+.cmpbar-n{font-family:var(--serif);font-size:1.6rem;font-weight:400;color:#fff;line-height:1}
+.cmpbar-t{font-size:11px;color:rgba(255,255,255,.6);font-weight:500}
+.cmpbar-chips{display:flex;gap:7px;flex:1;overflow-x:auto;scrollbar-width:none}
+.cmpbar-chips::-webkit-scrollbar{display:none}
+.cmpchip{display:flex;align-items:center;gap:7px;padding:6px 8px 6px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:10px;flex-shrink:0;animation:cmpIn .3s var(--ease)}
+@keyframes cmpIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.cmpchip-x{display:flex;flex-direction:column;line-height:1.15}
+.cmpchip-p{font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.cmpchip-u{font-size:9px;color:rgba(255,255,255,.55)}
+.cmpchip-rm{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .2s}
+.cmpchip-rm:hover{background:var(--r)}
+.cmpbar-r{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.cmpbar-clr{padding:8px 13px;background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.75);border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.cmpbar-clr:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.cmpbar-go{padding:9px 18px;background:var(--r);color:#fff;border:none;border-radius:7px;font-size:11.5px;font-weight:700;letter-spacing:.03em;cursor:pointer;white-space:nowrap;transition:all .2s}
+.cmpbar-go:hover{background:#9A1B23;transform:translateY(-1px)}
+.cmpbar-go:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* Modal comparador */
+.cmpbg{position:fixed;inset:0;z-index:960;background:rgba(10,10,15,.62);backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+.cmpbg.open{opacity:1;pointer-events:all}
+.cmpmodal{background:var(--w);border-radius:14px;max-width:920px;width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.2);transform:translateY(24px) scale(.97);transition:transform .35s var(--ease)}
+.cmpbg.open .cmpmodal{transform:none}
+.cmphead{padding:1.4rem 2rem;border-bottom:1.5px solid var(--g5);display:flex;align-items:center;justify-content:space-between;background:var(--ink)}
+.cmpeye{font-size:9px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:#F07070;display:block;margin-bottom:5px}
+.cmptit{font-family:var(--serif);font-size:1.5rem;font-weight:300;color:#fff;line-height:1}
+.cmpbody{padding:0;overflow:auto;flex:1}
+
+/* Tabla comparativa */
+.cmptable{width:100%;border-collapse:collapse;font-size:13px}
+.cmptable th,.cmptable td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--g6)}
+.cmptable thead th{position:sticky;top:0;background:var(--g7);z-index:2;vertical-align:bottom}
+.cmpth-lbl{background:var(--g7)!important;font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--g3);width:130px}
+.cmp-proj{font-family:var(--serif);font-size:1.25rem;font-weight:400;color:var(--ink);line-height:1.1}
+.cmp-dev{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--r);margin-top:3px}
+.cmp-unit{font-size:10.5px;color:var(--g3);margin-top:2px}
+.cmprow-lbl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--g3)}
+.cmp-val{font-weight:600;color:var(--ink)}
+.cmp-val.big{font-family:var(--serif);font-size:1.15rem;font-weight:400}
+.cmp-best{position:relative}
+.cmp-best .cmp-val{color:#1A7F37;font-weight:800}
+.cmp-bestbadge{display:inline-block;margin-left:7px;padding:1px 7px;background:#E3F5E8;color:#1A7F37;border-radius:9px;font-size:8.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;vertical-align:middle}
+.cmp-th{min-width:170px;border-left:1px solid var(--g6)}
+.cmp-actions{padding:1rem 2rem;border-top:1.5px solid var(--g5);background:var(--g7);display:flex;justify-content:flex-end;gap:10px}
+.cmp-wa{padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.cmp-wa:hover{background:#1FAE54}
+@media(max-width:600px){.cmpbar{flex-wrap:wrap;gap:.6rem}.cmpbar-chips{order:3;width:100%}.cmptable{font-size:11px}.cmptable th,.cmptable td{padding:9px 10px}.cmp-th{min-width:120px}}
+
 /* BROCHURE BUTTON IN HEADER */
 .hdr-btn2{display:flex;align-items:center;gap:7px;padding:8px 18px;background:var(--w);color:var(--ink);border:1.5px solid var(--g4);border-radius:4px;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .22s}
 .hdr-btn2:hover{border-color:var(--r);color:var(--r);background:var(--rl)}
@@ -391,7 +451,7 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
 <div id="cr"></div><div id="cd"></div><div id="pb"></div>
 
 <div class="tb">
-  <div class="tb-l"><span class="tb-dot"></span>Portafolio Exclusivo · Surquillo · Lima · 2025-2028</div>
+  <div class="tb-l"><span class="tb-dot"></span>Portafolio Exclusivo · Lima · 2025-2028</div>
   <div class="tb-r">
     <a href="https://www.instagram.com/nattiva.pe" target="_blank" class="tb-a">
       <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@nattiva.pe
@@ -417,8 +477,8 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
 
 <section class="hero">
   <div class="hero-l">
-    <div class="htag">Intelligence Platform · Surquillo</div>
-    <h1 class="hero-h1">Departamentos<br>de <em>primer nivel</em><br>en Surquillo</h1>
+    <div class="htag">Intelligence Platform · Lima</div>
+    <h1 class="hero-h1">Departamentos<br>de <em>primer nivel</em><br>en Lima</h1>
     <p class="hero-desc">Base de datos completa de los mejores proyectos del distrito. Analisis comparativo, financiamiento bancario, entrega inmediata y en planos.</p>
     <div class="hstats">
       <div class="hst"><span class="hst-v r" id="hn">-</span><span class="hst-k">Disponibles</span></div>
@@ -493,6 +553,9 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
       <span class="psep">-</span>
       <input type="number" class="pinp" id="pmax" placeholder="Hasta" oninput="F.px=this.value;render()">
       <div class="fs"></div>
+      <span class="fl">Distrito</span>
+      <select class="fso fso-proj" id="ddsel" onchange="setDist(this.value)"><option value="">Todos</option></select>
+      <div class="fs"></div>
       <span class="fl">Proyecto</span>
       <select class="fso fso-proj" id="dpsel" onchange="setProj(this.value)"><option value="">Todos</option></select>
       <div class="fs"></div>
@@ -516,6 +579,31 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
 
 <div class="listings"><div id="res"></div></div>
 
+
+
+<!-- BARRA FLOTANTE DE COMPARACION -->
+<div class="cmpbar" id="cmpbar">
+  <div class="cmpbar-l">
+    <span class="cmpbar-ico">&#9878;</span>
+    <div><span class="cmpbar-n" id="cmpcount">0</span> <span class="cmpbar-t">unidades para comparar</span></div>
+  </div>
+  <div class="cmpbar-chips" id="cmpchips"></div>
+  <div class="cmpbar-r">
+    <button class="cmpbar-clr" onclick="clearCmp()">Limpiar</button>
+    <button class="cmpbar-go" onclick="openCmp()">Comparar ahora &#8594;</button>
+  </div>
+</div>
+
+<!-- MODAL COMPARADOR -->
+<div class="cmpbg" id="cmpbg" onclick="if(event.target.id=='cmpbg')closeCmp()">
+  <div class="cmpmodal">
+    <div class="cmphead">
+      <div class="cmphead-l"><span class="cmpeye">Comparativa de unidades</span><span class="cmptit">Compara y decide</span></div>
+      <button class="bmclose" onclick="closeCmp()">&times;</button>
+    </div>
+    <div class="cmpbody" id="cmpbody"></div>
+  </div>
+</div>
 
 <div class="bmbg" id="bmbg" onclick="if(event.target.id=='bmbg')closeBroch()">
   <div class="bmodal">
@@ -558,9 +646,81 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
 function togPrj(btn,p){togC(btn,'p',p);}
 function togVi(btn,v){togC(btn,'vi',v);}
 
-var D=[{d:"V&V",p:"GERMANIA",u:"604",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:545000,en:"Dic-27",vs:"NO",cu:4885,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"AURA",u:"1604",m:"D",tc:56.7,li:0,to:56.7,vi:"ESQUINA",dr:2,pr:406900,en:"Abr-27",vs:"",cu:3647,bk:"INTERBANK"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1208",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"VISTA F1",dr:2,pr:444900,en:"INMEDIATA",vs:"NO",cu:3988,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1709",m:"P4-P18-X09",tc:57.3,li:0,to:57.3,vi:"INTERNA",dr:2,pr:384000,en:"Dic-27",vs:"NO",cu:3442,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2401",m:"X01",tc:69.22,li:0,to:69.22,vi:"EXTERNA",dr:3,pr:428000,en:"Mar-28",vs:"SI",cu:3836,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1213",m:"P4-P18-X13",tc:40,li:0,to:40,vi:"INTERNA",dr:1,pr:342000,en:"Dic-27",vs:"NO",cu:3066,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"304",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:383000,en:"Mar-28",vs:"SI",cu:3433,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1309",m:"F2 B7",tc:54.63,li:3.19,to:57.82,vi:"VISTA F1",dr:2,pr:443462,en:"INMEDIATA",vs:"NO",cu:3975,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6204",m:"TIPO-21",tc:73.18,li:0,to:73.18,vi:"PENDIENTE",dr:3,pr:619878,en:"Mar-28",vs:"",cu:5556,bk:""},{d:"VITAIN",p:"NITOA 6",u:"6804",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:"",cu:4493,bk:""},{d:"EDIFICA",p:"ELEMENT",u:"1804",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:361911,en:"Dic-26",vs:"SI",cu:3244,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"208",m:"TIPO 9A",tc:36.21,li:9.67,to:45.88,vi:"RICARDO ANGULO",dr:1,pr:359530,en:"Dic-26",vs:"SI",cu:3223,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1904",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:403000,en:"Mar-28",vs:"SI",cu:3612,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1610",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:305000,en:"Dic-27",vs:"SI",cu:2734,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"612",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:332551,en:"Dic-26",vs:"SI",cu:2981,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"407",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:264000,en:"Dic-27",vs:"SI",cu:2366,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"411",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:412000,en:"Dic-27",vs:"NO",cu:3693,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"2206",m:"X06-22",tc:77.34,li:0,to:77.34,vi:"EXTERNA",dr:3,pr:601000,en:"Dic-27",vs:"SI",cu:5387,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6604",m:"TIPO-21",tc:73.18,li:0,to:73.18,vi:"PENDIENTE",dr:3,pr:619878,en:"Mar-28",vs:"",cu:5556,bk:""},{d:"AMMA",p:"TORRE MARSANO 28",u:"1403",m:"X03",tc:63.02,li:0,to:63.02,vi:"EXTERNA",dr:3,pr:386000,en:"Mar-28",vs:"SI",cu:3460,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"2216",m:"X16-21 AL 23",tc:35.5,li:0,to:35.5,vi:"INTERNA",dr:1,pr:291000,en:"Dic-27",vs:"SI",cu:2608,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1104",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:353027,en:"Dic-26",vs:"SI",cu:3164,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"1709",m:"X09",tc:26.16,li:0,to:26.16,vi:"INTERNA",dr:1,pr:235000,en:"Dic-27",vs:"SI",cu:2106,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1302",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:286450,en:"Dic-26",vs:"SI",cu:2568,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"805",m:"X05-A",tc:39.96,li:0,to:39.96,vi:"EXTERNA",dr:1,pr:359000,en:"Dic-27",vs:"SI",cu:3218,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"906",m:"X06",tc:78.84,li:0,to:78.84,vi:"EXTERNA",dr:3,pr:613000,en:"Dic-27",vs:"SI",cu:5495,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"203",m:"X03",tc:63.77,li:0,to:63.77,vi:"EXTERNA",dr:3,pr:372000,en:"Mar-28",vs:"SI",cu:3334,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6102",m:"TIPO-8",tc:58.25,li:12.18,to:70.43,vi:"PENDIENTE",dr:2,pr:544998,en:"Mar-28",vs:"",cu:4885,bk:""},{d:"GRATTO",p:"ARAMBU 934",u:"1011",m:"X11",tc:34.57,li:0,to:34.57,vi:"INTERNA",dr:1,pr:305000,en:"Dic-27",vs:"SI",cu:2734,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"609",m:"X09",tc:26.9,li:0,to:26.9,vi:"INTERNA",dr:0,pr:193000,en:"Mar-28",vs:"SI",cu:1730,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"207",m:"F2 A2",tc:63.28,li:4.79,to:68.07,vi:"INTERNA",dr:2,pr:540531,en:"INMEDIATA",vs:"NO",cu:4845,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1203",m:"X03-A",tc:60.85,li:0,to:60.85,vi:"EXTERNA",dr:2,pr:501000,en:"Dic-27",vs:"SI",cu:4491,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2306",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:391000,en:"Mar-28",vs:"SI",cu:3505,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1904",m:"P19-P20-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:535000,en:"Dic-27",vs:"NO",cu:4796,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1205",m:"P4-P18-X05",tc:68.3,li:0,to:68.3,vi:"EXTERNA",dr:3,pr:454000,en:"Dic-27",vs:"NO",cu:4070,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1009",m:"X09",tc:26.9,li:0,to:26.9,vi:"INTERNA",dr:0,pr:197000,en:"Mar-28",vs:"SI",cu:1766,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"405",m:"X05-A",tc:39.96,li:0,to:39.96,vi:"EXTERNA",dr:1,pr:360000,en:"Dic-27",vs:"SI",cu:3227,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1712",m:"X12-16 A 20",tc:57.9,li:0,to:57.9,vi:"INTERNA",dr:2,pr:468000,en:"Dic-27",vs:"SI",cu:4195,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1602",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:343000,en:"Dic-27",vs:"SI",cu:3075,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1404",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:399000,en:"Mar-28",vs:"SI",cu:3577,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1502",m:"X02",tc:51.66,li:0,to:51.66,vi:"EXTERNA",dr:2,pr:372000,en:"Mar-28",vs:"SI",cu:3334,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1701",m:"X01",tc:69.22,li:0,to:69.22,vi:"EXTERNA",dr:3,pr:424000,en:"Mar-28",vs:"SI",cu:3801,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6203",m:"TIPO-20",tc:74.33,li:0,to:74.33,vi:"PENDIENTE",dr:3,pr:629619,en:"Mar-28",vs:"",cu:5644,bk:""},{d:"VITAIN",p:"NITOA 6",u:"61201",m:"TIPO-10",tc:42.57,li:0,to:42.57,vi:"PENDIENTE",dr:1,pr:360593,en:"Mar-28",vs:"",cu:3232,bk:""},{d:"GRATTO",p:"ARAMBU 934",u:"1002",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:346000,en:"Dic-27",vs:"SI",cu:3101,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1008",m:"X08",tc:26.72,li:0,to:26.72,vi:"INTERNA",dr:1,pr:243000,en:"Dic-27",vs:"SI",cu:2178,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"904",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:350488,en:"Dic-26",vs:"SI",cu:3142,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1411",m:"TIPO 11C",tc:41.41,li:0,to:41.41,vi:"RICARDO ANGULO",dr:1,pr:341311,en:"Dic-26",vs:"SI",cu:3059,bk:"SCOTIABANK"},{d:"VITAIN",p:"NITOA 6",u:"61204",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:"",cu:4493,bk:""},{d:"EDIFICA",p:"ELEMENT",u:"1402",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:287371,en:"Dic-26",vs:"SI",cu:2576,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1202",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:285530,en:"Dic-26",vs:"SI",cu:2559,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1601",m:"TIPO 1A",tc:30.72,li:0,to:30.72,vi:"TOMAS MARSANO",dr:1,pr:295136,en:"Dic-26",vs:"SI",cu:2646,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1412",m:"P4-P18-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:418000,en:"Dic-27",vs:"NO",cu:3747,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1612",m:"P4-P18-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:415000,en:"Dic-27",vs:"NO",cu:3720,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"1302",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:344000,en:"Dic-27",vs:"SI",cu:3084,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6301",m:"TIPO-18",tc:55.47,li:0,to:55.47,vi:"PENDIENTE",dr:2,pr:469864,en:"Mar-28",vs:"",cu:4212,bk:""},{d:"VITAIN",p:"NITOA 6",u:"6807",m:"TIPO-16",tc:74.24,li:0,to:74.24,vi:"PENDIENTE",dr:3,pr:628856,en:"Mar-28",vs:"",cu:5637,bk:""},{d:"GRATTO",p:"ARAMBU 934",u:"2201",m:"X01-22",tc:57.56,li:0,to:57.56,vi:"EXTERNA",dr:2,pr:462000,en:"Dic-27",vs:"SI",cu:4141,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"204",m:"X05",tc:64.31,li:0,to:64.31,vi:"EXTERNA",dr:3,pr:404000,en:"Mar-28",vs:"SI",cu:3621,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"2311",m:"P22-P23-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:419000,en:"Dic-27",vs:"NO",cu:3756,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"702",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:280929,en:"Dic-26",vs:"SI",cu:2518,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"2110",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:302000,en:"Dic-27",vs:"SI",cu:2707,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6501",m:"TIPO-10",tc:42.57,li:0,to:42.57,vi:"PENDIENTE",dr:1,pr:360593,en:"Mar-28",vs:"",cu:3232,bk:""},{d:"EDIFICA",p:"ELEMENT",u:"605",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:346681,en:"Dic-26",vs:"SI",cu:3108,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"510",m:"X10",tc:48.75,li:0,to:48.75,vi:"INTERNA",dr:2,pr:327000,en:"Mar-28",vs:"SI",cu:2931,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1012",m:"X12",tc:27.92,li:0,to:27.92,vi:"INTERNA",dr:0,pr:196000,en:"Mar-28",vs:"SI",cu:1757,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1206",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:384000,en:"Mar-28",vs:"SI",cu:3442,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"805",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:415000,en:"Mar-28",vs:"SI",cu:3720,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1201",m:"X01-12",tc:57.55,li:0,to:57.55,vi:"EXTERNA",dr:2,pr:468000,en:"Dic-27",vs:"SI",cu:4195,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1304",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:538000,en:"Dic-27",vs:"NO",cu:4822,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"504",m:"X04-B",tc:59.95,li:0,to:59.95,vi:"EXTERNA",dr:2,pr:502000,en:"Dic-27",vs:"SI",cu:4500,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"2608",m:"P26-P27-X12",tc:55,li:0,to:55,vi:"INTERNA",dr:2,pr:427000,en:"Dic-27",vs:"NO",cu:3827,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"2306",m:"X06-23",tc:77.04,li:0,to:77.04,vi:"EXTERNA",dr:3,pr:596000,en:"Dic-27",vs:"SI",cu:5342,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"803",m:"F2 A2",tc:63.28,li:4.79,to:68.07,vi:"INTERNA",dr:2,pr:539361,en:"INMEDIATA",vs:"NO",cu:4835,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1301",m:"X01",tc:69.66,li:0,to:69.66,vi:"EXTERNA",dr:3,pr:424000,en:"Mar-28",vs:"SI",cu:3801,bk:"BCP"},{d:"ALBAMAR",p:"OASIS",u:"606",m:"F",tc:74.38,li:0,to:74.38,vi:"INTERNA",dr:3,pr:614000,en:"Nov-26",vs:"NO",cu:5504,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2109",m:"X09",tc:27.32,li:0,to:27.32,vi:"INTERNA",dr:0,pr:203000,en:"Mar-28",vs:"SI",cu:1820,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"801",m:"X01",tc:70.1,li:0,to:70.1,vi:"EXTERNA",dr:3,pr:422000,en:"Mar-28",vs:"SI",cu:3783,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1503",m:"P4-P18-X03",tc:65.1,li:0,to:65.1,vi:"EXTERNA",dr:3,pr:495000,en:"Dic-27",vs:"NO",cu:4437,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"915",m:"X15",tc:57.5,li:0,to:57.5,vi:"INTERNA",dr:2,pr:457000,en:"Dic-27",vs:"SI",cu:4096,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"409",m:"X09",tc:26.16,li:0,to:26.16,vi:"INTERNA",dr:1,pr:239000,en:"Dic-27",vs:"SI",cu:2142,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1201",m:"F2 B1",tc:54.65,li:3.19,to:57.84,vi:"VISTA F1",dr:2,pr:452127,en:"INMEDIATA",vs:"NO",cu:4053,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2305",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:425000,en:"Mar-28",vs:"SI",cu:3810,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6308",m:"TIPO-17",tc:75.26,li:0,to:75.26,vi:"PENDIENTE",dr:3,pr:637496,en:"Mar-28",vs:"",cu:5714,bk:""},{d:"EDIFICA",p:"ELEMENT",u:"512",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:331272,en:"Dic-26",vs:"SI",cu:2969,bk:"SCOTIABANK"},{d:"VITAIN",p:"NITOA 6",u:"6402",m:"TIPO-11",tc:43.1,li:0,to:43.1,vi:"PENDIENTE",dr:1,pr:365082,en:"Mar-28",vs:"",cu:3272,bk:""},{d:"ALBAMAR",p:"AURA",u:"304",m:"D",tc:56.7,li:0,to:56.7,vi:"ESQUINA",dr:2,pr:422700,en:"Abr-27",vs:"",cu:3789,bk:"INTERBANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"403",m:"X03",tc:63.02,li:0,to:63.02,vi:"EXTERNA",dr:3,pr:368000,en:"Mar-28",vs:"SI",cu:3299,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1906",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:389000,en:"Mar-28",vs:"SI",cu:3487,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"2105",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:371740,en:"Dic-26",vs:"SI",cu:3332,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1411",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:402000,en:"Dic-27",vs:"NO",cu:3603,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"1007",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:262000,en:"Dic-27",vs:"SI",cu:2348,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"406",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:369000,en:"Mar-28",vs:"SI",cu:3308,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"205",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:369000,en:"Mar-28",vs:"SI",cu:3308,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"905",m:"X05-B",tc:39.91,li:0,to:39.91,vi:"EXTERNA",dr:1,pr:362000,en:"Dic-27",vs:"SI",cu:3245,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"808",m:"P4-P18-X08",tc:41.4,li:0,to:41.4,vi:"EXTERNA",dr:1,pr:365000,en:"Dic-27",vs:"NO",cu:3272,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"905",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:350488,en:"Dic-26",vs:"SI",cu:3142,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"708",m:"TIPO 8B",tc:55.77,li:0,to:55.77,vi:"TOMAS MARSANO",dr:1,pr:433583,en:"Dic-26",vs:"SI",cu:3886,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"1307",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:261000,en:"Dic-27",vs:"SI",cu:2340,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1403",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"INTERNA",dr:2,pr:449377,en:"INMEDIATA",vs:"NO",cu:4028,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"707",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:263000,en:"Dic-27",vs:"SI",cu:2357,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"210",m:"F2 A6",tc:41.18,li:1.87,to:43.05,vi:"VISTA F1",dr:1,pr:356914,en:"INMEDIATA",vs:"NO",cu:3199,bk:"BCP"},{d:"ALBAMAR",p:"AURA",u:"502",m:"B",tc:70.33,li:0,to:70.33,vi:"AV TOMAS MARSANO",dr:3,pr:483900,en:"Abr-27",vs:"",cu:4338,bk:"INTERBANK"},{d:"EDIFICA",p:"ELEMENT",u:"1311",m:"TIPO 11C",tc:41.41,li:0,to:41.41,vi:"RICARDO ANGULO",dr:1,pr:339993,en:"Dic-26",vs:"SI",cu:3048,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"610",m:"X10",tc:48.75,li:0,to:48.75,vi:"INTERNA",dr:2,pr:327000,en:"Mar-28",vs:"SI",cu:2931,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1611",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:399000,en:"Dic-27",vs:"NO",cu:3577,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"1506",m:"TIPO 6A",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:358104,en:"Dic-26",vs:"SI",cu:3210,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1306",m:"P4-P18-X06",tc:53.9,li:0,to:53.9,vi:"EXTERNA",dr:2,pr:454000,en:"Dic-27",vs:"NO",cu:4070,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"2009",m:"TIPO 16A",tc:57.43,li:0,to:57.43,vi:"RICARDO ANGULO",dr:1,pr:496485,en:"Dic-26",vs:"SI",cu:4450,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2713",m:"X13",tc:40.05,li:0,to:40.05,vi:"INTERNA",dr:1,pr:254000,en:"Mar-28",vs:"SI",cu:2277,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1902",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:291972,en:"Dic-26",vs:"SI",cu:2617,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"2305",m:"TIPO 18A",tc:67.07,li:10.88,to:77.95,vi:"TOMAS MARSANO",dr:2,pr:691230,en:"Dic-26",vs:"SI",cu:6196,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"402",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:349000,en:"Dic-27",vs:"SI",cu:3128,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1808",m:"X08",tc:36.83,li:0,to:36.83,vi:"INTERNA",dr:1,pr:243000,en:"Mar-28",vs:"SI",cu:2178,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"61304",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:"",cu:4493,bk:""},{d:"GRATTO",p:"ARAMBU 934",u:"103",m:"X09A",tc:26.16,li:3.62,to:29.78,vi:"INTERNA",dr:1,pr:236000,en:"Dic-27",vs:"SI",cu:2115,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"61002",m:"TIPO-11",tc:43.1,li:0,to:43.1,vi:"PENDIENTE",dr:1,pr:365082,en:"Mar-28",vs:"",cu:3272,bk:""},{d:"ALBAMAR",p:"AURA",u:"1205",m:"E",tc:29.62,li:0,to:29.62,vi:"CALLE",dr:1,pr:246500,en:"Abr-27",vs:"",cu:2210,bk:"INTERBANK"},{d:"VITAIN",p:"NITOA 6",u:"6703",m:"TIPO-20",tc:74.33,li:0,to:74.33,vi:"PENDIENTE",dr:3,pr:629619,en:"Mar-28",vs:"",cu:5644,bk:""},{d:"V&V",p:"GERMANIA",u:"2209",m:"P22-P23-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:295000,en:"Dic-27",vs:"NO",cu:2644,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"912",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:342722,en:"Dic-26",vs:"SI",cu:3072,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"2301",m:"TIPO 1B",tc:30.31,li:0,to:30.31,vi:"TOMAS MARSANO",dr:1,pr:298086,en:"Dic-26",vs:"SI",cu:2672,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"1314",m:"X14",tc:38.4,li:0,to:38.4,vi:"INTERNA",dr:1,pr:313000,en:"Dic-27",vs:"SI",cu:2806,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1001",m:"X01",tc:69.66,li:0,to:69.66,vi:"EXTERNA",dr:3,pr:422000,en:"Mar-28",vs:"SI",cu:3783,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1706",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:388000,en:"Mar-28",vs:"SI",cu:3478,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1910",m:"P19-P20-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:288000,en:"Dic-27",vs:"NO",cu:2582,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"OASIS",u:"902",m:"B",tc:47.27,li:0,to:47.27,vi:"INTERNA",dr:1,pr:400300,en:"Nov-26",vs:"NO",cu:3588,bk:"FIDEICOMISO"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1308",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"VISTA F1",dr:2,pr:451601,en:"INMEDIATA",vs:"NO",cu:4048,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"402",m:"X02",tc:51.66,li:0,to:51.66,vi:"EXTERNA",dr:2,pr:357000,en:"Mar-28",vs:"SI",cu:3200,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2505",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:419000,en:"Mar-28",vs:"SI",cu:3756,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"306",m:"X06",tc:79.48,li:0,to:79.48,vi:"EXTERNA",dr:3,pr:619000,en:"Dic-27",vs:"SI",cu:5549,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6105",m:"TIPO-05",tc:41.43,li:7,to:48.43,vi:"PENDIENTE",dr:1,pr:380584,en:"Mar-28",vs:"",cu:3411,bk:""},{d:"AMMA",p:"TORRE MARSANO 28",u:"908",m:"X08",tc:37.03,li:0,to:37.03,vi:"INTERNA",dr:1,pr:240000,en:"Mar-28",vs:"SI",cu:2151,bk:"BCP"},{d:"ALBAMAR",p:"AURA",u:"505",m:"E",tc:29.62,li:0,to:29.62,vi:"CALLE",dr:1,pr:251700,en:"Abr-27",vs:"",cu:2256,bk:"INTERBANK"},{d:"GRATTO",p:"ARAMBU 934",u:"105",m:"X11-1",tc:34.12,li:7.05,to:41.17,vi:"INTERNA",dr:1,pr:326000,en:"Dic-27",vs:"SI",cu:2922,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"406",m:"X06-4",tc:79.51,li:0,to:79.51,vi:"EXTERNA",dr:3,pr:616000,en:"Dic-27",vs:"SI",cu:5522,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1013",m:"X13-7",tc:55.64,li:0,to:55.64,vi:"INTERNA",dr:2,pr:447000,en:"Dic-27",vs:"SI",cu:4007,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2413",m:"X13",tc:40.05,li:0,to:40.05,vi:"INTERNA",dr:1,pr:252000,en:"Mar-28",vs:"SI",cu:2259,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1505",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:419000,en:"Mar-28",vs:"SI",cu:3756,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"910",m:"X10",tc:48.97,li:0,to:48.97,vi:"INTERNA",dr:2,pr:340000,en:"Mar-28",vs:"SI",cu:3048,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1809",m:"X09",tc:27.32,li:0,to:27.32,vi:"INTERNA",dr:0,pr:202000,en:"Mar-28",vs:"SI",cu:1811,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1310",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:306000,en:"Dic-27",vs:"SI",cu:2743,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1505",m:"P4-P18-X05",tc:68.3,li:0,to:68.3,vi:"EXTERNA",dr:3,pr:451000,en:"Dic-27",vs:"NO",cu:4043,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"AURA",u:"302",m:"B",tc:70.33,li:0,to:70.33,vi:"AV TOMAS MARSANO",dr:3,pr:486800,en:"Abr-27",vs:"",cu:4364,bk:"INTERBANK"},{d:"V&V",p:"GERMANIA",u:"2109",m:"P21-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:295000,en:"Dic-27",vs:"NO",cu:2644,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1004",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:541000,en:"Dic-27",vs:"NO",cu:4849,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"313",m:"X13-2",tc:56.35,li:0,to:56.35,vi:"INTERNA",dr:2,pr:457000,en:"Dic-27",vs:"SI",cu:4096,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1603",m:"P4-P18-X03",tc:65.1,li:0,to:65.1,vi:"EXTERNA",dr:3,pr:495000,en:"Dic-27",vs:"NO",cu:4437,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"804",m:"X04-B",tc:59.95,li:0,to:59.95,vi:"EXTERNA",dr:2,pr:500000,en:"Dic-27",vs:"SI",cu:4482,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1103",m:"X03-C",tc:60.97,li:0,to:60.97,vi:"EXTERNA",dr:2,pr:507000,en:"Dic-27",vs:"SI",cu:4545,bk:"BCP"}];
+var D=[{d:"V&V",p:"GERMANIA",u:"604",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:545000,en:"Dic-27",vs:"NO",cu:4885,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"AURA",u:"1604",m:"D",tc:56.7,li:0,to:56.7,vi:"ESQUINA",dr:2,pr:406900,en:"Abr-27",vs:"",cu:3647,bk:"INTERBANK"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1208",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"VISTA F1",dr:2,pr:444900,en:"INMEDIATA",vs:"NO",cu:3988,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1709",m:"P4-P18-X09",tc:57.3,li:0,to:57.3,vi:"INTERNA",dr:2,pr:384000,en:"Dic-27",vs:"NO",cu:3442,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2401",m:"X01",tc:69.22,li:0,to:69.22,vi:"EXTERNA",dr:3,pr:428000,en:"Mar-28",vs:"SI",cu:3836,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1213",m:"P4-P18-X13",tc:40,li:0,to:40,vi:"INTERNA",dr:1,pr:342000,en:"Dic-27",vs:"NO",cu:3066,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"304",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:383000,en:"Mar-28",vs:"SI",cu:3433,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1309",m:"F2 B7",tc:54.63,li:3.19,to:57.82,vi:"VISTA F1",dr:2,pr:443462,en:"INMEDIATA",vs:"NO",cu:3975,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6204",m:"TIPO-21",tc:73.18,li:0,to:73.18,vi:"PENDIENTE",dr:3,pr:619878,en:"Mar-28",vs:"",cu:5556,bk:""},{d:"VITAIN",p:"NITOA 6",u:"6804",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:"",cu:4493,bk:""},{d:"EDIFICA",p:"ELEMENT",u:"1804",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:361911,en:"Dic-26",vs:"SI",cu:3244,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"208",m:"TIPO 9A",tc:36.21,li:9.67,to:45.88,vi:"RICARDO ANGULO",dr:1,pr:359530,en:"Dic-26",vs:"SI",cu:3223,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1904",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:403000,en:"Mar-28",vs:"SI",cu:3612,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1610",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:305000,en:"Dic-27",vs:"SI",cu:2734,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"612",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:332551,en:"Dic-26",vs:"SI",cu:2981,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"407",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:264000,en:"Dic-27",vs:"SI",cu:2366,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"411",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:412000,en:"Dic-27",vs:"NO",cu:3693,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"2206",m:"X06-22",tc:77.34,li:0,to:77.34,vi:"EXTERNA",dr:3,pr:601000,en:"Dic-27",vs:"SI",cu:5387,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6604",m:"TIPO-21",tc:73.18,li:0,to:73.18,vi:"PENDIENTE",dr:3,pr:619878,en:"Mar-28",vs:"",cu:5556,bk:""},{d:"AMMA",p:"TORRE MARSANO 28",u:"1403",m:"X03",tc:63.02,li:0,to:63.02,vi:"EXTERNA",dr:3,pr:386000,en:"Mar-28",vs:"SI",cu:3460,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"2216",m:"X16-21 AL 23",tc:35.5,li:0,to:35.5,vi:"INTERNA",dr:1,pr:291000,en:"Dic-27",vs:"SI",cu:2608,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1104",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:353027,en:"Dic-26",vs:"SI",cu:3164,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"1709",m:"X09",tc:26.16,li:0,to:26.16,vi:"INTERNA",dr:1,pr:235000,en:"Dic-27",vs:"SI",cu:2106,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1302",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:286450,en:"Dic-26",vs:"SI",cu:2568,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"805",m:"X05-A",tc:39.96,li:0,to:39.96,vi:"EXTERNA",dr:1,pr:359000,en:"Dic-27",vs:"SI",cu:3218,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"906",m:"X06",tc:78.84,li:0,to:78.84,vi:"EXTERNA",dr:3,pr:613000,en:"Dic-27",vs:"SI",cu:5495,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"203",m:"X03",tc:63.77,li:0,to:63.77,vi:"EXTERNA",dr:3,pr:372000,en:"Mar-28",vs:"SI",cu:3334,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6102",m:"TIPO-8",tc:58.25,li:12.18,to:70.43,vi:"PENDIENTE",dr:2,pr:544998,en:"Mar-28",vs:"",cu:4885,bk:""},{d:"GRATTO",p:"ARAMBU 934",u:"1011",m:"X11",tc:34.57,li:0,to:34.57,vi:"INTERNA",dr:1,pr:305000,en:"Dic-27",vs:"SI",cu:2734,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"609",m:"X09",tc:26.9,li:0,to:26.9,vi:"INTERNA",dr:0,pr:193000,en:"Mar-28",vs:"SI",cu:1730,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"207",m:"F2 A2",tc:63.28,li:4.79,to:68.07,vi:"INTERNA",dr:2,pr:540531,en:"INMEDIATA",vs:"NO",cu:4845,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1203",m:"X03-A",tc:60.85,li:0,to:60.85,vi:"EXTERNA",dr:2,pr:501000,en:"Dic-27",vs:"SI",cu:4491,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2306",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:391000,en:"Mar-28",vs:"SI",cu:3505,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1904",m:"P19-P20-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:535000,en:"Dic-27",vs:"NO",cu:4796,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1205",m:"P4-P18-X05",tc:68.3,li:0,to:68.3,vi:"EXTERNA",dr:3,pr:454000,en:"Dic-27",vs:"NO",cu:4070,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1009",m:"X09",tc:26.9,li:0,to:26.9,vi:"INTERNA",dr:0,pr:197000,en:"Mar-28",vs:"SI",cu:1766,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"405",m:"X05-A",tc:39.96,li:0,to:39.96,vi:"EXTERNA",dr:1,pr:360000,en:"Dic-27",vs:"SI",cu:3227,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1712",m:"X12-16 A 20",tc:57.9,li:0,to:57.9,vi:"INTERNA",dr:2,pr:468000,en:"Dic-27",vs:"SI",cu:4195,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1602",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:343000,en:"Dic-27",vs:"SI",cu:3075,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1404",m:"X04",tc:55.39,li:0,to:55.39,vi:"EXTERNA",dr:2,pr:399000,en:"Mar-28",vs:"SI",cu:3577,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1502",m:"X02",tc:51.66,li:0,to:51.66,vi:"EXTERNA",dr:2,pr:372000,en:"Mar-28",vs:"SI",cu:3334,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1701",m:"X01",tc:69.22,li:0,to:69.22,vi:"EXTERNA",dr:3,pr:424000,en:"Mar-28",vs:"SI",cu:3801,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6203",m:"TIPO-20",tc:74.33,li:0,to:74.33,vi:"PENDIENTE",dr:3,pr:629619,en:"Mar-28",vs:"",cu:5644,bk:""},{d:"VITAIN",p:"NITOA 6",u:"61201",m:"TIPO-10",tc:42.57,li:0,to:42.57,vi:"PENDIENTE",dr:1,pr:360593,en:"Mar-28",vs:"",cu:3232,bk:""},{d:"GRATTO",p:"ARAMBU 934",u:"1002",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:346000,en:"Dic-27",vs:"SI",cu:3101,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1008",m:"X08",tc:26.72,li:0,to:26.72,vi:"INTERNA",dr:1,pr:243000,en:"Dic-27",vs:"SI",cu:2178,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"904",m:"TIPO 4A",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:350488,en:"Dic-26",vs:"SI",cu:3142,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1411",m:"TIPO 11C",tc:41.41,li:0,to:41.41,vi:"RICARDO ANGULO",dr:1,pr:341311,en:"Dic-26",vs:"SI",cu:3059,bk:"SCOTIABANK"},{d:"VITAIN",p:"NITOA 6",u:"61204",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:"",cu:4493,bk:""},{d:"EDIFICA",p:"ELEMENT",u:"1402",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:287371,en:"Dic-26",vs:"SI",cu:2576,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1202",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:285530,en:"Dic-26",vs:"SI",cu:2559,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"1601",m:"TIPO 1A",tc:30.72,li:0,to:30.72,vi:"TOMAS MARSANO",dr:1,pr:295136,en:"Dic-26",vs:"SI",cu:2646,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1412",m:"P4-P18-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:418000,en:"Dic-27",vs:"NO",cu:3747,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1612",m:"P4-P18-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:415000,en:"Dic-27",vs:"NO",cu:3720,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"1302",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:344000,en:"Dic-27",vs:"SI",cu:3084,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6301",m:"TIPO-18",tc:55.47,li:0,to:55.47,vi:"PENDIENTE",dr:2,pr:469864,en:"Mar-28",vs:"",cu:4212,bk:""},{d:"VITAIN",p:"NITOA 6",u:"6807",m:"TIPO-16",tc:74.24,li:0,to:74.24,vi:"PENDIENTE",dr:3,pr:628856,en:"Mar-28",vs:"",cu:5637,bk:""},{d:"GRATTO",p:"ARAMBU 934",u:"2201",m:"X01-22",tc:57.56,li:0,to:57.56,vi:"EXTERNA",dr:2,pr:462000,en:"Dic-27",vs:"SI",cu:4141,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"204",m:"X05",tc:64.31,li:0,to:64.31,vi:"EXTERNA",dr:3,pr:404000,en:"Mar-28",vs:"SI",cu:3621,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"2311",m:"P22-P23-X12",tc:56.8,li:0,to:56.8,vi:"INTERNA",dr:2,pr:419000,en:"Dic-27",vs:"NO",cu:3756,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"702",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:280929,en:"Dic-26",vs:"SI",cu:2518,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"2110",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:302000,en:"Dic-27",vs:"SI",cu:2707,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6501",m:"TIPO-10",tc:42.57,li:0,to:42.57,vi:"PENDIENTE",dr:1,pr:360593,en:"Mar-28",vs:"",cu:3232,bk:""},{d:"EDIFICA",p:"ELEMENT",u:"605",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:346681,en:"Dic-26",vs:"SI",cu:3108,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"510",m:"X10",tc:48.75,li:0,to:48.75,vi:"INTERNA",dr:2,pr:327000,en:"Mar-28",vs:"SI",cu:2931,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1012",m:"X12",tc:27.92,li:0,to:27.92,vi:"INTERNA",dr:0,pr:196000,en:"Mar-28",vs:"SI",cu:1757,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1206",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:384000,en:"Mar-28",vs:"SI",cu:3442,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"805",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:415000,en:"Mar-28",vs:"SI",cu:3720,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1201",m:"X01-12",tc:57.55,li:0,to:57.55,vi:"EXTERNA",dr:2,pr:468000,en:"Dic-27",vs:"SI",cu:4195,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1304",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:538000,en:"Dic-27",vs:"NO",cu:4822,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"504",m:"X04-B",tc:59.95,li:0,to:59.95,vi:"EXTERNA",dr:2,pr:502000,en:"Dic-27",vs:"SI",cu:4500,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"2608",m:"P26-P27-X12",tc:55,li:0,to:55,vi:"INTERNA",dr:2,pr:427000,en:"Dic-27",vs:"NO",cu:3827,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"2306",m:"X06-23",tc:77.04,li:0,to:77.04,vi:"EXTERNA",dr:3,pr:596000,en:"Dic-27",vs:"SI",cu:5342,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"803",m:"F2 A2",tc:63.28,li:4.79,to:68.07,vi:"INTERNA",dr:2,pr:539361,en:"INMEDIATA",vs:"NO",cu:4835,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1301",m:"X01",tc:69.66,li:0,to:69.66,vi:"EXTERNA",dr:3,pr:424000,en:"Mar-28",vs:"SI",cu:3801,bk:"BCP"},{d:"ALBAMAR",p:"OASIS",u:"606",m:"F",tc:74.38,li:0,to:74.38,vi:"INTERNA",dr:3,pr:614000,en:"Nov-26",vs:"NO",cu:5504,bk:"FIDEICOMISO"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2109",m:"X09",tc:27.32,li:0,to:27.32,vi:"INTERNA",dr:0,pr:203000,en:"Mar-28",vs:"SI",cu:1820,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"801",m:"X01",tc:70.1,li:0,to:70.1,vi:"EXTERNA",dr:3,pr:422000,en:"Mar-28",vs:"SI",cu:3783,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1503",m:"P4-P18-X03",tc:65.1,li:0,to:65.1,vi:"EXTERNA",dr:3,pr:495000,en:"Dic-27",vs:"NO",cu:4437,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"915",m:"X15",tc:57.5,li:0,to:57.5,vi:"INTERNA",dr:2,pr:457000,en:"Dic-27",vs:"SI",cu:4096,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"409",m:"X09",tc:26.16,li:0,to:26.16,vi:"INTERNA",dr:1,pr:239000,en:"Dic-27",vs:"SI",cu:2142,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1201",m:"F2 B1",tc:54.65,li:3.19,to:57.84,vi:"VISTA F1",dr:2,pr:452127,en:"INMEDIATA",vs:"NO",cu:4053,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2305",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:425000,en:"Mar-28",vs:"SI",cu:3810,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6308",m:"TIPO-17",tc:75.26,li:0,to:75.26,vi:"PENDIENTE",dr:3,pr:637496,en:"Mar-28",vs:"",cu:5714,bk:""},{d:"EDIFICA",p:"ELEMENT",u:"512",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:331272,en:"Dic-26",vs:"SI",cu:2969,bk:"SCOTIABANK"},{d:"VITAIN",p:"NITOA 6",u:"6402",m:"TIPO-11",tc:43.1,li:0,to:43.1,vi:"PENDIENTE",dr:1,pr:365082,en:"Mar-28",vs:"",cu:3272,bk:""},{d:"ALBAMAR",p:"AURA",u:"304",m:"D",tc:56.7,li:0,to:56.7,vi:"ESQUINA",dr:2,pr:422700,en:"Abr-27",vs:"",cu:3789,bk:"INTERBANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"403",m:"X03",tc:63.02,li:0,to:63.02,vi:"EXTERNA",dr:3,pr:368000,en:"Mar-28",vs:"SI",cu:3299,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1906",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:389000,en:"Mar-28",vs:"SI",cu:3487,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"2105",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:371740,en:"Dic-26",vs:"SI",cu:3332,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1411",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:402000,en:"Dic-27",vs:"NO",cu:3603,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"1007",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:262000,en:"Dic-27",vs:"SI",cu:2348,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"406",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:369000,en:"Mar-28",vs:"SI",cu:3308,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"205",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:369000,en:"Mar-28",vs:"SI",cu:3308,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"905",m:"X05-B",tc:39.91,li:0,to:39.91,vi:"EXTERNA",dr:1,pr:362000,en:"Dic-27",vs:"SI",cu:3245,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"808",m:"P4-P18-X08",tc:41.4,li:0,to:41.4,vi:"EXTERNA",dr:1,pr:365000,en:"Dic-27",vs:"NO",cu:3272,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"905",m:"TIPO 5B",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:350488,en:"Dic-26",vs:"SI",cu:3142,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"708",m:"TIPO 8B",tc:55.77,li:0,to:55.77,vi:"TOMAS MARSANO",dr:1,pr:433583,en:"Dic-26",vs:"SI",cu:3886,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"1307",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:261000,en:"Dic-27",vs:"SI",cu:2340,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1403",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"INTERNA",dr:2,pr:449377,en:"INMEDIATA",vs:"NO",cu:4028,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"707",m:"X07",tc:28.97,li:0,to:28.97,vi:"INTERNA",dr:1,pr:263000,en:"Dic-27",vs:"SI",cu:2357,bk:"BCP"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"210",m:"F2 A6",tc:41.18,li:1.87,to:43.05,vi:"VISTA F1",dr:1,pr:356914,en:"INMEDIATA",vs:"NO",cu:3199,bk:"BCP"},{d:"ALBAMAR",p:"AURA",u:"502",m:"B",tc:70.33,li:0,to:70.33,vi:"AV TOMAS MARSANO",dr:3,pr:483900,en:"Abr-27",vs:"",cu:4338,bk:"INTERBANK"},{d:"EDIFICA",p:"ELEMENT",u:"1311",m:"TIPO 11C",tc:41.41,li:0,to:41.41,vi:"RICARDO ANGULO",dr:1,pr:339993,en:"Dic-26",vs:"SI",cu:3048,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"610",m:"X10",tc:48.75,li:0,to:48.75,vi:"INTERNA",dr:2,pr:327000,en:"Mar-28",vs:"SI",cu:2931,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1611",m:"P4-P18-X11",tc:55.9,li:0,to:55.9,vi:"INTERNA",dr:2,pr:399000,en:"Dic-27",vs:"NO",cu:3577,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"1506",m:"TIPO 6A",tc:39.87,li:0,to:39.87,vi:"TOMAS MARSANO",dr:1,pr:358104,en:"Dic-26",vs:"SI",cu:3210,bk:"SCOTIABANK"},{d:"V&V",p:"GERMANIA",u:"1306",m:"P4-P18-X06",tc:53.9,li:0,to:53.9,vi:"EXTERNA",dr:2,pr:454000,en:"Dic-27",vs:"NO",cu:4070,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"2009",m:"TIPO 16A",tc:57.43,li:0,to:57.43,vi:"RICARDO ANGULO",dr:1,pr:496485,en:"Dic-26",vs:"SI",cu:4450,bk:"SCOTIABANK"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2713",m:"X13",tc:40.05,li:0,to:40.05,vi:"INTERNA",dr:1,pr:254000,en:"Mar-28",vs:"SI",cu:2277,bk:"BCP"},{d:"EDIFICA",p:"ELEMENT",u:"1902",m:"TIPO 2A",tc:28.91,li:0,to:28.91,vi:"TOMAS MARSANO",dr:1,pr:291972,en:"Dic-26",vs:"SI",cu:2617,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"2305",m:"TIPO 18A",tc:67.07,li:10.88,to:77.95,vi:"TOMAS MARSANO",dr:2,pr:691230,en:"Dic-26",vs:"SI",cu:6196,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"402",m:"X02-B",tc:40.39,li:0,to:40.39,vi:"EXTERNA",dr:1,pr:349000,en:"Dic-27",vs:"SI",cu:3128,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1808",m:"X08",tc:36.83,li:0,to:36.83,vi:"INTERNA",dr:1,pr:243000,en:"Mar-28",vs:"SI",cu:2178,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"61304",m:"TIPO-13",tc:59.17,li:0,to:59.17,vi:"PENDIENTE",dr:2,pr:501205,en:"Mar-28",vs:"",cu:4493,bk:""},{d:"GRATTO",p:"ARAMBU 934",u:"103",m:"X09A",tc:26.16,li:3.62,to:29.78,vi:"INTERNA",dr:1,pr:236000,en:"Dic-27",vs:"SI",cu:2115,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"61002",m:"TIPO-11",tc:43.1,li:0,to:43.1,vi:"PENDIENTE",dr:1,pr:365082,en:"Mar-28",vs:"",cu:3272,bk:""},{d:"ALBAMAR",p:"AURA",u:"1205",m:"E",tc:29.62,li:0,to:29.62,vi:"CALLE",dr:1,pr:246500,en:"Abr-27",vs:"",cu:2210,bk:"INTERBANK"},{d:"VITAIN",p:"NITOA 6",u:"6703",m:"TIPO-20",tc:74.33,li:0,to:74.33,vi:"PENDIENTE",dr:3,pr:629619,en:"Mar-28",vs:"",cu:5644,bk:""},{d:"V&V",p:"GERMANIA",u:"2209",m:"P22-P23-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:295000,en:"Dic-27",vs:"NO",cu:2644,bk:"FIDEICOMISO"},{d:"EDIFICA",p:"ELEMENT",u:"912",m:"TIPO 12B",tc:40.19,li:0,to:40.19,vi:"RICARDO ANGULO",dr:1,pr:342722,en:"Dic-26",vs:"SI",cu:3072,bk:"SCOTIABANK"},{d:"EDIFICA",p:"ELEMENT",u:"2301",m:"TIPO 1B",tc:30.31,li:0,to:30.31,vi:"TOMAS MARSANO",dr:1,pr:298086,en:"Dic-26",vs:"SI",cu:2672,bk:"SCOTIABANK"},{d:"GRATTO",p:"ARAMBU 934",u:"1314",m:"X14",tc:38.4,li:0,to:38.4,vi:"INTERNA",dr:1,pr:313000,en:"Dic-27",vs:"SI",cu:2806,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1001",m:"X01",tc:69.66,li:0,to:69.66,vi:"EXTERNA",dr:3,pr:422000,en:"Mar-28",vs:"SI",cu:3783,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1706",m:"X06",tc:56.09,li:0,to:56.09,vi:"EXTERNA",dr:2,pr:388000,en:"Mar-28",vs:"SI",cu:3478,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1910",m:"P19-P20-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:288000,en:"Dic-27",vs:"NO",cu:2582,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"OASIS",u:"902",m:"B",tc:47.27,li:0,to:47.27,vi:"INTERNA",dr:1,pr:400300,en:"Nov-26",vs:"NO",cu:3588,bk:"FIDEICOMISO"},{d:"GRUPO LAR",p:"DISTRITO 34",u:"1308",m:"F2 B2",tc:55.71,li:1.62,to:57.33,vi:"VISTA F1",dr:2,pr:451601,en:"INMEDIATA",vs:"NO",cu:4048,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"402",m:"X02",tc:51.66,li:0,to:51.66,vi:"EXTERNA",dr:2,pr:357000,en:"Mar-28",vs:"SI",cu:3200,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2505",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:419000,en:"Mar-28",vs:"SI",cu:3756,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"306",m:"X06",tc:79.48,li:0,to:79.48,vi:"EXTERNA",dr:3,pr:619000,en:"Dic-27",vs:"SI",cu:5549,bk:"BCP"},{d:"VITAIN",p:"NITOA 6",u:"6105",m:"TIPO-05",tc:41.43,li:7,to:48.43,vi:"PENDIENTE",dr:1,pr:380584,en:"Mar-28",vs:"",cu:3411,bk:""},{d:"AMMA",p:"TORRE MARSANO 28",u:"908",m:"X08",tc:37.03,li:0,to:37.03,vi:"INTERNA",dr:1,pr:240000,en:"Mar-28",vs:"SI",cu:2151,bk:"BCP"},{d:"ALBAMAR",p:"AURA",u:"505",m:"E",tc:29.62,li:0,to:29.62,vi:"CALLE",dr:1,pr:251700,en:"Abr-27",vs:"",cu:2256,bk:"INTERBANK"},{d:"GRATTO",p:"ARAMBU 934",u:"105",m:"X11-1",tc:34.12,li:7.05,to:41.17,vi:"INTERNA",dr:1,pr:326000,en:"Dic-27",vs:"SI",cu:2922,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"406",m:"X06-4",tc:79.51,li:0,to:79.51,vi:"EXTERNA",dr:3,pr:616000,en:"Dic-27",vs:"SI",cu:5522,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1013",m:"X13-7",tc:55.64,li:0,to:55.64,vi:"INTERNA",dr:2,pr:447000,en:"Dic-27",vs:"SI",cu:4007,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"2413",m:"X13",tc:40.05,li:0,to:40.05,vi:"INTERNA",dr:1,pr:252000,en:"Mar-28",vs:"SI",cu:2259,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1505",m:"X05",tc:63.87,li:0,to:63.87,vi:"EXTERNA",dr:3,pr:419000,en:"Mar-28",vs:"SI",cu:3756,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"910",m:"X10",tc:48.97,li:0,to:48.97,vi:"INTERNA",dr:2,pr:340000,en:"Mar-28",vs:"SI",cu:3048,bk:"BCP"},{d:"AMMA",p:"TORRE MARSANO 28",u:"1809",m:"X09",tc:27.32,li:0,to:27.32,vi:"INTERNA",dr:0,pr:202000,en:"Mar-28",vs:"SI",cu:1811,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1310",m:"X10",tc:37.58,li:0,to:37.58,vi:"INTERNA",dr:1,pr:306000,en:"Dic-27",vs:"SI",cu:2743,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1505",m:"P4-P18-X05",tc:68.3,li:0,to:68.3,vi:"EXTERNA",dr:3,pr:451000,en:"Dic-27",vs:"NO",cu:4043,bk:"FIDEICOMISO"},{d:"ALBAMAR",p:"AURA",u:"302",m:"B",tc:70.33,li:0,to:70.33,vi:"AV TOMAS MARSANO",dr:3,pr:486800,en:"Abr-27",vs:"",cu:4364,bk:"INTERBANK"},{d:"V&V",p:"GERMANIA",u:"2109",m:"P21-X10",tc:41.5,li:0,to:41.5,vi:"INTERNA",dr:1,pr:295000,en:"Dic-27",vs:"NO",cu:2644,bk:"FIDEICOMISO"},{d:"V&V",p:"GERMANIA",u:"1004",m:"P4-P18-X04",tc:70.6,li:0,to:70.6,vi:"EXTERNA",dr:3,pr:541000,en:"Dic-27",vs:"NO",cu:4849,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"313",m:"X13-2",tc:56.35,li:0,to:56.35,vi:"INTERNA",dr:2,pr:457000,en:"Dic-27",vs:"SI",cu:4096,bk:"BCP"},{d:"V&V",p:"GERMANIA",u:"1603",m:"P4-P18-X03",tc:65.1,li:0,to:65.1,vi:"EXTERNA",dr:3,pr:495000,en:"Dic-27",vs:"NO",cu:4437,bk:"FIDEICOMISO"},{d:"GRATTO",p:"ARAMBU 934",u:"804",m:"X04-B",tc:59.95,li:0,to:59.95,vi:"EXTERNA",dr:2,pr:500000,en:"Dic-27",vs:"SI",cu:4482,bk:"BCP"},{d:"GRATTO",p:"ARAMBU 934",u:"1103",m:"X03-C",tc:60.97,li:0,to:60.97,vi:"EXTERNA",dr:2,pr:507000,en:"Dic-27",vs:"SI",cu:4545,bk:"BCP"},
+{d:"EDIFICA",p:"ATELIER",u:"702",m:"T1",tc:48.0,li:0,to:48.0,vi:"EXTERNA",dr:1,pr:518641,en:"Inmediata",vs:"NO",cu:2987,bk:"SCOTIABANK"},
+{d:"EDIFICA",p:"ATELIER",u:"1002",m:"T2",tc:59.0,li:0,to:59.0,vi:"EXTERNA",dr:2,pr:534777,en:"Inmediata",vs:"NO",cu:3080,bk:"SCOTIABANK"},
+{d:"EDIFICA",p:"UPPER 28",u:"504",m:"T2",tc:60.1,li:0,to:60.1,vi:"INTERNA",dr:2,pr:636605,en:"Dic-25",vs:"NO",cu:3667,bk:"BCP"},
+{d:"EDIFICA",p:"UPPER 28",u:"701",m:"T3",tc:120.0,li:0,to:143.7,vi:"EXTERNA",dr:3,pr:1317762,en:"Dic-25",vs:"NO",cu:7590,bk:"BCP"},
+{d:"EDIFICA",p:"THE EDGE",u:"502",m:"T2",tc:60.3,li:0,to:60.3,vi:"EXTERNA",dr:2,pr:732266,en:"Dic-26",vs:"NO",cu:4218,bk:"BBVA"},
+{d:"EDIFICA",p:"THE EDGE",u:"1002",m:"T2",tc:86.1,li:0,to:86.1,vi:"EXTERNA",dr:2,pr:1012684,en:"Dic-26",vs:"NO",cu:5833,bk:"BBVA"},
+{d:"GALEON",p:"JORGE CHAVEZ",u:"502",m:"T2",tc:60.2,li:0,to:60.2,vi:"EXTERNA",dr:2,pr:570000,en:"Inmediata",vs:"NO",cu:3283,bk:"BCP"},
+{d:"GALEON",p:"JORGE CHAVEZ",u:"1003",m:"T3",tc:140.0,li:0,to:163.6,vi:"EXTERNA",dr:3,pr:1747500,en:"Inmediata",vs:"NO",cu:10066,bk:"BCP"},
+{d:"VYV",p:"PARDO",u:"701",m:"T1",tc:34.5,li:0,to:34.5,vi:"INTERNA",dr:1,pr:393000,en:"Oct-25",vs:"NO",cu:2264,bk:"BCP"},
+{d:"VYV",p:"PARDO",u:"904",m:"T2",tc:78.5,li:0,to:78.5,vi:"EXTERNA",dr:2,pr:738000,en:"Oct-25",vs:"NO",cu:4251,bk:"BCP"},
+{d:"CANTABRIA",p:"THU",u:"701",m:"T1",tc:60.9,li:0,to:60.9,vi:"EXTERNA",dr:1,pr:635000,en:"Inmediata",vs:"NO",cu:3658,bk:"BCP"},
+{d:"CANTABRIA",p:"LUUP",u:"801",m:"T1",tc:25.1,li:0,to:25.1,vi:"INTERNA",dr:1,pr:270000,en:"Sep-26",vs:"NO",cu:1555,bk:"BCP"},
+{d:"CANTABRIA",p:"LUUP",u:"1203",m:"T3",tc:71.6,li:0,to:71.6,vi:"EXTERNA",dr:3,pr:570000,en:"Sep-26",vs:"NO",cu:3283,bk:"BCP"},
+{d:"EDIFICA",p:"THE LEAD",u:"502",m:"T1",tc:45.0,li:0,to:45.0,vi:"INTERNA",dr:1,pr:532971,en:"Dic-25",vs:"NO",cu:3070,bk:"INTERBANK"},
+{d:"EDIFICA",p:"THE LEAD",u:"901",m:"T3",tc:120.0,li:0,to:138.1,vi:"EXTERNA",dr:3,pr:1303620,en:"Dic-25",vs:"NO",cu:7509,bk:"INTERBANK"},
+{d:"SENDA",p:"ALL SAN ISIDRO",u:"803",m:"T1",tc:45.0,li:0,to:45.0,vi:"INTERNA",dr:1,pr:415900,en:"Nov-25",vs:"NO",cu:2396,bk:"BCP"},
+{d:"SENDA",p:"ALL SAN ISIDRO",u:"1303",m:"T2",tc:73.5,li:0,to:73.5,vi:"EXTERNA",dr:2,pr:729800,en:"Nov-25",vs:"NO",cu:4204,bk:"BCP"},
+{d:"MAAS",p:"GRAY SAN ISIDRO",u:"701",m:"T1",tc:40.9,li:0,to:40.9,vi:"INTERNA",dr:1,pr:490000,en:"Inmediata",vs:"NO",cu:2822,bk:"BCP"},
+{d:"MAAS",p:"GRAY SAN ISIDRO",u:"1002",m:"T2",tc:60.0,li:0,to:60.0,vi:"EXTERNA",dr:2,pr:590000,en:"Inmediata",vs:"NO",cu:3398,bk:"BCP"},
+{d:"TALE",p:"ARAMBURU PARK",u:"603",m:"T1",tc:40.0,li:0,to:40.0,vi:"EXTERNA",dr:1,pr:333750,en:"Sep-28",vs:"NO",cu:1922,bk:"FIDEICOMISO"},
+{d:"TALE",p:"ARAMBURU PARK",u:"802",m:"T3",tc:100.0,li:0,to:122.0,vi:"EXTERNA",dr:3,pr:926250,en:"Sep-28",vs:"NO",cu:5335,bk:"FIDEICOMISO"},
+{d:"EDIFICA",p:"ARTLINE",u:"803",m:"T1",tc:40.0,li:0,to:40.0,vi:"EXTERNA",dr:1,pr:482387,en:"Inmediata",vs:"NO",cu:2779,bk:"BCP"},
+{d:"EDIFICA",p:"ARTLINE",u:"1002",m:"T3",tc:120.0,li:0,to:135.5,vi:"EXTERNA",dr:3,pr:1131510,en:"Inmediata",vs:"NO",cu:6517,bk:"BCP"},
+{d:"EDIFICA",p:"THE SIGHT",u:"702",m:"T1",tc:36.0,li:0,to:36.0,vi:"INTERNA",dr:1,pr:464381,en:"Jul-25",vs:"NO",cu:2675,bk:"BCP"},
+{d:"EDIFICA",p:"THE SIGHT",u:"1204",m:"T1",tc:47.8,li:0,to:47.8,vi:"EXTERNA",dr:1,pr:624018,en:"Jul-25",vs:"NO",cu:3594,bk:"BCP"},
+{d:"GDC",p:"CASA BARRANCO 195",u:"603",m:"T1",tc:40.8,li:0,to:40.8,vi:"EXTERNA",dr:1,pr:395853,en:"Jun-25",vs:"NO",cu:2280,bk:"BCP"},
+{d:"GDC",p:"CASA BARRANCO 195",u:"902",m:"T2",tc:74.7,li:0,to:74.7,vi:"EXTERNA",dr:2,pr:760122,en:"Jun-25",vs:"NO",cu:4378,bk:"BCP"},
+{d:"GDC",p:"UNICO MAGDALENA",u:"804",m:"T2",tc:50.9,li:0,to:50.9,vi:"INTERNA",dr:2,pr:371339,en:"Jul-26",vs:"NO",cu:2139,bk:"PROPIO"},
+{d:"GDC",p:"UNICO MAGDALENA",u:"1202",m:"T3",tc:75.1,li:0,to:75.1,vi:"EXTERNA",dr:3,pr:526400,en:"Jul-26",vs:"NO",cu:3032,bk:"PROPIO"},
+{d:"CANTABRIA",p:"BRISSA MAGDALENA",u:"801",m:"T1",tc:40.6,li:0,to:40.6,vi:"EXTERNA",dr:1,pr:335000,en:"Inmediata",vs:"NO",cu:1930,bk:"BCP"},
+{d:"CANTABRIA",p:"BRISSA MAGDALENA",u:"1001",m:"T2",tc:74.7,li:0,to:74.7,vi:"EXTERNA",dr:2,pr:573000,en:"Inmediata",vs:"NO",cu:3300,bk:"BCP"},
+{d:"TALE",p:"MUM",u:"801",m:"T1",tc:41.0,li:0,to:41.0,vi:"INTERNA",dr:1,pr:381000,en:"Dic-26",vs:"NO",cu:2195,bk:"FIDEICOMISO"},
+{d:"TALE",p:"MUM",u:"1304",m:"T3",tc:110.0,li:0,to:126.0,vi:"EXTERNA",dr:3,pr:1217000,en:"Dic-26",vs:"NO",cu:7010,bk:"FIDEICOMISO"},
+{d:"ALBAMAR",p:"PARQUE HABICH",u:"701",m:"T1",tc:39.9,li:0,to:39.9,vi:"INTERNA",dr:1,pr:348000,en:"Sep-24",vs:"NO",cu:2004,bk:"BCP"},
+{d:"ALBAMAR",p:"PARQUE HABICH",u:"903",m:"T2",tc:76.0,li:0,to:76.0,vi:"EXTERNA",dr:2,pr:611800,en:"Sep-24",vs:"NO",cu:3524,bk:"BCP"},
+{d:"CANTABRIA",p:"ETREA",u:"704",m:"T1",tc:40.1,li:0,to:40.1,vi:"EXTERNA",dr:1,pr:352000,en:"Inmediata",vs:"NO",cu:2028,bk:"BCP"},
+{d:"CANTABRIA",p:"ETREA",u:"1004",m:"T2",tc:73.6,li:0,to:73.6,vi:"EXTERNA",dr:2,pr:586000,en:"Inmediata",vs:"NO",cu:3375,bk:"BCP"},
+{d:"TALE",p:"ALAMEDA SAN MIGUEL",u:"702",m:"T1",tc:42.9,li:0,to:42.9,vi:"EXTERNA",dr:1,pr:297000,en:"2027",vs:"SI",cu:1711,bk:"FIDEICOMISO"},
+{d:"TALE",p:"ALAMEDA SAN MIGUEL",u:"903",m:"T2",tc:52.5,li:0,to:52.5,vi:"EXTERNA",dr:2,pr:358000,en:"2027",vs:"SI",cu:2062,bk:"FIDEICOMISO"},
+{d:"VYV",p:"GONZALES",u:"602",m:"T1",tc:42.5,li:0,to:42.5,vi:"INTERNA",dr:1,pr:313000,en:"Ene-25",vs:"SI",cu:1803,bk:"BCP"},
+{d:"VYV",p:"GONZALES",u:"1002",m:"T2",tc:57.0,li:0,to:57.0,vi:"EXTERNA",dr:2,pr:424000,en:"Ene-25",vs:"SI",cu:2442,bk:"BCP"},
+{d:"ALBAMAR",p:"ALTUARS",u:"503",m:"T1",tc:32.7,li:0,to:32.7,vi:"INTERNA",dr:1,pr:272900,en:"Feb-25",vs:"NO",cu:1572,bk:"BCP"},
+{d:"ALBAMAR",p:"ALTUARS",u:"1001",m:"T3",tc:120.0,li:0,to:142.0,vi:"EXTERNA",dr:3,pr:879400,en:"Feb-25",vs:"NO",cu:5065,bk:"BCP"},
+{d:"TALE",p:"CASANOVA",u:"702",m:"T1",tc:40.0,li:0,to:40.0,vi:"EXTERNA",dr:1,pr:339000,en:"Inmediata",vs:"NO",cu:1953,bk:"BCP"},
+{d:"TALE",p:"CASANOVA",u:"902",m:"T2",tc:79.0,li:0,to:79.0,vi:"EXTERNA",dr:2,pr:668000,en:"Inmediata",vs:"NO",cu:3848,bk:"BCP"},
+{d:"ALBAMAR",p:"JOMY",u:"504",m:"T2",tc:76.2,li:0,to:76.2,vi:"EXTERNA",dr:2,pr:460000,en:"Dic-24",vs:"NO",cu:2650,bk:"BCP"},
+{d:"ALBAMAR",p:"JOMY",u:"702",m:"T2",tc:80.5,li:0,to:80.5,vi:"EXTERNA",dr:2,pr:594000,en:"Dic-24",vs:"NO",cu:3421,bk:"BCP"}];
 
 var PC={
+'ATELIER':{'lat':-12.12,'lng':-77.0335,'addr':'Miraflores','color':'#B3202A'},
+  'UPPER 28':{'lat':-12.1192,'lng':-77.0283,'addr':'Miraflores','color':'#1D7A50'},
+  'THE EDGE':{'lat':-12.1244,'lng':-77.0318,'addr':'Miraflores','color':'#1D4A9A'},
+  'JORGE CHAVEZ':{'lat':-12.1215,'lng':-77.0315,'addr':'Miraflores','color':'#7A1D9A'},
+  'PARDO':{'lat':-12.1229,'lng':-77.032,'addr':'Miraflores','color':'#9A5A1D'},
+  'THU':{'lat':-12.1243,'lng':-77.0269,'addr':'Miraflores','color':'#5A1D9A'},
+  'LUUP':{'lat':-12.0958,'lng':-77.0362,'addr':'San Isidro','color':'#1D509A'},
+  'THE LEAD':{'lat':-12.097,'lng':-77.0349,'addr':'San Isidro','color':'#A03030'},
+  'ALL SAN ISIDRO':{'lat':-12.0948,'lng':-77.0336,'addr':'San Isidro','color':'#B3202A'},
+  'GRAY SAN ISIDRO':{'lat':-12.1003,'lng':-77.0377,'addr':'San Isidro','color':'#1D7A50'},
+  'ARAMBURU PARK':{'lat':-12.1003,'lng':-77.0375,'addr':'San Isidro','color':'#1D4A9A'},
+  'ARTLINE':{'lat':-12.1464,'lng':-77.0186,'addr':'Barranco','color':'#7A1D9A'},
+  'THE SIGHT':{'lat':-12.1457,'lng':-77.0205,'addr':'Barranco','color':'#9A5A1D'},
+  'CASA BARRANCO 195':{'lat':-12.1459,'lng':-77.0199,'addr':'Barranco','color':'#5A1D9A'},
+  'UNICO MAGDALENA':{'lat':-12.09,'lng':-77.0737,'addr':'Magdalena','color':'#1D509A'},
+  'BRISSA MAGDALENA':{'lat':-12.088,'lng':-77.0769,'addr':'Magdalena','color':'#A03030'},
+  'MUM':{'lat':-12.0948,'lng':-77.0767,'addr':'Magdalena','color':'#B3202A'},
+  'PARQUE HABICH':{'lat':-12.0732,'lng':-77.0493,'addr':'Jesus Maria','color':'#1D7A50'},
+  'ETREA':{'lat':-12.0719,'lng':-77.0503,'addr':'Jesus Maria','color':'#1D4A9A'},
+  'ALAMEDA SAN MIGUEL':{'lat':-12.081,'lng':-77.0902,'addr':'San Miguel','color':'#7A1D9A'},
+  'GONZALES':{'lat':-12.0743,'lng':-77.0919,'addr':'San Miguel','color':'#9A5A1D'},
+  'ALTUARS':{'lat':-12.0877,'lng':-77.0338,'addr':'Lince','color':'#5A1D9A'},
+  'CASANOVA':{'lat':-12.0911,'lng':-77.0371,'addr':'Lince','color':'#1D509A'},
+  'JOMY':{'lat':-12.073,'lng':-77.0594,'addr':'Pueblo Libre','color':'#A03030'},
+
   'GERMANIA':{'lat':-12.1020,'lng':-77.0098,'addr':'Jr. Domingo M. Lujan','color':'#B3202A'},
   'TORRE MARSANO 28':{'lat':-12.1078,'lng':-77.0025,'addr':'Av. Tomas Marsano 28','color':'#1D7A50'},
   'ELEMENT':{'lat':-12.1055,'lng':-77.0070,'addr':'Av. Ricardo Angulo','color':'#1D4A9A'},
@@ -570,12 +730,50 @@ var PC={
   'AURA':{'lat':-12.1048,'lng':-77.0062,'addr':'Av. Tomas Marsano','color':'#1D509A'},
   'OASIS':{'lat':-12.1030,'lng':-77.0088,'addr':'Surquillo','color':'#1D7A30'}
 };
+
+// Distrito por proyecto (estructura lista para sumar otros distritos)
+var PD={
+'ATELIER':'Miraflores',
+  'UPPER 28':'Miraflores',
+  'THE EDGE':'Miraflores',
+  'JORGE CHAVEZ':'Miraflores',
+  'PARDO':'Miraflores',
+  'THU':'Miraflores',
+  'LUUP':'San Isidro',
+  'THE LEAD':'San Isidro',
+  'ALL SAN ISIDRO':'San Isidro',
+  'GRAY SAN ISIDRO':'San Isidro',
+  'ARAMBURU PARK':'San Isidro',
+  'ARTLINE':'Barranco',
+  'THE SIGHT':'Barranco',
+  'CASA BARRANCO 195':'Barranco',
+  'UNICO MAGDALENA':'Magdalena',
+  'BRISSA MAGDALENA':'Magdalena',
+  'MUM':'Magdalena',
+  'PARQUE HABICH':'Jesus Maria',
+  'ETREA':'Jesus Maria',
+  'ALAMEDA SAN MIGUEL':'San Miguel',
+  'GONZALES':'San Miguel',
+  'ALTUARS':'Lince',
+  'CASANOVA':'Lince',
+  'JOMY':'Pueblo Libre',
+
+  'GERMANIA':'Surquillo',
+  'TORRE MARSANO 28':'Surquillo',
+  'ELEMENT':'Surquillo',
+  'NITOA 6':'Surquillo',
+  'DISTRITO 34':'Surquillo',
+  'ARAMBU 934':'Surquillo',
+  'AURA':'Surquillo',
+  'OASIS':'Surquillo'
+};
+function gd(p){return PD[p]||'Surquillo';}
 var GA={
   'GERMANIA':'gA','TORRE MARSANO 28':'gB','ELEMENT':'gC','NITOA 6':'gD',
   'DISTRITO 34':'gE','ARAMBU 934':'gF','AURA':'gG','OASIS':'gH'
 };
 
-var F={vi:[],dr:[],en:[],vs:[],p:[],bk:'',pm:'',px:'',am:'',ax:''};
+var F={vi:[],dr:[],en:[],vs:[],p:[],dt:'',bk:'',pm:'',px:'',am:'',ax:''};
 var vw='grid', so='pa';
 var maps={}, mainMap=null, dOpen=false;
 
@@ -596,6 +794,7 @@ function etag(e){
 
 function filter(){
   var x=D.slice();
+  if(F.dt) x=x.filter(function(r){return gd(r.p)===F.dt});
   if(F.p.length) x=x.filter(function(r){return F.p.indexOf(r.p)>=0});
   if(F.vi.length) x=x.filter(function(r){return F.vi.some(function(v){return r.vi.indexOf(v)>=0})});
   if(F.dr.length) x=x.filter(function(r){
@@ -654,12 +853,28 @@ function setProj(v){
   render();
 }
 
+function setDist(v){
+  // Filtro por distrito + reajusta lista de proyectos del distrito
+  F.dt = v;
+  F.p = []; // limpia proyecto al cambiar distrito
+  var dpsel=document.getElementById('dpsel');
+  if(dpsel){
+    var ps2=[];
+    D.forEach(function(r){ if((!v||gd(r.p)===v) && ps2.indexOf(r.p)<0) ps2.push(r.p); });
+    var ph='<option value="">Todos</option>';
+    ps2.sort().forEach(function(p){ph+='<option value="'+p+'">'+p+'</option>';});
+    dpsel.innerHTML=ph;
+  }
+  render();
+}
+
 function resetF(){
-  F={vi:[],dr:[],en:[],vs:[],p:[],bk:'',pm:'',px:'',am:'',ax:''};
+  F={vi:[],dr:[],en:[],vs:[],p:[],dt:'',bk:'',pm:'',px:'',am:'',ax:''};
   document.querySelectorAll('.chip.on,.vt.on').forEach(function(c){if(!c.classList.contains('vt'))c.classList.remove('on')});
   ['pmin','pmax','amin','amax'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
   var dbn=document.getElementById('dbn');if(dbn)dbn.value='';
   var dpsel=document.getElementById('dpsel');if(dpsel)dpsel.value='';
+  var ddsel=document.getElementById('ddsel');if(ddsel)ddsel.value='';
   render();
 }
 
@@ -744,8 +959,8 @@ function cardHTML(r,i){
   return '<div class="card '+acc+'" style="animation-delay:'+(i%20*.03)+'s" onclick="openM('+idx+')">'
     +'<div class="cbar"></div>'
     +(PROJIMG[r.p]
-        ? '<div class="cmap cimg" style="background-image:url('+PROJIMG[r.p]+')"><div class="cmg"></div><div class="cmc"><span class="cmd"></span>'+co.addr+'</div><div class="cfav" onclick="event.stopPropagation()">&#9825;</div></div>'
-        : '<div class="cmap" id="'+mid+'-w"><div id="'+mid+'"></div><div class="cmg"></div><div class="cmc"><span class="cmd"></span>'+co.addr+'</div><div class="cfav" onclick="event.stopPropagation()">&#9825;</div></div>'
+        ? '<div class="cmap cimg" style="background-image:url('+PROJIMG[r.p]+')"><div class="cmg"></div><div class="cmc"><span class="cmd"></span>'+co.addr+'</div><button class="ccmp" onclick="event.stopPropagation();toggleCmp('+idx+',this)">+ Comparar</button><div class="cfav" onclick="event.stopPropagation()">&#9825;</div></div>'
+        : '<div class="cmap" id="'+mid+'-w"><div id="'+mid+'"></div><div class="cmg"></div><div class="cmc"><span class="cmd"></span>'+co.addr+'</div><button class="ccmp" onclick="event.stopPropagation();toggleCmp('+idx+',this)">+ Comparar</button><div class="cfav" onclick="event.stopPropagation()">&#9825;</div></div>'
       )
     +'<div class="cbody">'
     +'<div class="cmeta"><span class="cprj">'+r.p+'</span><span class="cdev">'+r.d+'</span></div>'
@@ -819,6 +1034,7 @@ function render(){
         });
         c.addEventListener('mouseleave',function(){c.style.transform='';c.style.boxShadow='';});
       });
+      syncCmpButtons();
     },100);
   } else {
     var html2='<div class="lv"><div class="lhdr"><span class="lh">Proyecto / Unidad</span><span class="lh">Dorms</span><span class="lh">Area / Vista</span><span class="lh">Entrega</span><span class="lh">Banco</span><span class="lh">Precio / Cuota</span><span class="lh"></span></div>';
@@ -841,7 +1057,7 @@ function openM(idx){
       )
     +'<div class="cbar mbar '+acc+'"></div>'
     +'<div class="mbody">'
-    +'<div class="meye">'+r.d+' · Surquillo, Lima</div>'
+    +'<div class="meye">'+r.d+' · '+gd(r.p)+', Lima</div>'
     +'<div class="mtit">'+dL(r.dr)+'</div>'
     +'<div class="msub">Unidad '+r.u+' · Modelo '+r.m+' · '+r.vi+' · '+co.addr+'</div>'
     +'<div class="mrib">'
@@ -853,7 +1069,7 @@ function openM(idx){
     +'<div class="msp"><span class="msv">'+A(r.li)+'</span><span class="msk">Libre</span></div>'
     +'<div class="msp"><span class="msv">'+A(r.to)+'</span><span class="msk">Total</span></div>'
     +'</div></div>'
-    +'<div class="msec"><div class="msect">Ubicacion en Surquillo</div><div class="mmz" id="mb'+idx+'"><div class="mml">'+co.addr+'</div></div></div>'
+    +'<div class="msec"><div class="msect">Ubicacion en '+gd(r.p)+'</div><div class="mmz" id="mb'+idx+'"><div class="mml">'+co.addr+'</div></div></div>'
     +'<div class="msec"><div class="msect">Ficha tecnica</div><div class="mg2">'
     +'<div class="mdt"><span class="mdtk">Dormitorios</span><span class="mdtv">'+dL(r.dr)+'</span></div>'
     +'<div class="mdt"><span class="mdtk">Vista</span><span class="mdtv">'+r.vi+'</span></div>'
@@ -910,6 +1126,8 @@ function init(){
   // Build drawer
   var dpsel=document.getElementById('dpsel');
   if(dpsel){var ph='<option value="">Todos</option>';ps.sort().forEach(function(p){ph+='<option value="'+p+'">'+p+'</option>';});dpsel.innerHTML=ph;}
+  var ddsel=document.getElementById('ddsel');
+  if(ddsel){var dts=[];D.forEach(function(r){var dd=gd(r.p);if(dts.indexOf(dd)<0)dts.push(dd);});var dh='<option value="">Todos</option>';dts.sort().forEach(function(d){dh+='<option value="'+d+'">'+d+'</option>';});ddsel.innerHTML=dh;}
 
 
 
@@ -1016,7 +1234,7 @@ function renderBroch(){
     } else {
       // proyecto - count files
       var nf=child.files?child.files.length:0;
-      sub='Surquillo, Lima';
+      sub=gd(r.p)+', Lima';
       if(nf===0){cnt='Proximamente';soon=' bmcard-soon';}
       else cnt=nf+' '+(nf===1?'recurso':'recursos');
     }
@@ -1030,6 +1248,134 @@ function renderBroch(){
   gh+='</div>';
   body.innerHTML=gh;
 }
+
+
+// ===== COMPARADOR DE UNIDADES =====
+var cmpSel=[]; // array de indices (max 3)
+var CMP_MAX=3;
+
+function toggleCmp(idx,btn){
+  idx=+idx;
+  var pos=cmpSel.indexOf(idx);
+  if(pos>=0){
+    cmpSel.splice(pos,1);
+    if(btn){btn.classList.remove('on');btn.textContent='+ Comparar';}
+  } else {
+    if(cmpSel.length>=CMP_MAX){
+      // Limite alcanzado - feedback breve
+      if(btn){var o=btn.textContent;btn.textContent='Maximo 3';setTimeout(function(){btn.textContent=o;},900);}
+      return;
+    }
+    cmpSel.push(idx);
+    if(btn){btn.classList.add('on');btn.textContent='Quitar';}
+  }
+  renderCmpBar();
+}
+
+function syncCmpButtons(){
+  // Re-aplica estado .on a botones visibles tras re-render
+  document.querySelectorAll('.ccmp').forEach(function(b){
+    var oc=b.getAttribute('onclick')||'';
+    var m=oc.match(/toggleCmp\('(\d+)'/);
+    if(m){
+      var id=+m[1];
+      if(cmpSel.indexOf(id)>=0){b.classList.add('on');b.textContent='Quitar';}
+      else{b.classList.remove('on');b.textContent='+ Comparar';}
+    }
+  });
+}
+
+function renderCmpBar(){
+  var bar=document.getElementById('cmpbar');
+  document.getElementById('cmpcount').textContent=cmpSel.length;
+  var ch='';
+  cmpSel.forEach(function(idx){
+    var r=D[idx];
+    ch+='<div class="cmpchip"><div class="cmpchip-x"><span class="cmpchip-p">'+r.p+'</span><span class="cmpchip-u">Ud. '+r.u+' &middot; '+A(r.to)+'</span></div><span class="cmpchip-rm" onclick="toggleCmp(\''+idx+'\',null)">&times;</span></div>';
+  });
+  document.getElementById('cmpchips').innerHTML=ch;
+  var go=document.querySelector('.cmpbar-go');
+  if(go)go.disabled=cmpSel.length<2;
+  if(cmpSel.length>0)bar.classList.add('show'); else bar.classList.remove('show');
+}
+
+function clearCmp(){
+  cmpSel=[];
+  renderCmpBar();
+  syncCmpButtons();
+}
+
+function openCmp(){
+  if(cmpSel.length<2)return;
+  var rows=cmpSel.map(function(i){return D[i];});
+  // Calcular mejores valores
+  var prices=rows.map(function(r){return r.pr;});
+  var ppms=rows.map(function(r){return r.to>0?r.pr/r.to:1e9;});
+  var areas=rows.map(function(r){return r.to;});
+  var cuotas=rows.map(function(r){return r.cu||1e9;});
+  var minP=Math.min.apply(null,prices);
+  var minPpm=Math.min.apply(null,ppms);
+  var maxA=Math.max.apply(null,areas);
+  var minC=Math.min.apply(null,cuotas);
+
+  var h='<table class="cmptable"><thead><tr><th class="cmpth-lbl"></th>';
+  rows.forEach(function(r){
+    h+='<th class="cmp-th"><div class="cmp-proj">'+r.p+'</div><div class="cmp-dev">'+r.d+'</div><div class="cmp-unit">Unidad '+r.u+' &middot; Modelo '+r.m+'</div></th>';
+  });
+  h+='</tr></thead><tbody>';
+
+  function row(label,fn,bestFn){
+    var hh='<tr><td class="cmpth-lbl">'+label+'</td>';
+    rows.forEach(function(r,i){
+      var best=bestFn?bestFn(r,i):false;
+      hh+='<td class="'+(best?'cmp-best':'')+'">'+fn(r,i)+(best?'<span class="cmp-bestbadge">Mejor</span>':'')+'</td>';
+    });
+    return hh+'</tr>';
+  }
+
+  // Precio (mejor = menor)
+  h+=row('Precio',function(r){return '<span class="cmp-val big">'+S(r.pr)+'</span>';},function(r){return r.pr===minP;});
+  h+=row('Precio USD',function(r){return '<span class="cmp-val">'+U(r.pr)+'</span>';},null);
+  // Dormitorios
+  h+=row('Dormitorios',function(r){return '<span class="cmp-val">'+dS(r.dr)+'</span>';},null);
+  // Area total (mejor = mayor)
+  h+=row('Area total',function(r){return '<span class="cmp-val">'+A(r.to)+'</span>';},function(r){return r.to===maxA;});
+  // Area techada
+  h+=row('Area techada',function(r){return '<span class="cmp-val">'+A(r.tc)+'</span>';},null);
+  // Area libre
+  h+=row('Area libre',function(r){return '<span class="cmp-val">'+(r.li>0?A(r.li):'--')+'</span>';},null);
+  // S/ x m2 (mejor = menor)
+  h+=row('Precio x m2',function(r){var v=r.to>0?Math.round(r.pr/r.to):0;return '<span class="cmp-val">'+(v>0?'S/ '+v.toLocaleString('es-PE'):'--')+'</span>';},function(r){return r.to>0&&(r.pr/r.to)===minPpm;});
+  // Cuota mensual (mejor = menor)
+  h+=row('Cuota mensual',function(r){return '<span class="cmp-val">'+(r.cu?'S/ '+r.cu.toLocaleString('es-PE'):'--')+'</span>';},function(r){return r.cu&&r.cu===minC;});
+  // Vista
+  h+=row('Vista',function(r){return '<span class="cmp-val">'+r.vi+'</span>';},null);
+  // Entrega
+  h+=row('Entrega',function(r){return '<span class="cmp-val">'+r.en+'</span>';},null);
+  // VIS
+  h+=row('Subsidio VIS',function(r){return '<span class="cmp-val">'+(r.vs==='SI'?'Si aplica':'No')+'</span>';},null);
+  // Banco
+  h+=row('Banco',function(r){return '<span class="cmp-val">'+(r.bk||'--')+'</span>';},null);
+
+  h+='</tbody></table>';
+
+  // Boton compartir por WhatsApp con resumen de la comparativa
+  var msg='Hola! Te comparto estas '+rows.length+' opciones:%0A%0A';
+  rows.forEach(function(r){
+    msg+='*'+r.p+'* (Ud. '+r.u+')%0A'+dS(r.dr)+' - '+A(r.to)+'%0A'+S(r.pr)+(r.cu?' - cuota S/ '+r.cu.toLocaleString('es-PE')+'/mes':'')+'%0A%0A';
+  });
+  h+='<div class="cmp-actions"><a class="cmp-wa" href="https://wa.me/51936512527?text='+msg+'" target="_blank">Compartir comparativa por WhatsApp</a></div>';
+
+  document.getElementById('cmpbody').innerHTML=h;
+  document.getElementById('cmpbg').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeCmp(){
+  document.getElementById('cmpbg').classList.remove('open');
+  document.body.style.overflow='';
+}
+
 
 window.onload=init;
 document.addEventListener('click',function(e){
