@@ -107,24 +107,27 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
 
 /* FILTER BAR */
 .fw{position:sticky;top:100px;z-index:600;background:var(--w);border-bottom:1.5px solid var(--g5);box-shadow:0 2px 12px rgba(0,0,0,.04)}
-.fb{display:flex;align-items:center;height:52px;padding:0 1.75rem;overflow-x:auto;scrollbar-width:none}
+.fb{display:flex;align-items:center;min-height:64px;padding:10px 1.75rem;overflow-x:auto;scrollbar-width:none;flex-wrap:wrap;gap:6px 0}
 .fb::-webkit-scrollbar{display:none}
 .fbv{display:flex;align-items:center;gap:2px;padding-right:1rem;border-right:1.5px solid var(--g5);flex-shrink:0}
-.vt{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:5px;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--g3);background:none;border:1.5px solid transparent;transition:all .18s;flex-shrink:0}
+.vt{display:flex;align-items:center;gap:6px;padding:8px 15px;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--g3);background:none;border:1.5px solid transparent;transition:all .18s;flex-shrink:0}
 .vt:hover{color:var(--ink);background:var(--g6);border-color:var(--g5)} .vt.on{color:#fff;background:var(--ink);border-color:var(--ink)}
-.fbm{display:flex;align-items:center;gap:5px;padding:0 1rem;flex:1;overflow-x:auto;scrollbar-width:none}
+.fbm{display:flex;align-items:center;gap:7px;padding:0 1rem;flex:1;flex-wrap:wrap;overflow-x:visible;scrollbar-width:none}
 .fbm::-webkit-scrollbar{display:none}
-.fs{width:1px;height:18px;background:var(--g5);flex-shrink:0;margin:0 2px}
-.fl{font-size:8.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--g3);white-space:nowrap;flex-shrink:0}
-.chip{padding:4.5px 11px;border-radius:20px;border:1.5px solid var(--g4);background:var(--w);color:var(--g1);font-size:10.5px;font-weight:500;white-space:nowrap;transition:all .18s;flex-shrink:0}
+.fs{width:1px;height:24px;background:var(--g5);flex-shrink:0;margin:0 6px}
+.fl{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--g2);white-space:nowrap;flex-shrink:0;margin-right:2px}
+.chip{padding:7px 15px;border-radius:20px;border:1.5px solid var(--g4);background:var(--w);color:var(--g1);font-size:12.5px;font-weight:500;white-space:nowrap;transition:all .18s;flex-shrink:0;cursor:pointer}
 .chip:hover{border-color:var(--r);color:var(--r);background:var(--rl)} .chip.on{background:var(--r);border-color:var(--r);color:#fff;font-weight:600}
-.pinp{width:95px;padding:5px 8px;border:1.5px solid var(--g4);border-radius:5px;background:var(--g7);color:var(--ink);font-family:var(--sans);font-size:10.5px;outline:none;transition:border-color .18s}
+.pinp{width:100px;padding:8px 10px;border:1.5px solid var(--g4);border-radius:6px;background:var(--g7);color:var(--ink);font-family:var(--sans);font-size:12px;outline:none;transition:border-color .18s}
 .pinp:focus{border-color:var(--r);background:var(--w)} .pinp::placeholder{color:var(--g4)}
 .psep{color:var(--g3);font-size:11px}
 .fbr{display:flex;align-items:center;gap:7px;padding-left:1rem;border-left:1.5px solid var(--g5);flex-shrink:0}
-.fct{font-size:11px;color:var(--g2);white-space:nowrap} .fct strong{color:var(--ink);font-weight:700}
-.fso{padding:5px 20px 5px 8px;border:1.5px solid var(--g4);border-radius:5px;background:var(--g7);font-family:var(--sans);font-size:10.5px;color:var(--g1);outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23AAA' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;transition:border-color .18s}
+.fct{font-size:12.5px;color:var(--g2);white-space:nowrap} .fct strong{color:var(--r);font-weight:800;font-size:13.5px}
+.fso{padding:8px 24px 8px 11px;border:1.5px solid var(--g4);border-radius:6px;background:var(--g7);font-family:var(--sans);font-size:12px;color:var(--g1);outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23AAA' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;transition:border-color .18s}
 .fso:focus{border-color:var(--r)}
+.fso-proj{min-width:130px}
+.fbr{gap:10px!important}
+.fclr{font-size:11px!important;padding:7px 14px!important;font-weight:700}
 .fadv{display:flex;align-items:center;gap:5px;padding:5px 12px;border:1.5px solid var(--g4);border-radius:5px;background:var(--w);color:var(--g2);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;transition:all .18s;flex-shrink:0}
 .fadv:hover{border-color:var(--r);color:var(--r);background:var(--rl)} .fadv.on{background:var(--r);border-color:var(--r);color:#fff}
 .fadv .arr{font-size:9px;transition:transform .3s} .fadv.on .arr{transform:rotate(180deg)}
@@ -466,26 +469,35 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
       <button class="vt" id="vl" onclick="setView('list')"><svg width="11" height="11" fill="currentColor" viewBox="0 0 12 12"><rect y="0" width="12" height="2" rx="1"/><rect y="5" width="12" height="2" rx="1"/><rect y="10" width="12" height="2" rx="1"/></svg>Lista</button>
     </div>
     <div class="fbm">
-      <span class="fl">Vista</span>
-      <button class="chip" onclick="togC(this,'vi','EXTERNA')">Externa</button>
-      <button class="chip" onclick="togC(this,'vi','INTERNA')">Interna</button>
-      <div class="fs"></div>
       <span class="fl">Dorms</span>
       <button class="chip" onclick="togC(this,'dr','0')">Studio</button>
       <button class="chip" onclick="togC(this,'dr','1')">1</button>
       <button class="chip" onclick="togC(this,'dr','2')">2</button>
       <button class="chip" onclick="togC(this,'dr','3')">3+</button>
       <div class="fs"></div>
-      <span class="fl">Precio S/</span>
-      <input type="number" class="pinp" id="pmin" placeholder="Desde" oninput="F.pm=this.value;render()">
-      <span class="psep">-</span>
-      <input type="number" class="pinp" id="pmax" placeholder="Hasta" oninput="F.px=this.value;render()">
-      <div class="fs"></div>
       <span class="fl">Entrega</span>
       <button class="chip" onclick="togC(this,'en','INMEDIATA')">Inmediata</button>
       <button class="chip" onclick="togC(this,'en','26')">2026</button>
       <button class="chip" onclick="togC(this,'en','27')">2027</button>
       <button class="chip" onclick="togC(this,'en','28')">2028</button>
+      <div class="fs"></div>
+      <span class="fl">VIS</span>
+      <button class="chip" onclick="togC(this,'vs','SI')">Con VIS</button>
+      <div class="fs"></div>
+      <span class="fl">Vista</span>
+      <button class="chip" onclick="togC(this,'vi','EXTERNA')">Externa</button>
+      <button class="chip" onclick="togC(this,'vi','INTERNA')">Interna</button>
+      <div class="fs"></div>
+      <span class="fl">Precio S/</span>
+      <input type="number" class="pinp" id="pmin" placeholder="Desde" oninput="F.pm=this.value;render()">
+      <span class="psep">-</span>
+      <input type="number" class="pinp" id="pmax" placeholder="Hasta" oninput="F.px=this.value;render()">
+      <div class="fs"></div>
+      <span class="fl">Proyecto</span>
+      <select class="fso fso-proj" id="dpsel" onchange="setProj(this.value)"><option value="">Todos</option></select>
+      <div class="fs"></div>
+      <span class="fl">Banco</span>
+      <select class="fso" id="dbn" onchange="F.bk=this.value;render()"><option value="">Todos</option></select>
     </div>
     <div class="fbr">
       <span class="fct">Mostrando <strong id="rc">-</strong></span>
@@ -496,17 +508,7 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
         <option value="aa">Menor area</option>
         <option value="ca">Cuota asc</option>
       </select>
-      <button class="fadv" id="fadv" onclick="toggleD()"><svg width="12" height="10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" viewBox="0 0 12 10"><line x1="0" y1="1.5" x2="12" y2="1.5"/><line x1="2" y1="5" x2="10" y2="5"/><line x1="4" y1="8.5" x2="8" y2="8.5"/></svg>Filtros <span class="fbdg" id="fbdg">0</span><span class="arr">v</span></button>
-      <button class="fclr" onclick="resetF()">x</button>
-    </div>
-  </div>
-  <div class="fdrw" id="fdrw">
-    <div class="dbody">
-      <div><div class="dgt">Proyecto</div><div class="dgc" id="dp"></div></div>
-      <div><div class="dgt">Vista detallada</div><div class="dgc" id="dv"></div></div>
-      <div><div class="dgt">Area total m2</div><div class="dr"><input class="di" type="number" id="amin" placeholder="Min" oninput="F.am=this.value;render()"><span style="color:var(--g3)">-</span><input class="di" type="number" id="amax" placeholder="Max" oninput="F.ax=this.value;render()"></div></div>
-      <div><div class="dgt">Banco</div><select class="dsel" id="dbn" onchange="F.bk=this.value;render()"><option value="">Todos</option></select></div>
-      <div><div class="dgt">VIS</div><div class="dgc"><button class="chip" onclick="togC(this,'vs','SI')">Con VIS</button><button class="chip" onclick="togC(this,'vs','NO')">Sin VIS</button></div></div>
+      <button class="fclr" onclick="resetF()">Limpiar</button>
     </div>
   </div>
   <div id="atags"></div>
@@ -646,10 +648,10 @@ function setView(v){
   render();
 }
 
-function toggleD(){
-  dOpen=!dOpen;
-  document.getElementById('fdrw').classList.toggle('open',dOpen);
-  document.getElementById('fadv').classList.toggle('on',dOpen);
+function setProj(v){
+  // Single-select project filter from dropdown
+  F.p = v ? [v] : [];
+  render();
 }
 
 function resetF(){
@@ -657,6 +659,7 @@ function resetF(){
   document.querySelectorAll('.chip.on,.vt.on').forEach(function(c){if(!c.classList.contains('vt'))c.classList.remove('on')});
   ['pmin','pmax','amin','amax'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=''});
   var dbn=document.getElementById('dbn');if(dbn)dbn.value='';
+  var dpsel=document.getElementById('dpsel');if(dpsel)dpsel.value='';
   render();
 }
 
@@ -905,11 +908,10 @@ function init(){
   se('anr',Math.round(Math.min.apply(null,areas))+'--'+Math.round(Math.max.apply(null,areas))+' m2');
 
   // Build drawer
-  var fp=document.getElementById('dp');
-  if(fp){var ph='';ps.forEach(function(p){ph+='<button class="chip" onclick="togPrj(this,\'' +p+ '\')">'+p+'</button>';});fp.innerHTML=ph;}
+  var dpsel=document.getElementById('dpsel');
+  if(dpsel){var ph='<option value="">Todos</option>';ps.sort().forEach(function(p){ph+='<option value="'+p+'">'+p+'</option>';});dpsel.innerHTML=ph;}
 
-  var fv=document.getElementById('dv');
-  if(fv){var vh='';['EXTERNA','INTERNA','PENDIENTE','ESQUINA','VISTA F1'].forEach(function(v){vh+='<button class="chip" onclick="togVi(this,\'' +v+ '\')">'+v+'</button>';});fv.innerHTML=vh;}
+
 
   var bks=[];
   D.forEach(function(r){if(r.bk&&bks.indexOf(r.bk)<0)bks.push(r.bk)});
