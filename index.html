@@ -153,6 +153,98 @@ body:not(.view-devs) #devsView{display:none}
 .rhead-t b{color:var(--ink);font-weight:800}
 .rsort{display:flex;align-items:center;gap:8px}
 
+/* ===== VIEW TOGGLE (grid/list) ===== */
+.vtoggle{display:flex;gap:3px;background:var(--paper2);border:1px solid var(--line);border-radius:8px;padding:3px}
+.vtbtn{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:6px;font-size:12px;font-weight:700;color:var(--muted);transition:all .18s}
+.vtbtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.vtbtn.on{background:var(--ink);color:#fff}
+
+/* ===== LIST VIEW ===== */
+.list{max-width:1320px;margin:0 auto;padding:1rem clamp(1rem,4vw,2.5rem) 4rem;display:flex;flex-direction:column;gap:9px}
+.lrow{display:grid;grid-template-columns:40px 1.7fr 1fr .9fr .9fr auto auto;align-items:center;gap:16px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:13px 18px;cursor:pointer;transition:all .2s var(--ease);opacity:0;transform:translateY(8px);animation:rise .4s var(--ease) forwards}
+.lrow:hover{border-color:var(--em);box-shadow:var(--sh1);transform:translateY(-1px)}
+.lmono{width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,var(--emd),var(--eml));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:15px;font-weight:500}
+.lname{font-family:var(--serif);font-size:1.15rem;color:var(--ink);line-height:1.15}
+.lsub{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.lk{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.lv{font-size:13.5px;font-weight:700;color:var(--ink);margin-top:2px;font-variant-numeric:tabular-nums}
+.lv.em{color:var(--em)}
+.ldorm{display:flex;gap:4px}
+.ldorm span{font-size:10px;font-weight:700;width:20px;height:20px;border-radius:5px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink2)}
+.lgo{font-size:11.5px;font-weight:700;color:var(--em);white-space:nowrap}
+@media(max-width:900px){.lrow{grid-template-columns:36px 1fr auto;gap:12px}.lrow .lcol-hide{display:none}}
+
+/* ===== COMPARE ===== */
+.ccheck{position:absolute;top:13px;left:13px;z-index:3;display:flex;align-items:center;gap:6px;background:rgba(20,22,26,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:5px 10px 5px 7px;border-radius:20px;transition:all .18s}
+.ccheck:hover{background:rgba(20,22,26,.75)}
+.ccheck.on{background:var(--gold);border-color:var(--gold);color:#1c1407}
+.ccheck .cbox{width:15px;height:15px;border-radius:4px;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center}
+.ccheck .cbox svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;opacity:0}
+.ccheck.on .cbox svg{opacity:1}
+.lcheck{width:22px;height:22px;border-radius:5px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .18s}
+.lcheck svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;opacity:0}
+.lcheck.on{background:var(--gold);border-color:var(--gold)}
+.lcheck.on svg{opacity:1;stroke:#1c1407}
+.ctray{position:fixed;left:50%;transform:translateX(-50%) translateY(140%);bottom:22px;z-index:700;background:var(--ink);color:#fff;border-radius:14px;box-shadow:var(--sh3);padding:12px 14px;display:flex;align-items:center;gap:14px;transition:transform .38s var(--ease);max-width:min(94vw,720px)}
+.ctray.on{transform:translateX(-50%) translateY(0)}
+.ctray-items{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ctray-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border-radius:8px;padding:6px 8px 6px 11px;font-size:12px;font-weight:600}
+.ctray-chip button{color:rgba(255,255,255,.6);font-size:15px;line-height:1;width:18px;height:18px;border-radius:50%;transition:all .15s}
+.ctray-chip button:hover{background:rgba(255,255,255,.18);color:#fff}
+.ctray-empty{font-size:12px;color:rgba(255,255,255,.55);font-weight:500}
+.ctray-go{background:var(--gold);color:#1c1407;font-weight:800;font-size:13px;padding:11px 20px;border-radius:9px;white-space:nowrap;transition:all .2s}
+.ctray-go:hover{background:#c79b57}
+.ctray-go:disabled{opacity:.4;cursor:not-allowed}
+.ctray-clr{font-size:11.5px;color:rgba(255,255,255,.6);font-weight:600}
+.ctray-clr:hover{color:#fff}
+
+/* compare modal */
+.cmpbg{position:fixed;inset:0;z-index:950;background:rgba(20,22,26,.55);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s}
+.cmpbg.on{opacity:1;pointer-events:auto}
+.cmp{position:fixed;inset:clamp(1rem,4vw,3rem);z-index:951;background:var(--bg);border-radius:18px;box-shadow:var(--sh3);transform:scale(.97);opacity:0;pointer-events:none;transition:all .32s var(--ease);display:flex;flex-direction:column;overflow:hidden}
+.cmp.on{transform:none;opacity:1;pointer-events:auto}
+.cmp-head{display:flex;align-items:center;justify-content:space-between;padding:20px clamp(1.2rem,3vw,2rem);border-bottom:1px solid var(--line);background:var(--paper)}
+.cmp-head h2{font-family:var(--serif);font-weight:400;font-size:1.5rem;color:var(--ink)}
+.cmp-body{flex:1;overflow:auto;padding:0}
+.cmp-table{width:100%;border-collapse:collapse;font-size:13px}
+.cmp-table th,.cmp-table td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line2);vertical-align:top}
+.cmp-table thead th{position:sticky;top:0;background:var(--bg);z-index:2;border-bottom:1.5px solid var(--line)}
+.cmp-table thead th:first-child{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.cmp-proj{font-family:var(--serif);font-size:1.2rem;color:var(--ink);line-height:1.15}
+.cmp-proj small{display:block;font-family:var(--sans);font-size:11px;font-weight:700;color:var(--muted);margin-top:3px;letter-spacing:.02em}
+.cmp-table tbody th{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.cmp-table td{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.cmp-table td.best{color:var(--em)}
+.cmp-table td.best::after{content:' ★';color:var(--gold);font-size:10px}
+.cmp-wa{display:inline-flex;align-items:center;gap:6px;background:var(--em);color:#fff;font-weight:700;font-size:12px;padding:9px 14px;border-radius:8px}
+
+/* ===== MAP & UNIT DETAIL (drill-down) ===== */
+.dd-section{padding:18px clamp(1.2rem,3vw,2.4rem) 0}
+.dd-sec-t{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.dd-sec-t::before{content:'';width:18px;height:1.5px;background:var(--gold)}
+.dd-map{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);height:230px;background:var(--paper2)}
+.dd-map iframe{width:100%;height:100%;border:0;display:block}
+.dd-map-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;margin-top:-1px}
+.dd-map-addr{font-size:12.5px;color:var(--ink2);font-weight:600;display:flex;align-items:center;gap:8px}
+.dd-map-addr svg{width:15px;height:15px;stroke:var(--em);fill:none;stroke-width:1.9;flex-shrink:0}
+.dd-map-go{font-size:12px;font-weight:700;color:var(--em);white-space:nowrap;display:flex;align-items:center;gap:5px}
+.dd-map-go:hover{text-decoration:underline}
+.utable tbody tr.urow{cursor:pointer}
+.utable tbody tr.urow td:first-child .u-unit::before{content:'▸ ';color:var(--faint);font-weight:400}
+.utable tbody tr.urow.open td:first-child .u-unit::before{content:'▾ '}
+.udetail td{background:var(--paper2);padding:0!important;border-bottom:1px solid var(--line)}
+.udetail-in{padding:14px 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px}
+.udt{display:flex;flex-direction:column;gap:3px}
+.udt-k{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.udt-v{font-size:13px;font-weight:700;color:var(--ink)}
+.dd-devbox{margin:18px clamp(1.2rem,3vw,2.4rem) 4px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.dd-devbox-l{display:flex;align-items:center;gap:13px}
+.dd-devbox-mono{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--emd),var(--eml));color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;font-weight:500;flex-shrink:0}
+.dd-devbox-k{font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.dd-devbox-n{font-size:15px;font-weight:800;color:var(--ink);margin-top:2px}
+.dd-devbox-link{font-size:12px;font-weight:700;color:var(--em);white-space:nowrap;display:flex;align-items:center;gap:6px}
+.dd-devbox-link:hover{text-decoration:underline}
+
 /* ===== GRID ===== */
 .grid{max-width:1320px;margin:0 auto;padding:1rem clamp(1rem,4vw,2.5rem) 4rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:20px}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s;display:flex;flex-direction:column;opacity:0;transform:translateY(14px);animation:rise .5s var(--ease) forwards}
@@ -338,6 +430,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
 <div class="rhead">
   <div class="rhead-t">Mostrando <b id="rc">—</b> · <span id="ru">—</span> unidades</div>
   <div class="rsort">
+    <div class="vtoggle">
+      <button class="vtbtn on" id="vGrid" onclick="setView('grid')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Grid</button>
+      <button class="vtbtn" id="vList" onclick="setView('list')"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Lista</button>
+    </div>
     <span class="flab">Ordenar</span>
     <select class="fsel" id="sort" onchange="F.sort=this.value;render()">
       <option value="units">Más unidades</option>
@@ -349,6 +445,15 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
 </div>
 
 <div class="grid" id="grid"></div>
+<div class="list" id="listView" style="display:none"></div>
+
+<div class="ctray" id="ctray">
+  <div class="ctray-items" id="ctrayItems"></div>
+  <button class="ctray-go" id="ctrayGo" onclick="openCompare()" disabled>Comparar</button>
+  <button class="ctray-clr" onclick="clearCompare()">Limpiar</button>
+</div>
+<div class="cmpbg" id="cmpbg" onclick="if(event.target.id=='cmpbg')closeCompare()"></div>
+<div class="cmp" id="cmp"></div>
 
 <div class="ddbg" id="ddbg" onclick="if(event.target.id=='ddbg')closeDD()"></div>
 <aside class="dd" id="dd" aria-hidden="true"></aside>
@@ -443,18 +548,59 @@ function filtered(){
   return r;
 }
 
+/* ---- district coords (centroides aprox. Lima) ---- */
+var DC={'San Miguel':[-12.0776,-77.0925],'San Isidro':[-12.0976,-77.0365],'Miraflores':[-12.1211,-77.0297],'Cercado De Lima':[-12.0464,-77.0428],'Surquillo':[-12.1133,-77.0186],'La Victoria':[-12.0667,-77.0167],'Barranco':[-12.1492,-77.0220],'Chorrillos':[-12.1742,-77.0156],'Lince':[-12.0858,-77.0364],'Callao':[-12.0566,-77.1181],'Surco':[-12.1450,-76.9938],'Santiago De Surco':[-12.1450,-76.9938],'Jesús María':[-12.0742,-77.0494],'Magdalena Del Mar':[-12.0908,-77.0719],'Breña':[-12.0586,-77.0506],'Pueblo Libre':[-12.0764,-77.0628],'San Bartolo':[-12.3886,-76.7806],'San Borja':[-12.1086,-76.9978],'Punta Hermosa':[-12.3339,-76.8233],'San Martin De Porres':[-12.0078,-77.0844]};
+function titleCase(s){return s.toLowerCase().replace(/(^|\s|\-)([a-zñáéíóúü])/g,function(m){return m.toUpperCase();});}
+function projName(p){return titleCase(p.n);}
+function monogram(p){return (p.n.replace(/[^A-Za-zÁÉÍÓÚÑ ]/g,'').trim().split(' ').filter(Boolean).slice(0,2).map(function(w){return w[0];}).join('')||p.n.slice(0,2)).toUpperCase();}
+
+/* ---- compare state ---- */
+var CMP=[];
+function inCmp(i){return CMP.indexOf(i)>=0;}
+function toggleCmp(i,ev){
+  if(ev){ev.stopPropagation();ev.preventDefault();}
+  var k=CMP.indexOf(i);
+  if(k>=0)CMP.splice(k,1);
+  else{ if(CMP.length>=4){flashTray();return;} CMP.push(i); }
+  syncCmpUI();
+}
+function flashTray(){var t=document.getElementById('ctrayGo');t.textContent='Máximo 4';setTimeout(function(){t.textContent='Comparar';},1200);}
+function syncCmpUI(){
+  // checkboxes en grid y lista
+  document.querySelectorAll('[data-cmp]').forEach(function(el){
+    el.classList.toggle('on', inCmp(+el.getAttribute('data-cmp')));
+  });
+  var tray=document.getElementById('ctray');
+  var items=document.getElementById('ctrayItems');
+  var go=document.getElementById('ctrayGo');
+  if(CMP.length){
+    tray.classList.add('on');
+    items.innerHTML=CMP.map(function(i){return '<span class="ctray-chip">'+projName(P[i])+'<button onclick="toggleCmp('+i+')" title="Quitar">×</button></span>';}).join('');
+    go.disabled=CMP.length<2;
+    go.textContent=CMP.length<2?'Elige 2+':'Comparar ('+CMP.length+')';
+  }else{
+    tray.classList.remove('on');
+    items.innerHTML='';go.disabled=true;
+  }
+}
+function clearCompare(){CMP=[];syncCmpUI();}
+
+function compareBtn(i){
+  return '<button class="ccheck'+(inCmp(i)?' on':'')+'" data-cmp="'+i+'" onclick="toggleCmp('+i+',event)" title="Comparar proyecto"><span class="cbox"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></span>Comparar</button>';
+}
+
 function card(p,i){
-  var mono=p.n.replace(/[^A-Za-zÁÉÍÓÚÑ ]/g,'').trim().split(' ').filter(Boolean).slice(0,2).map(function(w){return w[0];}).join('')||p.n.slice(0,2);
   var badges='<span class="cbadge">'+p.u.length+' unid.</span>';
   if(p.visAny)badges+='<span class="cbadge vis">VIS</span>';
   if(p.ents['INM'])badges+='<span class="cbadge">Inmediata</span>';
   var dorms=p.dorms.filter(function(d){return d>0||p.dorms.length===1;}).map(function(d){return '<span>'+dormLabel(d)+'</span>';}).join('');
   return '<article class="card" style="animation-delay:'+Math.min(i*28,420)+'ms" onclick="openDD('+p._i+')">'
-    +'<div class="ctop"><span class="cmono">'+mono.toUpperCase()+'</span>'
-      +'<div style="display:flex;justify-content:space-between;align-items:start"><span class="cdist">'+p.distN+'</span></div>'
+    +compareBtn(p._i)
+    +'<div class="ctop"><span class="cmono">'+monogram(p)+'</span>'
+      +'<div style="display:flex;justify-content:flex-end;align-items:start"><span class="cdist">'+p.distN+'</span></div>'
       +'<div><div class="cbadges">'+badges+'</div></div></div>'
     +'<div class="cbody">'
-      +'<div class="cname">'+p.n.toLowerCase().replace(/(^|\s|\-)([a-zñáéíóú])/g,function(m){return m.toUpperCase();})+'</div>'
+      +'<div class="cname">'+projName(p)+'</div>'
       +'<div class="cunits">'+p.devN+'</div>'
       +'<div class="cmetrics">'
         +'<div><div class="cm-k">Desde</div><div class="cm-v em">'+(p.desde?pen(p.desde):'—')+'</div></div>'
@@ -464,34 +610,122 @@ function card(p,i){
     +'</div></article>';
 }
 
+function listRow(p,i){
+  var dorms=p.dorms.filter(function(d){return d>0||p.dorms.length===1;}).map(function(d){return '<span>'+dormLabel(d)+'</span>';}).join('');
+  return '<div class="lrow" style="animation-delay:'+Math.min(i*16,300)+'ms" onclick="openDD('+p._i+')">'
+    +'<div class="lcheck'+(inCmp(p._i)?' on':'')+'" data-cmp="'+p._i+'" onclick="toggleCmp('+p._i+',event)" title="Comparar"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></div>'
+    +'<div><div class="lname">'+projName(p)+'</div><div class="lsub">'+p.devN+' · '+p.distN+' · '+p.u.length+' unid.</div></div>'
+    +'<div class="lcol-hide"><div class="lk">Desde</div><div class="lv em">'+(p.desde?pen(p.desde):'—')+'</div></div>'
+    +'<div class="lcol-hide"><div class="lk">Cuota desde</div><div class="lv">'+(p.cuotaMin?pen(p.cuotaMin):'—')+'</div></div>'
+    +'<div class="lcol-hide"><div class="lk">Dorms</div><div class="ldorm" style="margin-top:3px">'+dorms+'</div></div>'
+    +'<div class="lcol-hide">'+(p.visAny?'<span class="tag tag-vis">VIS</span>':'')+'</div>'
+    +'<div class="lgo">Ver unidades →</div>'
+  +'</div>';
+}
+
+var VIEW='grid';
+function setView(v){
+  VIEW=v;
+  document.getElementById('vGrid').classList.toggle('on',v==='grid');
+  document.getElementById('vList').classList.toggle('on',v==='list');
+  document.getElementById('grid').style.display=v==='grid'?'':'none';
+  document.getElementById('listView').style.display=v==='list'?'':'none';
+  render();
+}
+
 function render(){
   var r=filtered();
   var units=r.reduce(function(a,p){return a+p.u.length;},0);
   document.getElementById('rc').textContent=r.length+(r.length===1?' proyecto':' proyectos');
   document.getElementById('ru').textContent=units.toLocaleString('es-PE');
-  var g=document.getElementById('grid');
-  if(!r.length){g.innerHTML='<div class="empty"><div class="empty-t">Sin resultados</div><div>Ajusta los filtros para ver más proyectos.</div></div>';return;}
-  g.innerHTML=r.map(function(p,i){return card(p,i);}).join('');
+  if(VIEW==='list'){
+    var lv=document.getElementById('listView');
+    lv.innerHTML=r.length?r.map(function(p,i){return listRow(p,i);}).join(''):'<div class="empty"><div class="empty-t">Sin resultados</div><div>Ajusta los filtros para ver más proyectos.</div></div>';
+  }else{
+    var g=document.getElementById('grid');
+    g.innerHTML=r.length?r.map(function(p,i){return card(p,i);}).join(''):'<div class="empty"><div class="empty-t">Sin resultados</div><div>Ajusta los filtros para ver más proyectos.</div></div>';
+  }
+  syncCmpUI();
 }
 
+/* ---- compare modal ---- */
+function openCompare(){
+  if(CMP.length<2)return;
+  var ps=CMP.map(function(i){return P[i];});
+  var rows=[
+    ['Distrito',function(p){return p.distN;}],
+    ['Desarrolladora',function(p){return p.devN;}],
+    ['Unidades',function(p){return p.u.length;},'max'],
+    ['Precio desde',function(p){return p.desde;},'minMoney'],
+    ['Precio hasta',function(p){return p.hasta;},'maxMoney'],
+    ['Cuota desde',function(p){return p.cuotaMin;},'minMoney'],
+    ['Dormitorios',function(p){var d=p.dorms.filter(function(x){return x>0;});return d.length?d.map(dormLabel).join(', '):'—';}],
+    ['Área m²',function(p){var a=p.u.map(function(u){return u[4];}).filter(Boolean);return a.length?Math.min.apply(null,a)+'–'+Math.max.apply(null,a):'—';}],
+    ['VIS',function(p){return p.visAny?'Sí':'No';}],
+    ['Entrega inmediata',function(p){return p.ents['INM']?'Sí':'No';}]
+  ];
+  // best markers
+  function bestIdx(getter,mode){
+    var vals=ps.map(getter);
+    var valid=vals.map(function(v,k){return {v:v,k:k};}).filter(function(o){return typeof o.v==='number'&&o.v>0;});
+    if(!valid.length)return -1;
+    valid.sort(function(a,b){return mode==='max'?b.v-a.v:a.v-b.v;});
+    return valid[0].k;
+  }
+  var head='<th>Característica</th>'+ps.map(function(p){return '<th><div class="cmp-proj">'+projName(p)+'<small>'+p.devN+'</small></div></th>';}).join('');
+  var body=rows.map(function(row){
+    var label=row[0],getter=row[1],mode=row[2];
+    var best=-1;
+    if(mode==='max')best=bestIdx(getter,'max');
+    else if(mode==='minMoney')best=bestIdx(getter,'min');
+    else if(mode==='maxMoney')best=bestIdx(getter,'max');
+    var cells=ps.map(function(p,k){
+      var v=getter(p);
+      if(typeof v==='number'&&(mode==='minMoney'||mode==='maxMoney'))v=v?pen(v):'—';
+      var cls=(k===best&&best>=0)?' class="best"':'';
+      return '<td'+cls+'>'+v+'</td>';
+    }).join('');
+    return '<tr><th>'+label+'</th>'+cells+'</tr>';
+  }).join('');
+  var ctaRow='<tr><th></th>'+ps.map(function(p){
+    var msg=encodeURIComponent('Hola NATTIVA, me interesa el proyecto '+p.n+' ('+p.distN+'). Quisiera más información.');
+    return '<td><a class="cmp-wa" href="https://wa.me/51907528914?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a></td>';
+  }).join('')+'</tr>';
+  document.getElementById('cmp').innerHTML=
+    '<div class="cmp-head"><h2>Comparar proyectos</h2><button class="dd-close" style="position:static;background:var(--line2);color:var(--ink2)" onclick="closeCompare()">×</button></div>'
+    +'<div class="cmp-body"><table class="cmp-table"><thead><tr>'+head+'</tr></thead><tbody>'+body+ctaRow+'</tbody></table></div>';
+  document.getElementById('cmpbg').classList.add('on');
+  document.getElementById('cmp').classList.add('on');
+}
+function closeCompare(){document.getElementById('cmpbg').classList.remove('on');document.getElementById('cmp').classList.remove('on');}
+
 /* ---- drill-down ---- */
-var ddSort={col:8,dir:1},ddP=null;
+var ddSort={col:8,dir:1},ddP=null,ddOpenRow=-1;
 var UCOLS=[['Unidad',0,0],['Dorms',6,0],['Área m²',4,1],['Vista',5,0],['Entrega',9,0],['VIS',10,0],['Banco',12,0],['Cuota/mes',11,1],['Precio',8,1]];
 
 function openDD(i){
-  ddP=P[i];ddSort={col:8,dir:1};
+  ddP=P[i];ddSort={col:8,dir:1};ddOpenRow=-1;
   document.getElementById('ddbg').classList.add('on');
   var dd=document.getElementById('dd');dd.classList.add('on');dd.setAttribute('aria-hidden','false');
   buildDD();
 }
 function closeDD(){document.getElementById('ddbg').classList.remove('on');var dd=document.getElementById('dd');dd.classList.remove('on');dd.setAttribute('aria-hidden','true');}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDD();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeDD();closeCompare();}});
+function sortDD(c){if(ddSort.col===c)ddSort.dir*=-1;else{ddSort={col:c,dir:1};}ddOpenRow=-1;buildDD();}
+function toggleRow(idx){ddOpenRow=ddOpenRow===idx?-1:idx;buildDD();}
 
-function sortDD(c){if(ddSort.col===c)ddSort.dir*=-1;else{ddSort={col:c,dir:1};}buildDD();}
+function findPartner(devName){
+  var n=devName.toLowerCase();
+  for(var i=0;i<PARTNERS.length;i++){
+    var pn=PARTNERS[i].n.toLowerCase();
+    if(n.indexOf(pn)>=0||pn.indexOf(n)>=0)return PARTNERS[i];
+  }
+  return null;
+}
 
 function buildDD(){
   var p=ddP;
-  var name=p.n.toLowerCase().replace(/(^|\s|\-)([a-zñáéíóú])/g,function(m){return m.toUpperCase();});
+  var name=projName(p);
   var dormR=p.dorms.filter(function(d){return d>0;});
   var dormTxt=dormR.length?dormR.map(dormLabel).join(', ')+' dorm.':'—';
   var ar=p.u.map(function(u){return u[4];}).filter(Boolean);
@@ -510,18 +744,33 @@ function buildDD(){
       +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(p.cuotaMin?pen(p.cuotaMin):'—')+'</span><span class="dd-kpi-k">Cuota desde</span></div>'
       +'<div class="dd-kpi"><span class="dd-kpi-v">'+dormTxt+'</span><span class="dd-kpi-k">Dormitorios</span></div>'
     +'</div></div>'
-    +'<div class="dd-bar"><div class="dd-bar-t"><b>'+p.u.length+'</b> unidades disponibles · '+arTxt+'</div><div class="dd-bar-t" style="color:var(--muted)">Clic en una columna para ordenar</div></div>';
+    +'<div class="dd-bar"><div class="dd-bar-t"><b>'+p.u.length+'</b> unidades disponibles · '+arTxt+'</div><div class="dd-bar-t" style="color:var(--muted)">Clic en una fila para ver detalle · clic en columna para ordenar</div></div>';
 
-  var rows=p.u.slice().sort(function(a,b){
-    var c=ddSort.col;var va=a[c],vb=b[c];
+  // ---- mapa de ubicación ----
+  var coord=DC[p.distN]||[-12.0464,-77.0428];
+  var d=0.012;
+  var bbox=(coord[1]-d)+','+(coord[0]-d*0.7)+','+(coord[1]+d)+','+(coord[0]+d*0.7);
+  var mapSrc='https://www.openstreetmap.org/export/embed.html?bbox='+bbox+'&layer=mapnik&marker='+coord[0]+','+coord[1];
+  var gmapsQ=encodeURIComponent(p.n+', '+p.distN+', Lima, Perú');
+  var mapSection='<div class="dd-section"><div class="dd-sec-t">Ubicación</div>'
+    +'<div class="dd-map"><iframe loading="lazy" src="'+mapSrc+'"></iframe></div>'
+    +'<div class="dd-map-bar"><span class="dd-map-addr"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>'+name+' · '+p.distN+', Lima</span>'
+    +'<a class="dd-map-go" href="https://www.google.com/maps/search/?api=1&query='+gmapsQ+'" target="_blank" rel="noopener">Ver en Google Maps →</a></div></div>';
+
+  // ---- tabla de unidades (filas expandibles) ----
+  var rows=p.u.map(function(u,k){return {u:u,k:k};}).sort(function(a,b){
+    var c=ddSort.col;var va=a.u[c],vb=b.u[c];
     if(c===5||c===9||c===12){va=(c===5?VISTA:c===9?ENT:BANCO)[va];vb=(c===5?VISTA:c===9?ENT:BANCO)[vb];return ddSort.dir*(''+va).localeCompare(''+vb);}
     return ddSort.dir*((va||0)-(vb||0));
   });
   var th=UCOLS.map(function(c){var on=ddSort.col===c[1]?' s':'';var al=c[2]?' r':'';return '<th class="'+al+on+'" onclick="sortDD('+c[1]+')">'+c[0]+'<span class="ar">'+(ddSort.col===c[1]?(ddSort.dir>0?'▲':'▼'):'↕')+'</span></th>';}).join('');
-  var body=rows.map(function(u){
+  var body=rows.map(function(o,ri){
+    var u=o.u;
     var visTag=u[10]===1?'<span class="tag tag-vis">VIS</span>':(u[10]===0?'No':'—');
     var precio=u[7]===1?'<span class="u-price u-usd num">US$ '+u[8].toLocaleString('en-US')+'</span>':'<span class="u-price num">'+pen(u[8])+'</span>';
-    return '<tr><td><span class="u-unit">'+(u[0]||'—')+'</span> <span class="u-model">'+(u[1]||'')+'</span></td>'
+    var open=ddOpenRow===ri;
+    var tr='<tr class="urow'+(open?' open':'')+'" onclick="toggleRow('+ri+')">'
+      +'<td><span class="u-unit">'+(u[0]||'—')+'</span> <span class="u-model">'+(u[1]||'')+'</span></td>'
       +'<td>'+dormLabel(u[6])+'</td>'
       +'<td class="r num">'+(u[4]||'—')+'</td>'
       +'<td><span class="tag tag-v">'+VISTA[u[5]]+'</span></td>'
@@ -530,13 +779,42 @@ function buildDD(){
       +'<td>'+BANCO[u[12]]+'</td>'
       +'<td class="r"><span class="u-cuota num">'+(u[11]?pen(u[11]):'—')+'</span></td>'
       +'<td class="r">'+precio+'</td></tr>';
+    if(open){
+      var moneda=u[7]===1?'US$':'S/';
+      var pf=function(v){return v?(u[7]===1?'US$ '+v.toLocaleString('en-US'):pen(v)):'—';};
+      tr+='<tr class="udetail"><td colspan="9"><div class="udetail-in">'
+        +'<div class="udt"><span class="udt-k">Unidad</span><span class="udt-v">'+(u[0]||'—')+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Modelo / Tipología</span><span class="udt-v">'+(u[1]||'—')+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Dormitorios</span><span class="udt-v">'+dormLabel(u[6])+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Área techada</span><span class="udt-v">'+(u[2]?u[2]+' m²':'—')+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Área libre</span><span class="udt-v">'+(u[3]?u[3]+' m²':'—')+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Área total</span><span class="udt-v">'+(u[4]?u[4]+' m²':'—')+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Vista</span><span class="udt-v">'+VISTA[u[5]]+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Entrega</span><span class="udt-v">'+ENT[u[9]]+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Restricción VIS</span><span class="udt-v">'+(u[10]===1?'Sí':(u[10]===0?'No':'—'))+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Banco / financiamiento</span><span class="udt-v">'+BANCO[u[12]]+'</span></div>'
+        +'<div class="udt"><span class="udt-k">Cuota aprox.</span><span class="udt-v">'+pf(u[11])+'/mes</span></div>'
+        +'<div class="udt"><span class="udt-k">Precio</span><span class="udt-v" style="color:var(--em)">'+pf(u[8])+'</span></div>'
+      +'</div></td></tr>';
+    }
+    return tr;
   }).join('');
-  var table='<div class="dd-body"><table class="utable"><thead><tr>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>';
+  var table='<div class="dd-body">'+mapSection
+    +'<div class="dd-section"><div class="dd-sec-t">Unidades disponibles</div></div>'
+    +'<div style="padding:0 clamp(1.2rem,3vw,2.4rem)"><table class="utable"><thead><tr>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>';
+
+  // ---- desarrolladora (abajo) ----
+  var partner=findPartner(p.devN);
+  var devLink=partner?'<a class="dd-devbox-link" href="'+partner.u+'" target="_blank" rel="noopener">Ver material de la desarrolladora →</a>':'';
+  var devbox='<div class="dd-devbox"><div class="dd-devbox-l"><div class="dd-devbox-mono">'+monogram({n:p.devN})+'</div>'
+    +'<div><div class="dd-devbox-k">Desarrollado por</div><div class="dd-devbox-n">'+p.devN+'</div></div></div>'
+    +devLink+'</div>';
+  table+=devbox+'</div>';
+
   var msg=encodeURIComponent('Hola NATTIVA, me interesa el proyecto '+p.n+' ('+p.distN+'). Quisiera más información y disponibilidad.');
   var cta='<div class="dd-cta"><div class="dd-cta-t">¿Te interesa <b>'+name+'</b>? Un asesor te comparte planos y disponibilidad al instante.</div>'
     +'<a class="wabtn" href="https://wa.me/51907528914?text='+msg+'" target="_blank" rel="noopener"><svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15l-1.4 5 5.2-1.4A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-3-.2-.3A8 8 0 1 1 12 20zm4.5-6c-.2-.1-1.4-.7-1.7-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.4.2-.4.6-1.2.1-.2 0-.3 0-.5l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3c-.3.3-.9.9-.9 2.1s.9 2.5 1 2.6 1.8 2.8 4.4 3.9c1.6.7 2.2.7 3 .6.5 0 1.4-.6 1.6-1.1s.2-1 .1-1.1-.3-.2-.5-.3z"/></svg>Consultar por WhatsApp</a></div>';
   document.getElementById('dd').innerHTML=hero+table+cta;
-  document.querySelector('.dd-body').scrollTop=0;
 }
 
 /* ---- init ---- */
