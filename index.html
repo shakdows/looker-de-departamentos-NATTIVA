@@ -445,6 +445,10 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
 @media(max-width:1050px){.partners-panel{padding:2.5rem 2rem}.pp-title{font-size:1.6rem}}
 @media(max-width:1050px){.hero{grid-template-columns:1fr}.hero-r{grid-template-columns:repeat(4,1fr);grid-template-rows:auto}.abar{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:700px){.grid{grid-template-columns:1fr}.hero-r{grid-template-columns:1fr 1fr}}
+
+/* A11Y: foco visible por teclado */
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--r);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
@@ -479,7 +483,7 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
   <div class="hero-l">
     <div class="htag">Intelligence Platform · Lima</div>
     <h1 class="hero-h1">Departamentos<br>de <em>primer nivel</em><br>en Lima</h1>
-    <p class="hero-desc">Base de datos completa de los mejores proyectos del distrito. Analisis comparativo, financiamiento bancario, entrega inmediata y en planos.</p>
+    <p class="hero-desc">Base de datos completa de los mejores proyectos de Lima. Análisis comparativo, financiamiento bancario, entrega inmediata y en planos.</p>
     <div class="hstats">
       <div class="hst"><span class="hst-v r" id="hn">-</span><span class="hst-k">Disponibles</span></div>
       <div class="hsep"></div>
@@ -518,7 +522,7 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
   <div class="ac"><div class="ac-ico rd"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div><div class="ac-v" id="anp">-</div><div class="ac-k">Proyectos activos</div><span class="ac-d gn" id="and">-</span></div></div>
   <div class="ac"><div class="ac-ico gn"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><div class="ac-v" id="ani">-</div><div class="ac-k">Entrega inmediata</div><span class="ac-d gn">Disponible ya</span></div></div>
   <div class="ac"><div class="ac-ico bl"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><div class="ac-v" id="anv">-</div><div class="ac-k">Con subsidio VIS</div><span class="ac-d am">Financiamiento</span></div></div>
-  <div class="ac"><div class="ac-ico am"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div><div class="ac-v" id="anm2">-</div><div class="ac-k">Precio prom. m2</div><span class="ac-d am" id="anr">-</span></div></div>
+  <div class="ac"><div class="ac-ico am"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div><div class="ac-v" id="anm2">-</div><div class="ac-k">Precio prom. m²</div><span class="ac-d am" id="anr">-</span></div></div>
 </div>
 
 
@@ -567,8 +571,8 @@ header.stuck{background:rgba(254,254,255,.97);border-bottom-color:var(--g5);back
       <select class="fso" id="srt" onchange="so=this.value;render()">
         <option value="pa">Precio asc</option>
         <option value="pd">Precio desc</option>
-        <option value="ad">Mayor area</option>
-        <option value="aa">Menor area</option>
+        <option value="ad">Mayor área</option>
+        <option value="aa">Menor área</option>
         <option value="ca">Cuota asc</option>
       </select>
       <button class="fclr" onclick="resetF()">Limpiar</button>
@@ -713,8 +717,8 @@ var PC={
   'UNICO MAGDALENA':{'lat':-12.09,'lng':-77.0737,'addr':'Magdalena','color':'#1D509A'},
   'BRISSA MAGDALENA':{'lat':-12.088,'lng':-77.0769,'addr':'Magdalena','color':'#A03030'},
   'MUM':{'lat':-12.0948,'lng':-77.0767,'addr':'Magdalena','color':'#B3202A'},
-  'PARQUE HABICH':{'lat':-12.0732,'lng':-77.0493,'addr':'Jesus Maria','color':'#1D7A50'},
-  'ETREA':{'lat':-12.0719,'lng':-77.0503,'addr':'Jesus Maria','color':'#1D4A9A'},
+  'PARQUE HABICH':{'lat':-12.0732,'lng':-77.0493,'addr':'Jesús María','color':'#1D7A50'},
+  'ETREA':{'lat':-12.0719,'lng':-77.0503,'addr':'Jesús María','color':'#1D4A9A'},
   'ALAMEDA SAN MIGUEL':{'lat':-12.081,'lng':-77.0902,'addr':'San Miguel','color':'#7A1D9A'},
   'GONZALES':{'lat':-12.0743,'lng':-77.0919,'addr':'San Miguel','color':'#9A5A1D'},
   'ALTUARS':{'lat':-12.0877,'lng':-77.0338,'addr':'Lince','color':'#5A1D9A'},
@@ -750,8 +754,8 @@ var PD={
   'UNICO MAGDALENA':'Magdalena',
   'BRISSA MAGDALENA':'Magdalena',
   'MUM':'Magdalena',
-  'PARQUE HABICH':'Jesus Maria',
-  'ETREA':'Jesus Maria',
+  'PARQUE HABICH':'Jesús María',
+  'ETREA':'Jesús María',
   'ALAMEDA SAN MIGUEL':'San Miguel',
   'GONZALES':'San Miguel',
   'ALTUARS':'Lince',
@@ -779,7 +783,7 @@ var maps={}, mainMap=null, dOpen=false;
 
 function S(n){return 'S/ '+Math.round(n).toLocaleString('es-PE')}
 function U(n){return 'USD '+Math.round(n/3.74).toLocaleString('en-US')}
-function A(n){return n.toFixed(1)+' m2'}
+function A(n){return n.toFixed(1)+' m²'}
 function dS(d){var m={0:'Studio',1:'1 dorm.',2:'2 dorms.',3:'3 dorms.'};return m[d]||d+' dorms.'}
 function dL(d){var m={0:'Studio',1:'1 Dormitorio',2:'2 Dormitorios',3:'3 Dormitorios'};return m[d]||d+' dorms.'}
 function gc(p){return PC[p]||{lat:-12.105,lng:-77.006,addr:'Surquillo',color:'#B3202A'}}
@@ -970,7 +974,7 @@ function cardHTML(r,i){
     +'<div class="specs">'
     +'<div class="spec"><span class="sv">'+A(r.to)+'</span><span class="sk">Total</span></div>'
     +'<div class="spec"><span class="sv">'+A(r.tc)+'</span><span class="sk">Techada</span></div>'
-    +'<div class="spec"><span class="sv">'+(ppm>0?'S/'+ppm.toLocaleString('es-PE'):'--')+'</span><span class="sk">x m2</span></div>'
+    +'<div class="spec"><span class="sv">'+(ppm>0?'S/'+ppm.toLocaleString('es-PE'):'--')+'</span><span class="sk">x m²</span></div>'
     +'</div>'
     +'<div class="cfoot">'
     +'<div><div class="cfp">'+S(r.pr)+'</div><div class="cfusd">'+U(r.pr)+'</div></div>'
@@ -1075,7 +1079,7 @@ function openM(idx){
     +'<div class="mdt"><span class="mdtk">Vista</span><span class="mdtv">'+r.vi+'</span></div>'
     +'<div class="mdt"><span class="mdtk">Entrega</span><span class="mdtv">'+r.en+'</span></div>'
     +'<div class="mdt"><span class="mdtk">Desarrolladora</span><span class="mdtv">'+r.d+'</span></div>'
-    +'<div class="mdt"><span class="mdtk">Precio por m2</span><span class="mdtv">'+(ppm>0?'S/ '+ppm.toLocaleString('es-PE'):'--')+'</span></div>'
+    +'<div class="mdt"><span class="mdtk">Precio por m²</span><span class="mdtv">'+(ppm>0?'S/ '+ppm.toLocaleString('es-PE'):'--')+'</span></div>'
     +'<div class="mdt"><span class="mdtk">VIS</span><span class="mdtv"><span class="'+(isVis?'bdgY':'bdgG')+'">'+(r.vs||'N/D')+'</span></span></div>'
     +'</div></div>'
     +(PROJBROCH[r.p]?'<a class="mcta mcta-broch" href="https://drive.google.com/file/d/'+PROJBROCH[r.p].id+'/view" target="_blank">Ver brochure del proyecto &#8595;</a>':'')
@@ -1121,7 +1125,7 @@ function init(){
   se('ani',imm);
   se('anv',vis);
   se('anm2','S/ '+Math.round(avgP/avgArea).toLocaleString('es-PE'));
-  se('anr',Math.round(Math.min.apply(null,areas))+'--'+Math.round(Math.max.apply(null,areas))+' m2');
+  se('anr',Math.round(Math.min.apply(null,areas))+'--'+Math.round(Math.max.apply(null,areas))+' m²');
 
   // Build drawer
   var dpsel=document.getElementById('dpsel');
@@ -1158,7 +1162,7 @@ var PROJBROCH={
 // ═══ BROCHURE NAVIGATOR ═══
 var BROCH={
  "EDIFICA":{"Surquillo":{"ELEMENT":{"folder":"1R66aDrrD1fstjzpQlq2l0xvojjUGU-k2","files":[{"name":"Book Element Digital","sub":"Brochure completo","id":"1-wGSSLkPEMtyUHhj1oghQBm9xUQC2Oth","type":"pdf"}]}}},
- "GALEON":{"Surquillo":{"ARAMBURU 934":{"folder":"1n0I4bguZTtkuXw15QUoI8Ch5HLbLv5xK","files":[{"name":"Brochure Digital","sub":"Plantas y areas comunes","id":"1j0Nh9wAVKQvlctEnSyW-Z7Dc-zmmXy9v","type":"pdf"},{"name":"Tour 3D Virtual","sub":"Recorrido interactivo","url":"https://praux3d.com/constructoragaleon/aramburu934/","type":"link"}]}}},
+ "GALEON":{"Surquillo":{"ARAMBURU 934":{"folder":"1n0I4bguZTtkuXw15QUoI8Ch5HLbLv5xK","files":[{"name":"Brochure Digital","sub":"Plantas y áreas comunes","id":"1j0Nh9wAVKQvlctEnSyW-Z7Dc-zmmXy9v","type":"pdf"},{"name":"Tour 3D Virtual","sub":"Recorrido interactivo","url":"https://praux3d.com/constructoragaleon/aramburu934/","type":"link"}]}}},
  "TALE":{"Surquillo":{"TORRE PAINO":{"folder":"1DjLKjw-8xAZwlJnscMaBYK6phaAaJfrP","files":[]}},"San Isidro":{"ARAMBURU PARK":{"folder":"16zhQgOlm8RNwL3_2VD2wGEbbt-R410v4","files":[]}}},
  "DESARROLLADORA":{"Surquillo":{"DORUE":{"folder":"1tSzouG8cLjG_smBKGy_zdaP6iFcTKqLy","files":[{"name":"Brochure 2024","sub":"Proyecto completo","id":"1EP2Pkr54maN-u-YtP3oFQZpNTEAt6BNE","type":"pdf"},{"name":"Planera","sub":"Tipologias y plantas","id":"125KElHNBvf0ArVsEv8hyKmLk-D3JAPk9","type":"pdf"},{"name":"Lista de Precios","sub":"Marzo 2025","id":"14ZZyn7CsJj5PeXZ84V7AbMXPRDEYxfdM","type":"pdf"},{"name":"Memoria de Acabados","sub":"Especificaciones","id":"12JK7HWGJCvzkuV7uadnyUZIm5pAOQsJ0","type":"pdf"}]}}}
 };
@@ -1197,7 +1201,7 @@ function renderBroch(){
     // Show files of a project
     var proj=node;
     if(!proj.files||proj.files.length===0){
-      body.innerHTML='<div class="bmempty"><span class="bmempty-i">&#9633;</span><div class="bmempty-t">Brochure proximamente</div><div class="bmempty-s">Estamos preparando el material de este proyecto</div>'+(proj.folder?'<br><a class="bmall" href="'+folderUrl(proj.folder)+'" target="_blank">Abrir carpeta en Drive &#8594;</a>':'')+'</div>';
+      body.innerHTML='<div class="bmempty"><span class="bmempty-i">&#9633;</span><div class="bmempty-t">Brochure próximamente</div><div class="bmempty-s">Estamos preparando el material de este proyecto</div>'+(proj.folder?'<br><a class="bmall" href="'+folderUrl(proj.folder)+'" target="_blank">Abrir carpeta en Drive &#8594;</a>':'')+'</div>';
       return;
     }
     var fh='';
@@ -1263,7 +1267,7 @@ function toggleCmp(idx,btn){
   } else {
     if(cmpSel.length>=CMP_MAX){
       // Limite alcanzado - feedback breve
-      if(btn){var o=btn.textContent;btn.textContent='Maximo 3';setTimeout(function(){btn.textContent=o;},900);}
+      if(btn){var o=btn.textContent;btn.textContent='Máximo 3';setTimeout(function(){btn.textContent=o;},900);}
       return;
     }
     cmpSel.push(idx);
@@ -1353,7 +1357,7 @@ function openCmp(){
   // Entrega
   h+=row('Entrega',function(r){return '<span class="cmp-val">'+r.en+'</span>';},null);
   // VIS
-  h+=row('Subsidio VIS',function(r){return '<span class="cmp-val">'+(r.vs==='SI'?'Si aplica':'No')+'</span>';},null);
+  h+=row('Subsidio VIS',function(r){return '<span class="cmp-val">'+(r.vs==='SI'?'Sí aplica':'No')+'</span>';},null);
   // Banco
   h+=row('Banco',function(r){return '<span class="cmp-val">'+(r.bk||'--')+'</span>';},null);
 
