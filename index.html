@@ -386,7 +386,7 @@ body:not(.view-biz) #bizView{display:none}
 /* ===== DRILL-DOWN ===== */
 .ddbg{position:fixed;inset:0;z-index:900;background:rgba(20,22,26,.5);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s}
 .ddbg.on{opacity:1;pointer-events:auto}
-.dd{position:fixed;top:50%;left:50%;z-index:901;width:min(960px,94vw);max-height:92vh;background:var(--bg);box-shadow:var(--sh3);border-radius:18px;overflow:hidden;transform:translate(-50%,-46%) scale(.96);opacity:0;pointer-events:none;transition:transform .36s var(--ease),opacity .28s var(--ease);display:flex;flex-direction:column}
+.dd{position:fixed;top:50%;left:50%;z-index:901;width:97vw;max-width:1700px;max-height:96vh;background:var(--bg);box-shadow:var(--sh3);border-radius:16px;overflow:hidden;transform:translate(-50%,-46%) scale(.96);opacity:0;pointer-events:none;transition:transform .36s var(--ease),opacity .28s var(--ease);display:flex;flex-direction:column}
 .dd.on{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:auto}
 @media(max-width:680px){.dd{width:96vw;max-height:94vh;border-radius:14px}}
 .dd-hero{position:relative;color:#fff;padding:28px clamp(1.2rem,3vw,2.4rem) 24px;overflow:hidden;flex-shrink:0}
