@@ -267,6 +267,16 @@ body:not(.view-biz) #bizView{display:none}
 .dd-pos-mark{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--em);border:3px solid #fff;box-shadow:0 2px 8px rgba(200,16,46,.5);transform:translate(-50%,-50%)}
 .dd-pos-sc{display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:var(--faint);font-variant-numeric:tabular-nums}
 .dd-pos-sc span:nth-child(2){color:var(--muted)}
+.dd-typos{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.dd-typo{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--sh1)}
+.dd-typo-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:11px;padding-bottom:10px;border-bottom:1px solid var(--line2)}
+.dd-typo-n{font-weight:800;font-size:14px;color:var(--ink)}
+.dd-typo-u{font-size:11px;font-weight:700;color:#fff;background:var(--em);padding:3px 9px;border-radius:20px;white-space:nowrap}
+.dd-typo-g{display:flex;flex-direction:column;gap:7px}
+.dd-typo-g>div{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.dd-typo-g .k{font-size:11px;font-weight:600;color:var(--muted)}
+.dd-typo-g .v{font-size:13px;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
+.dd-typo-g .v.em{color:var(--em);font-weight:800}
 
 /* ===== DRAWER · CALCULADORA DE CUOTA ===== */
 .dd-calc{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--sh1)}
@@ -344,6 +354,11 @@ body:not(.view-biz) #bizView{display:none}
   radial-gradient(120px 120px at 85% 20%,rgba(255,255,255,.14),transparent 70%),
   repeating-linear-gradient(125deg,rgba(255,255,255,.05) 0 1px,transparent 1px 13px);z-index:0;opacity:.8}
 .ctop .cmono{position:absolute;right:-6px;bottom:-26px;font-family:var(--serif);font-style:italic;font-weight:300;font-size:88px;line-height:1;color:rgba(255,255,255,.1);z-index:1;user-select:none}
+.ctop .ccover{position:absolute;inset:0;z-index:0;padding:0;margin:0}
+.ctop .ccover img{width:100%;height:100%;object-fit:cover;display:block}
+.ctop .ccover::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(154,10,34,.86),rgba(154,10,34,.54) 55%,rgba(154,10,34,.40))}
+.ctop.has-cover::after{opacity:.4}
+.ctop.has-cover .cmono{display:none}
 .ctop>*{position:relative;z-index:2}
 .cdist{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.85)}
 .cdist::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold)}
@@ -378,6 +393,10 @@ body:not(.view-biz) #bizView{display:none}
 .dd-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(125deg,var(--emd),var(--em) 60%,var(--eml));z-index:0}
 .dd-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(300px 200px at 90% 0,rgba(255,255,255,.12),transparent 65%),repeating-linear-gradient(125deg,rgba(255,255,255,.045) 0 1px,transparent 1px 15px);z-index:0}
 .dd-hero>*{position:relative;z-index:1}
+.dd-hero .dd-cover{position:absolute;inset:0;z-index:0;padding:0;margin:0}
+.dd-hero .dd-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.dd-hero .dd-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(125deg,rgba(154,10,34,.90),rgba(154,10,34,.60) 55%,rgba(154,10,34,.36))}
+.dd-hero.has-cover::after{opacity:.5}
 .dd-close{position:absolute;top:18px;right:18px;z-index:3;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;transition:background .2s;border:1px solid rgba(255,255,255,.18)}
 .dd-close:hover{background:rgba(255,255,255,.26)}
 .dd-actions{position:absolute;top:18px;right:18px;z-index:3;display:flex;gap:9px;align-items:center}
@@ -982,6 +1001,31 @@ function posDD(p){
     +'<div class="dd-pos-sc"><span>'+pen(lo)+' · mín.</span><span>mediana '+pen(med)+'</span><span>'+pen(hi)+' · máx.</span></div></div></div>';
 }
 
+function dormBreakdown(p){
+  var groups={};
+  p.u.forEach(function(u){var k=u[6];(groups[k]=groups[k]||[]).push(u);});
+  var keys=Object.keys(groups).map(Number).sort(function(a,b){return a-b;});
+  if(!keys.length)return '';
+  var cards=keys.map(function(k){
+    var g=groups[k];
+    var label=k===0?'Estudio':(dormLabel(k)+(k===1?' dormitorio':' dormitorios'));
+    var areas=g.map(function(u){return u[4];}).filter(Boolean);
+    var arT=areas.length?(Math.min.apply(null,areas)+' m²'):'—';
+    var soles=g.filter(function(u){return u[7]===0&&u[8]>=50000;}).map(function(u){return u[8];});
+    var usd=g.filter(function(u){return u[7]===1&&u[8]>0;}).map(function(u){return u[8];});
+    var desde=soles.length?pen(Math.min.apply(null,soles)):(usd.length?'US$ '+Math.min.apply(null,usd).toLocaleString('en-US'):'—');
+    var cuo=g.map(function(u){return u[11];}).filter(function(v){return v>=100;});
+    var cuoT=cuo.length?pen(Math.min.apply(null,cuo)):'—';
+    return '<div class="dd-typo">'
+      +'<div class="dd-typo-h"><span class="dd-typo-n">'+label+'</span><span class="dd-typo-u">'+g.length+(g.length===1?' unid.':' unid.')+'</span></div>'
+      +'<div class="dd-typo-g">'
+        +'<div><span class="k">Área desde</span><span class="v">'+arT+'</span></div>'
+        +'<div><span class="k">Desde</span><span class="v em">'+desde+'</span></div>'
+        +'<div><span class="k">Cuota desde</span><span class="v">'+cuoT+'</span></div>'
+      +'</div></div>';
+  }).join('');
+  return '<div class="dd-section"><div class="dd-sec-t">Disponibilidad por tipo de dormitorio</div><div class="dd-typos">'+cards+'</div></div>';
+}
 var CALC={inicial:20,tasa:11.5,plazo:20};
 function calcCuota(){
   var pr=document.getElementById('calcPrecio');if(!pr)return;
@@ -1111,9 +1155,11 @@ function card(p,i){
   var dl=ppmDelta(p);if(dl!==null&&dl<=-7)badges+='<span class="cbadge opp">Oportunidad</span>';
   var dorms=p.dorms.filter(function(d){return d>0||p.dorms.length===1;}).map(function(d){return '<span>'+dormLabel(d)+'</span>';}).join('');
   var ppm=p.ppm2med?'<div class="cppm"><span class="cppm-v">'+pen(p.ppm2med)+'<small>/m²</small></span>'+(DISTMED[p.distN]?'<span class="cppm-ctx">distrito '+pen(DISTMED[p.distN])+'</span>':'')+'</div>':'';
+  var cardCover=COVERS[p.n];
+  var ccoverHtml=cardCover?'<div class="ccover"><img src="'+coverThumb(cardCover,600)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var c=this.closest(\'.ccover\');if(c)c.style.display=\'none\'"></div>':'';
   return '<article class="card" style="animation-delay:'+Math.min(i*28,420)+'ms" onclick="openDD('+p._i+')">'
     +compareBtn(p._i)
-    +'<div class="ctop"><span class="cmono">'+monogram(p)+'</span>'
+    +'<div class="ctop'+(cardCover?' has-cover':'')+'">'+ccoverHtml+'<span class="cmono">'+monogram(p)+'</span>'
       +'<div style="display:flex;justify-content:flex-end;align-items:start"><span class="cdist">'+p.distN+'</span></div>'
       +'<div><div class="cbadges">'+badges+'</div></div></div>'
     +'<div class="cbody">'
@@ -1246,6 +1292,19 @@ var PROJFOLDERS={
   "HIGH LIVING":"https://drive.google.com/drive/folders/13vqVV8I6yhH4CjYRl9fVkjXkaxgTtD3X",
   "PRESTON":"https://drive.google.com/drive/folders/1fAg5Iq-TO7OMuSCBgegPigCqoGXUHwuB"
 };
+/* Portada (foto/render) por proyecto: ID de un archivo público de Drive (PDF brochure o imagen).
+   Se renderiza como fondo del hero vía el endpoint de thumbnail. Si falla, cae al gradiente.
+   Agregar más proyectos aquí a medida que haya renders/flyers limpios y públicos. */
+var COVERS={
+  "STYLE":"1uf_lejp6DOT5s35cRbKFlWPGCChQrkIR",
+  "PRESTON":"1L3H8XsyITC3m-RHeU0_wGyq5-yR6e7MD"
+};
+function coverThumb(id,w){return 'https://drive.google.com/thumbnail?id='+id+'&sz=w'+(w||1200);}
+/* Brochure/Book oficial en PDF (Drive público) por proyecto. Si el dato no trae p.b, usamos esto. */
+var BROCHURES={
+  "STYLE":"https://drive.google.com/file/d/1uf_lejp6DOT5s35cRbKFlWPGCChQrkIR/view",
+  "PRESTON":"https://drive.google.com/file/d/1L3H8XsyITC3m-RHeU0_wGyq5-yR6e7MD/view"
+};
 
 function buildDD(){
   var p=ddP;
@@ -1254,10 +1313,13 @@ function buildDD(){
   var dormTxt=dormR.length?dormR.map(dormLabel).join(', ')+' dorm.':'—';
   var ar=p.u.map(function(u){return u[4];}).filter(Boolean);
   var arTxt=ar.length?Math.min.apply(null,ar)+'–'+Math.max.apply(null,ar)+' m²':'—';
-  var broc = p.b
-    ? '<a class="dd-broc" href="'+p.b+'" target="_blank" rel="noopener" title="Abrir brochure del proyecto"><svg viewBox="0 0 24 24"><path d="M4 4h10l6 6v10a0 0 0 0 1 0 0H4z"/><path d="M14 4v6h6"/><path d="M8 14h8M8 17h6"/></svg><span>Ver brochure</span></a>'
+  var brocUrl = p.b || BROCHURES[p.n];
+  var broc = brocUrl
+    ? '<a class="dd-broc" href="'+brocUrl+'" target="_blank" rel="noopener" title="Abrir brochure del proyecto"><svg viewBox="0 0 24 24"><path d="M4 4h10l6 6v10a0 0 0 0 1 0 0H4z"/><path d="M14 4v6h6"/><path d="M8 14h8M8 17h6"/></svg><span>Ver brochure</span></a>'
     : '<span class="dd-broc off" title="Brochure aún no disponible"><svg viewBox="0 0 24 24"><path d="M4 4h10l6 6v10H4z"/><path d="M14 4v6h6"/></svg><span>Brochure próximamente</span></span>';
-  var hero='<div class="dd-hero"><div class="dd-actions">'+broc+'<button class="dd-print" onclick="printDD()" title="Descargar ficha en PDF"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4v-7h16v7h-2M8 14h8v8H8z"/></svg><span>Descargar ficha</span></button><button class="dd-close" onclick="closeDD()">×</button></div>'
+  var coverId=COVERS[p.n];
+  var coverHtml=coverId?'<div class="dd-cover"><img src="'+coverThumb(coverId,1200)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var c=this.closest(\'.dd-cover\');if(c)c.style.display=\'none\'"></div>':'';
+  var hero='<div class="dd-hero'+(coverId?' has-cover':'')+'">'+coverHtml+'<div class="dd-actions">'+broc+'<button class="dd-print" onclick="printDD()" title="Descargar ficha en PDF"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4v-7h16v7h-2M8 14h8v8H8z"/></svg><span>Descargar ficha</span></button><button class="dd-close" onclick="closeDD()">×</button></div>'
     +'<span class="dd-eye">'+p.distN+'</span>'
     +'<div class="dd-name">'+name+'</div>'
     +'<div class="dd-dev">'+p.devN+'</div>'
@@ -1269,7 +1331,7 @@ function buildDD(){
       +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(p.ppm2med?pen(p.ppm2med):'—')+'</span><span class="dd-kpi-k">Precio / m²</span></div>'
       +'<div class="dd-kpi"><span class="dd-kpi-v">'+dormTxt+'</span><span class="dd-kpi-k">Dormitorios</span></div>'
     +'</div></div>'
-    +'<div class="dd-bar"><div class="dd-bar-t"><b>'+p.u.length+'</b> unidades disponibles · '+arTxt+'</div><div class="dd-bar-t" style="color:var(--muted)">Clic en una fila para ver detalle · clic en columna para ordenar</div></div>';
+    +'<div class="dd-bar"><div class="dd-bar-t"><b>'+p.u.length+'</b> unidades disponibles</div><div class="dd-bar-t" style="color:var(--muted)">Clic en una fila para ver detalle · clic en columna para ordenar</div></div>';
 
   // ---- mapa de ubicación ----
   var coord=DC[p.distN]||[-12.0464,-77.0428];
@@ -1324,7 +1386,7 @@ function buildDD(){
     }
     return tr;
   }).join('');
-  var table='<div class="dd-body">'+posDD(p)+calcDD(p)+mapSection
+  var table='<div class="dd-body">'+dormBreakdown(p)+posDD(p)+calcDD(p)+mapSection
     +'<div class="dd-section"><div class="dd-sec-t">Unidades disponibles</div></div>'
     +'<div style="padding:0 clamp(1.2rem,3vw,2.4rem)"><table class="utable"><thead><tr>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>';
 
