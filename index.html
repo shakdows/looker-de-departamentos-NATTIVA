@@ -749,6 +749,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
 .sum-reveal.in{opacity:1;transform:none}
 @media(max-width:1000px){.sum-kpis{grid-template-columns:repeat(3,1fr)}.sum-grid{grid-template-columns:repeat(2,1fr)}.sum-card.span2{grid-column:span 2}}
 @media(max-width:680px){.sum-kpis{grid-template-columns:repeat(2,1fr)}.sum-grid{grid-template-columns:1fr}.sum-card.span2{grid-column:span 1}.sum-brow{grid-template-columns:96px 1fr auto}}
+.cbadge.dtype{background:var(--em);color:#fff;font-weight:700;border-color:var(--em)}
+.ltype{font:600 11px var(--sans);color:var(--em);background:var(--emsoft);padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -1585,7 +1587,9 @@ function buildDD(){
   if(location.hash==='#desarrolladoras')showTab('devs');
   else if(location.hash==='#inmobiliarias')showTab('biz');
   else if(location.hash==='#entregas')showTab('ent');
-  else if(!location.hash||location.hash==='#'||location.hash==='#resumen')showTab('sum');
+  else if(location.hash==='#resumen')showTab('sum');
+  else if(location.hash==='#top'||location.hash==='#portafolio')showTab('port');
+  else showTab('devs');
 })();
 
 function showTab(which){
@@ -1957,6 +1961,121 @@ function renderDevs(){
   window.verDist=function(d){F.dist=d;nav('fdist',d);};
   window.verDevName=function(d){F.dev=d;nav('fdev',d);};
   window.__renderSum=render;
+})();
+</script>
+
+<script>
+/* ===== Portafolio por TIPO DE DORMITORIO (una tarjeta por dorm) ===== */
+(function(){
+  var EXP=null;
+  function buildEXP(){
+    EXP=[];
+    P.forEach(function(p){
+      var g={};
+      p.u.forEach(function(u){var k=u[6];(g[k]=g[k]||[]).push(u);});
+      Object.keys(g).map(Number).sort(function(a,b){return a-b;}).forEach(function(k){
+        var arr=g[k],soles=[],cuo=[],areas=[],pp=[],ents={},vis=false;
+        arr.forEach(function(u){
+          if(u[7]===0&&u[8]>=50000)soles.push(u[8]);
+          if(u[11]>=100)cuo.push(u[11]);
+          if(u[4])areas.push(u[4]);
+          if(u[7]===0&&u[8]>=50000&&u[4]>10)pp.push(u[8]/u[4]);
+          var ey=entYear(ENT[u[9]]);if(ey)ents[ey]=1;
+          if(u[10]===1)vis=true;
+        });
+        EXP.push({p:p,_i:p._i,n:p.n,distN:p.distN,devN:p.devN,dorm:k,count:arr.length,
+          desde:soles.length?Math.min.apply(null,soles):0,
+          hasta:soles.length?Math.max.apply(null,soles):0,
+          cuotaMin:cuo.length?Math.min.apply(null,cuo):0,
+          areaMin:areas.length?Math.min.apply(null,areas):0,
+          ppm2med:medOf(pp),ents:ents,visAny:vis});
+      });
+    });
+  }
+  function dtypeLabel(d){return d===0?'Estudio':(dormLabel(d)+(d===1?' dorm.':' dorm.'));}
+  function isOppIt(it){var dm=DISTMED[it.distN];return dm&&it.ppm2med&&(it.ppm2med/dm-1)*100<=-7;}
+  function matchDormIt(it){if(!F.dorms.length)return true;var d=it.dorm;if(F.dorms.indexOf(4)>=0&&d>=4)return true;return F.dorms.indexOf(Math.floor(d))>=0||F.dorms.indexOf(d)>=0;}
+  function matchEntIt(it){if(!F.ents.length)return true;return F.ents.some(function(e){return it.ents[e];});}
+
+  function filteredItems(){
+    if(!EXP)buildEXP();
+    var q=F.q.trim().toLowerCase(),pmin=parseFloat(F.pmin)||0,pmax=parseFloat(F.pmax)||Infinity;
+    var r=EXP.filter(function(it){
+      if(q&&(it.n+' '+it.devN+' '+it.distN).toLowerCase().indexOf(q)<0)return false;
+      if(F.dist&&it.distN!==F.dist)return false;
+      if(F.dev&&it.devN!==F.dev)return false;
+      if(F.vis&&!it.visAny)return false;
+      if(F.opp&&!isOppIt(it))return false;
+      if(!matchDormIt(it))return false;
+      if(!matchEntIt(it))return false;
+      if(it.desde&&(it.desde>pmax||it.hasta<pmin))return false;
+      return true;
+    });
+    r.sort(function(a,b){
+      if(F.sort==='pa')return (a.desde||1e12)-(b.desde||1e12);
+      if(F.sort==='pd')return (b.desde||0)-(a.desde||0);
+      if(F.sort==='ppm')return (a.ppm2med||1e12)-(b.ppm2med||1e12);
+      if(F.sort==='name')return a.n.localeCompare(b.n)||(a.dorm-b.dorm);
+      return b.count-a.count;
+    });
+    return r;
+  }
+
+  function cardItem(it,i){
+    var p=it.p,dm=DISTMED[it.distN],oppd=(dm&&it.ppm2med)?Math.round((it.ppm2med/dm-1)*100):null;
+    var badges='<span class="cbadge dtype">'+dtypeLabel(it.dorm)+'</span><span class="cbadge">'+it.count+' unid.</span>';
+    if(it.visAny)badges+='<span class="cbadge vis">VIS</span>';
+    if(it.ents['INM'])badges+='<span class="cbadge">Inmediata</span>';
+    if(oppd!==null&&oppd<=-7)badges+='<span class="cbadge opp">Oportunidad</span>';
+    var ppm=it.ppm2med?'<div class="cppm"><span class="cppm-v">'+pen(it.ppm2med)+'<small>/m²</small></span>'+(dm?'<span class="cppm-ctx">distrito '+pen(dm)+'</span>':'')+'</div>':'';
+    var cover=COVERS[p.n];
+    var ch=cover?'<div class="ccover"><img src="'+coverThumb(cover,600)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var c=this.closest(\'.ccover\');if(c)c.style.display=\'none\'"></div>':'';
+    var area=it.areaMin?'<small style="color:var(--muted);font-weight:500"> · desde '+it.areaMin+' m²</small>':'';
+    return '<article class="card" style="animation-delay:'+Math.min(i*22,420)+'ms" onclick="openDD('+it._i+')">'
+      +compareBtn(it._i)
+      +'<div class="ctop'+(cover?' has-cover':'')+'">'+ch+'<span class="cmono">'+monogram(p)+'</span>'
+        +'<div style="display:flex;justify-content:flex-end;align-items:start"><span class="cdist">'+it.distN+'</span></div>'
+        +'<div><div class="cbadges">'+badges+'</div></div></div>'
+      +'<div class="cbody">'
+        +'<div class="cname">'+projName(p)+'</div>'
+        +'<div class="cunits">'+p.devN+area+'</div>'
+        +'<div class="cmetrics">'
+          +'<div><div class="cm-k">Desde</div><div class="cm-v em">'+(it.desde?pen(it.desde):'—')+'</div></div>'
+          +'<div><div class="cm-k">Cuota desde</div><div class="cm-v">'+(it.cuotaMin?pen(it.cuotaMin)+' <small>/mes</small>':'—')+'</div></div>'
+        +'</div>'
+        +ppm
+        +'<div class="cfoot"><div class="cdorm"><span>'+(it.dorm===0?'St':dormLabel(it.dorm))+'</span></div><span class="cgo">Ver unidades →</span></div>'
+      +'</div></article>';
+  }
+
+  function rowItem(it,i){
+    var p=it.p;
+    return '<div class="lrow" style="animation-delay:'+Math.min(i*12,300)+'ms" onclick="openDD('+it._i+')">'
+      +'<div class="lcheck'+(inCmp(it._i)?' on':'')+'" data-cmp="'+it._i+'" onclick="toggleCmp('+it._i+',event)" title="Comparar"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></div>'
+      +'<div><div class="lname">'+projName(p)+' <span class="ltype">'+dtypeLabel(it.dorm)+'</span></div><div class="lsub">'+p.devN+' · '+it.distN+' · '+it.count+' unid.</div></div>'
+      +'<div class="lcol-hide"><div class="lk">Desde</div><div class="lv em">'+(it.desde?pen(it.desde):'—')+'</div></div>'
+      +'<div class="lcol-hide"><div class="lk">Cuota desde</div><div class="lv">'+(it.cuotaMin?pen(it.cuotaMin):'—')+'</div></div>'
+      +'<div class="lcol-hide"><div class="lk">Área desde</div><div class="lv">'+(it.areaMin?it.areaMin+' m²':'—')+'</div></div>'
+      +'<div class="lcol-hide">'+(it.visAny?'<span class="tag tag-vis">VIS</span>':'')+'</div>'
+      +'<div class="lgo">Ver unidades →</div>'
+    +'</div>';
+  }
+
+  render=function(){
+    var r=filteredItems();
+    var units=r.reduce(function(a,it){return a+it.count;},0);
+    document.getElementById('rc').textContent=r.length+(r.length===1?' tipo':' tipos');
+    document.getElementById('ru').textContent=units.toLocaleString('es-PE');
+    var empty='<div class="empty"><div class="empty-t">Sin resultados</div><div>Ajusta los filtros para ver más tipos de unidad.</div></div>';
+    if(VIEW==='list'){
+      document.getElementById('listView').innerHTML=r.length?r.map(function(it,i){return rowItem(it,i);}).join(''):empty;
+    }else{
+      document.getElementById('grid').innerHTML=r.length?r.map(function(it,i){return cardItem(it,i);}).join(''):empty;
+    }
+    syncCmpUI();
+  };
+  window.render=render;
+  if(document.getElementById('grid'))render();
 })();
 </script>
 
