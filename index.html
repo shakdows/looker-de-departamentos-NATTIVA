@@ -68,6 +68,8 @@ body:not(.view-devs) #devsView{display:none}
 body:not(.view-biz) #bizView{display:none}
 body.view-ent #top,body.view-ent #proyectos,body.view-ent .rhead,body.view-ent #grid,body.view-ent #pulse{display:none!important}
 body:not(.view-ent) #entView{display:none}
+body.view-sum #top,body.view-sum #proyectos,body.view-sum .rhead,body.view-sum #grid,body.view-sum #pulse{display:none!important}
+body:not(.view-sum) #sumView{display:none}
 
 /* ===== DEVS DIRECTORY ===== */
 #devsView{min-height:60vh}
@@ -679,6 +681,74 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
 .ptile-feat{box-shadow:0 0 0 2px var(--em),var(--sh2)!important}
 .ptile-feat .ptile-logo{height:172px;background:linear-gradient(160deg,#fff,var(--paper2))}
 .ptile-badge{position:absolute;top:12px;left:12px;z-index:3;font:700 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--em);padding:6px 11px;border-radius:999px;box-shadow:var(--sh1)}
+/* ===== Resumen · dashboard ejecutivo ===== */
+#sumView{max-width:1240px;margin:0 auto;padding:30px 20px 90px}
+.sum-hero{margin-bottom:26px}
+.sum-eyebrow{display:inline-block;font:700 10px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--em);background:var(--emsoft);padding:7px 12px;border-radius:999px;margin-bottom:14px}
+.sum-title{font:600 clamp(28px,4.4vw,46px)/1.02 var(--serif);color:var(--ink);letter-spacing:-.015em;margin:0}
+.sum-title em{font-style:italic;color:var(--em)}
+.sum-lead{margin:12px 0 0;max-width:660px;color:var(--muted);font:400 15px/1.6 var(--sans)}
+/* KPI strip */
+.sum-kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:26px 0 20px}
+.sum-kpi{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 18px 16px;box-shadow:var(--sh1);position:relative;overflow:hidden}
+.sum-kpi::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--em),var(--eml))}
+.sum-kpi .k-v{font:600 27px/1 var(--serif);color:var(--ink);letter-spacing:-.01em;display:flex;align-items:baseline}
+.sum-kpi .k-pre{font-size:15px;color:var(--muted);font-weight:600;margin-right:1px}
+.sum-kpi .k-l{margin-top:8px;font:600 10px/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+/* bento grid */
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;grid-auto-flow:dense}
+.sum-card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:22px 24px;box-shadow:var(--sh2)}
+.sum-card.span2{grid-column:span 2}
+.sum-ch{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;gap:12px}
+.sum-ct{font:600 16px/1.2 var(--serif);color:var(--ink)}
+.sum-cs{font:500 11px var(--sans);color:var(--faint);letter-spacing:.02em;text-transform:uppercase}
+/* horizontal bars */
+.sum-bars{display:flex;flex-direction:column;gap:11px}
+.sum-brow{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;cursor:pointer;padding:2px 0}
+.sum-brow.static{cursor:default}
+.sum-blab{font:600 12px var(--sans);color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sum-btrack{height:11px;background:var(--paper2);border-radius:99px;overflow:hidden;position:relative}
+.sum-bfill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--em),var(--eml));transition:width .9s cubic-bezier(.32,.72,0,1)}
+.sum-bfill.usd{background:linear-gradient(90deg,var(--usd),#2f74b3)}
+.sum-bfill.dim{background:linear-gradient(90deg,#c9a4ab,#d9bcc1)}
+.sum-bval{font:600 12px var(--sans);color:var(--ink);white-space:nowrap;min-width:44px;text-align:right}
+.sum-brow:hover .sum-blab{color:var(--em)}
+.sum-brow:hover .sum-bfill{filter:saturate(1.15) brightness(1.03)}
+/* median marker */
+.sum-medline{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.5;z-index:2}
+.sum-medcap{display:flex;align-items:center;gap:6px;font:500 11px var(--sans);color:var(--muted);margin-top:12px}
+.sum-medcap i{width:14px;height:2px;background:var(--ink);opacity:.5;display:inline-block}
+/* donut */
+.sum-donut-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.sum-donut{position:relative;width:150px;height:150px;flex:none}
+.sum-donut svg{transform:rotate(-90deg)}
+.sum-donut-c{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.sum-donut-c b{font:600 24px/1 var(--serif);color:var(--ink)}
+.sum-donut-c span{font:600 9px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.sum-leg{display:flex;flex-direction:column;gap:9px;flex:1;min-width:130px}
+.sum-li{display:flex;align-items:center;gap:9px;font:500 13px var(--sans);color:var(--ink2)}
+.sum-li .dot{width:11px;height:11px;border-radius:4px;flex:none}
+.sum-li b{margin-left:auto;color:var(--ink);font-weight:700}
+.sum-li small{color:var(--faint);font-weight:500;margin-left:6px}
+/* year mini bars (vertical) */
+.sum-yr{display:flex;align-items:flex-end;gap:8px;height:150px;padding-top:8px}
+.sum-yc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;height:100%}
+.sum-ybar{width:100%;max-width:34px;background:linear-gradient(var(--em),var(--eml));border-radius:7px 7px 0 0;height:0;transition:height .9s cubic-bezier(.32,.72,0,1)}
+.sum-yc.inm .sum-ybar{background:linear-gradient(var(--usd),#2f74b3)}
+.sum-yl{font:600 11px var(--sans);color:var(--muted)}
+.sum-yv{font:700 11px var(--sans);color:var(--ink)}
+/* dev rows with logo */
+.sum-dev{display:grid;grid-template-columns:34px 96px 1fr auto;gap:11px;align-items:center;cursor:pointer;padding:3px 0}
+.sum-dev:hover .sum-dlab{color:var(--em)}
+.sum-dchip{width:34px;height:34px;border-radius:9px;background:var(--paper2);border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+.sum-dchip img{max-width:26px;max-height:24px;object-fit:contain}
+.sum-dchip span{font:700 12px var(--serif);color:var(--ink2)}
+.sum-dlab{font:600 12px var(--sans);color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* reveal */
+.sum-reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.32,.72,0,1),transform .7s cubic-bezier(.32,.72,0,1)}
+.sum-reveal.in{opacity:1;transform:none}
+@media(max-width:1000px){.sum-kpis{grid-template-columns:repeat(3,1fr)}.sum-grid{grid-template-columns:repeat(2,1fr)}.sum-card.span2{grid-column:span 2}}
+@media(max-width:680px){.sum-kpis{grid-template-columns:repeat(2,1fr)}.sum-grid{grid-template-columns:1fr}.sum-card.span2{grid-column:span 1}.sum-brow{grid-template-columns:96px 1fr auto}}
 </style>
 </head>
 <body>
@@ -698,10 +768,11 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
     <span class="brand-tag">Real Estate Intelligence</span>
   </a>
   <nav class="htabs">
-    <button class="htab on" id="tabPort" onclick="showTab('port')">Portafolio</button>
     <button class="htab" id="tabDevs" onclick="showTab('devs')">Desarrolladoras</button>
+    <button class="htab" id="tabPort" onclick="showTab('port')">Portafolio</button>
     <button class="htab" id="tabBiz" onclick="showTab('biz')">Para inmobiliarias</button>
     <button class="htab" id="tabEnt" onclick="showTab('ent')">Entregas</button>
+    <button class="htab" id="tabResumen" onclick="showTab('sum')">Resumen</button>
   </nav>
   <div class="hcta">
     <a class="hbtn hbtn-o" href="https://wa.me/51907528914" target="_blank" rel="noopener">Hablar con un asesor</a>
@@ -998,6 +1069,23 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
   <div class="ent-body">
     <div class="ent-panel"><div class="ent-panel-t">Volumen por mes de entrega</div><div class="ent-tl" id="entTimeline"></div></div>
     <div class="ent-panel"><div class="ent-panel-t" id="entDetailT">Proyectos del período</div><div id="entDetail"><div class="ent-detail-empty">Selecciona un período en la línea de tiempo para ver los proyectos que entregan.</div></div></div>
+  </div>
+</section>
+
+<section id="sumView">
+  <div class="sum-hero sum-reveal">
+    <span class="sum-eyebrow">Resumen ejecutivo · Lima</span>
+    <h2 class="sum-title">Todo el <em>portafolio</em> en una vista</h2>
+    <p class="sum-lead">Panorama en vivo de la oferta inmobiliaria: unidades, precios por m², mix de tipologías y cronograma de entregas. Haz clic en cualquier distrito o desarrolladora para ver sus proyectos.</p>
+  </div>
+  <div class="sum-kpis" id="sumKpis"></div>
+  <div class="sum-grid">
+    <div class="sum-card span2 sum-reveal"><div class="sum-ch"><div class="sum-ct">Unidades por distrito</div><div class="sum-cs">Top 10 · clic para filtrar</div></div><div class="sum-bars" id="sumDist"></div></div>
+    <div class="sum-card sum-reveal"><div class="sum-ch"><div class="sum-ct">Mix de dormitorios</div></div><div class="sum-donut-wrap"><div class="sum-donut" id="sumDonut"></div><div class="sum-leg" id="sumDormLeg"></div></div></div>
+    <div class="sum-card span2 sum-reveal"><div class="sum-ch"><div class="sum-ct">Precio por m² por distrito</div><div class="sum-cs">Mediana · vs Lima</div></div><div class="sum-bars" id="sumPpm"></div><div class="sum-medcap"><i></i> Mediana Lima <b id="sumCity" style="color:var(--ink);margin-left:4px"></b></div></div>
+    <div class="sum-card sum-reveal"><div class="sum-ch"><div class="sum-ct">Entregas por año</div></div><div class="sum-yr" id="sumYr"></div></div>
+    <div class="sum-card span2 sum-reveal"><div class="sum-ch"><div class="sum-ct">Top desarrolladoras</div><div class="sum-cs">Por unidades · clic para filtrar</div></div><div class="sum-bars" id="sumDev"></div></div>
+    <div class="sum-card sum-reveal"><div class="sum-ch"><div class="sum-ct">Rango de precios</div><div class="sum-cs">Soles</div></div><div class="sum-bars" id="sumRange"></div></div>
   </div>
 </section>
 
@@ -1497,21 +1585,25 @@ function buildDD(){
   if(location.hash==='#desarrolladoras')showTab('devs');
   else if(location.hash==='#inmobiliarias')showTab('biz');
   else if(location.hash==='#entregas')showTab('ent');
+  else if(!location.hash||location.hash==='#'||location.hash==='#resumen')showTab('sum');
 })();
 
 function showTab(which){
-  var devs=which==='devs', biz=which==='biz', ent=which==='ent';
+  var devs=which==='devs', biz=which==='biz', ent=which==='ent', sum=which==='sum';
   document.body.classList.toggle('view-devs',devs);
   document.body.classList.toggle('view-biz',biz);
   document.body.classList.toggle('view-ent',ent);
+  document.body.classList.toggle('view-sum',sum);
   document.getElementById('tabDevs').classList.toggle('on',devs);
   document.getElementById('tabBiz').classList.toggle('on',biz);
   var te=document.getElementById('tabEnt');if(te)te.classList.toggle('on',ent);
-  document.getElementById('tabPort').classList.toggle('on',!devs&&!biz&&!ent);
+  var ts=document.getElementById('tabResumen');if(ts)ts.classList.toggle('on',sum);
+  document.getElementById('tabPort').classList.toggle('on',which==='port');
   window.scrollTo({top:0,behavior:'instant' in window?'instant':'auto'});
-  history.replaceState(null,'',devs?'#desarrolladoras':(biz?'#inmobiliarias':(ent?'#entregas':'#top')));
+  history.replaceState(null,'',devs?'#desarrolladoras':(biz?'#inmobiliarias':(ent?'#entregas':(sum?'#resumen':'#top'))));
   if(biz&&window.__revealBiz)setTimeout(window.__revealBiz,50);
   if(ent&&window.__renderEnt)setTimeout(window.__renderEnt,30);
+  if(sum&&window.__renderSum)setTimeout(window.__renderSum,20);
 }
 function devWM(img){var w=document.createElement('div');w.className='ptile-wm';w.innerHTML='<small>Aliado NATTIVA</small>'+img.getAttribute('data-wm');img.replaceWith(w);}
 function verDev(i){var dev=PARTNERS[i].u;F.dev=dev;var sel=document.getElementById('fdev');if(sel)sel.value=dev;showTab('port');render();var el=document.getElementById('proyectos');if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
@@ -1757,6 +1849,114 @@ function renderDevs(){
     render();
   };
   if(location.hash==='#entregas'&&typeof showTab==='function')setTimeout(function(){showTab('ent');},40);
+})();
+</script>
+
+<script>
+/* ===== Resumen · dashboard ejecutivo (data en vivo) ===== */
+(function(){
+  var MES={ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,set:9,sep:9,oct:10,nov:11,dic:12};
+  function parseEnt(s){s=(s||'').trim();if(!s||s.toLowerCase()==='null')return null;if(s.toUpperCase().indexOf('INM')>=0)return{inm:1};var m=s.match(/^([A-Za-zÁ-úñÑ]{3})-(\d{2})$/);if(m&&MES[m[1].toLowerCase()])return{year:2000+(+m[2])};var y=s.match(/^(20\d{2})$/);if(y)return{year:+y[1]};return null;}
+  function median(a){if(!a.length)return 0;a=a.slice().sort(function(x,y){return x-y;});var m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2;}
+  var RAMP=['#9A0A22','#C8102E','#E12338','#EE6A78','#F3B3BA'];
+  var DLAB=['Estudio','1 dorm','2 dorm','3 dorm','4+ dorm'];
+  var BASE='https://raw.githubusercontent.com/shakdows/nattiva-app/main/logos/';
+  var DEVLOGO={'EDIFICA':'edifica','ALBAMAR':'albamar','GRUPO T&C':'grupo-tyc','V&V':'vyv','GRUPO MG':'grupo-mg','CANTABRIA':'cantabria','GRUPO LAR':'grupo-lar','CIUDARIS':'ciudaris','VITAIN':'vita-in','MAKE':'make','VERDANT':'verdant','URBANA':'urbana-peru','SENDA':'senda','VIDARQ':'vidarq','NOI':'noi-inmobiliaria','TUCAN':'tucan-inversiones','ZAFIRA':'zafira','IMAGINA':'imagina','CONFORTA':'conforta'};
+
+  function agg(){
+    var units=0,devU={},dorm=[0,0,0,0,0],prices=[],ranges=[0,0,0,0,0],yr={},inm=0;
+    P.forEach(function(p){
+      units+=p.u.length; devU[p.devN]=(devU[p.devN]||0)+p.u.length;
+      p.u.forEach(function(u){
+        var d=u[6]>=4?4:Math.max(0,Math.floor(u[6]||0)); dorm[d]++;
+        if(u[7]===0&&u[8]>=50000){prices.push(u[8]);var pr=u[8];ranges[pr<300000?0:pr<500000?1:pr<700000?2:pr<1000000?3:4]++;}
+        var e=parseEnt(ENT[u[9]]); if(e){if(e.inm)inm++;else yr[e.year]=(yr[e.year]||0)+1;}
+      });
+    });
+    return {units:units,devU:devU,dorm:dorm,prices:prices,ranges:ranges,yr:yr,inm:inm};
+  }
+
+  function hbars(el,rows,maxV,fmt,cls,onclick){
+    var mx=maxV||Math.max.apply(null,rows.map(function(r){return r.v;}))||1;
+    el.innerHTML=rows.map(function(r){
+      var w=(r.v/mx*100).toFixed(1);
+      var oc=onclick&&r.key!=null?' onclick="'+onclick+'(\''+String(r.key).replace(/'/g,"")+'\')"':'';
+      var cl=r.cls||cls||'';
+      var pre=r.logo!==undefined?'':'';
+      return '<div class="sum-brow'+(oc?'':' static')+'"'+oc+'><div class="sum-blab">'+r.label+'</div>'
+        +'<div class="sum-btrack"><div class="sum-bfill '+cl+'" data-w="'+w+'"></div></div>'
+        +'<div class="sum-bval">'+fmt(r.v)+'</div></div>';
+    }).join('');
+  }
+
+  function render(){
+    var a=agg();
+    var cityMed=CITYMED||median(a.prices);
+    var K=[
+      {v:P.length,l:'Proyectos'},
+      {v:a.units,l:'Unidades'},
+      {v:Object.keys(DISTUNITS).length,l:'Distritos'},
+      {v:Object.keys(a.devU).length,l:'Desarrolladoras'},
+      {v:Math.round(cityMed),l:'Precio/m² · mediana',money:1},
+      {v:Math.round(median(a.prices)),l:'Ticket · mediana',money:1}
+    ];
+    document.getElementById('sumKpis').innerHTML=K.map(function(k,i){
+      return '<div class="sum-kpi"><div class="k-v">'+(k.money?'<span class="k-pre">S/ </span>':'')+'<span id="skpi'+i+'">0</span></div><div class="k-l">'+k.l+'</div></div>';
+    }).join('');
+    K.forEach(function(k,i){animateCount('skpi'+i,k.v);});
+
+    // unidades por distrito (top 10)
+    var dist=Object.keys(DISTUNITS).map(function(d){return {label:d,key:d,v:DISTUNITS[d]};}).sort(function(x,y){return y.v-x.v;}).slice(0,10);
+    hbars(document.getElementById('sumDist'),dist,dist[0].v,function(v){return v.toLocaleString('es-PE');},'','verDist');
+
+    // precio/m2 por distrito
+    var ppm=Object.keys(DISTMED).filter(function(d){return DISTMED[d]>0;}).map(function(d){return {label:d,key:d,v:Math.round(DISTMED[d])};}).sort(function(x,y){return y.v-x.v;});
+    var mppm=ppm.length?ppm[0].v:1;
+    ppm.forEach(function(r){r.cls=r.v>=cityMed?'':'dim';});
+    hbars(document.getElementById('sumPpm'),ppm,mppm,function(v){return 'S/ '+v.toLocaleString('es-PE');},'','verDist');
+    document.getElementById('sumCity').textContent='S/ '+Math.round(cityMed).toLocaleString('es-PE')+'/m²';
+
+    // mix dormitorios · donut
+    var tot=a.dorm.reduce(function(x,y){return x+y;},0)||1,r=60,C=2*Math.PI*r,off=0;
+    var segs=a.dorm.map(function(v,i){var len=v/tot*C;var s='<circle cx="75" cy="75" r="'+r+'" fill="none" stroke="'+RAMP[i]+'" stroke-width="22" stroke-dasharray="'+len.toFixed(2)+' '+(C-len).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'"></circle>';off+=len;return s;}).join('');
+    document.getElementById('sumDonut').innerHTML='<svg viewBox="0 0 150 150" width="150" height="150">'+segs+'</svg><div class="sum-donut-c"><b>'+a.units.toLocaleString('es-PE')+'</b><span>unidades</span></div>';
+    document.getElementById('sumDormLeg').innerHTML=a.dorm.map(function(v,i){return '<div class="sum-li"><span class="dot" style="background:'+RAMP[i]+'"></span>'+DLAB[i]+'<b>'+Math.round(v/tot*100)+'%</b><small>'+v.toLocaleString('es-PE')+'</small></div>';}).join('');
+
+    // entregas por año
+    var years=Object.keys(a.yr).map(Number).sort(),ymax=Math.max(a.inm,Math.max.apply(null,years.map(function(y){return a.yr[y];})))||1;
+    var yhtml=(a.inm?'<div class="sum-yc inm"><div class="sum-yv">'+a.inm+'</div><div class="sum-ybar" data-h="'+(a.inm/ymax*100).toFixed(1)+'"></div><div class="sum-yl">Inm.</div></div>':'');
+    yhtml+=years.map(function(y){return '<div class="sum-yc"><div class="sum-yv">'+a.yr[y]+'</div><div class="sum-ybar" data-h="'+(a.yr[y]/ymax*100).toFixed(1)+'"></div><div class="sum-yl">\''+String(y).slice(2)+'</div></div>';}).join('');
+    document.getElementById('sumYr').innerHTML=yhtml;
+
+    // top desarrolladoras
+    var devs=Object.keys(a.devU).map(function(d){return {d:d,v:a.devU[d]};}).sort(function(x,y){return y.v-x.v;}).slice(0,8);
+    var dmax=devs[0].v;
+    document.getElementById('sumDev').innerHTML=devs.map(function(o){
+      var w=(o.v/dmax*100).toFixed(1);
+      var lf=DEVLOGO[o.d]?'<img src="'+BASE+DEVLOGO[o.d]+'.png" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.textContent=\''+o.d.replace(/[^A-Za-zÁÉÍÓÚÑ]/g,'').slice(0,2).toUpperCase()+'\'">':'<span>'+o.d.replace(/[^A-Za-zÁÉÍÓÚÑ]/g,'').slice(0,2).toUpperCase()+'</span>';
+      return '<div class="sum-dev" onclick="verDevName(\''+o.d.replace(/'/g,"")+'\')"><div class="sum-dchip">'+lf+'</div><div class="sum-dlab">'+titleCase(o.d)+'</div><div class="sum-btrack"><div class="sum-bfill" data-w="'+w+'"></div></div><div class="sum-bval">'+o.v.toLocaleString('es-PE')+'</div></div>';
+    }).join('');
+
+    // rango de precios
+    var RLAB=['< S/ 300k','300k – 500k','500k – 700k','700k – 1M','> S/ 1M'];
+    var rmax=Math.max.apply(null,a.ranges)||1;
+    document.getElementById('sumRange').innerHTML=a.ranges.map(function(v,i){
+      return '<div class="sum-brow static"><div class="sum-blab">'+RLAB[i]+'</div><div class="sum-btrack"><div class="sum-bfill" data-w="'+(v/rmax*100).toFixed(1)+'"></div></div><div class="sum-bval">'+v.toLocaleString('es-PE')+'</div></div>';
+    }).join('');
+
+    // animar barras + reveal
+    requestAnimationFrame(function(){
+      document.querySelectorAll('#sumView .sum-bfill').forEach(function(b){b.style.width=b.getAttribute('data-w')+'%';});
+      document.querySelectorAll('#sumView .sum-ybar').forEach(function(b){b.style.height=b.getAttribute('data-h')+'%';});
+    });
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+    document.querySelectorAll('#sumView .sum-reveal:not(.in)').forEach(function(el){io.observe(el);});
+  }
+
+  function nav(dev,val){var s=document.getElementById(dev);if(s)s.value=val;showTab('port');window.render&&window.render();var el=document.getElementById('proyectos');if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  window.verDist=function(d){F.dist=d;nav('fdist',d);};
+  window.verDevName=function(d){F.dev=d;nav('fdev',d);};
+  window.__renderSum=render;
 })();
 </script>
 
