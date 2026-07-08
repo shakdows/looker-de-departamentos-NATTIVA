@@ -66,6 +66,8 @@ body.view-biz #top,body.view-biz #proyectos,body.view-biz .rhead,body.view-biz #
 body.view-devs #pulse,body.view-biz #pulse{display:none!important}
 body:not(.view-devs) #devsView{display:none}
 body:not(.view-biz) #bizView{display:none}
+body.view-ent #top,body.view-ent #proyectos,body.view-ent .rhead,body.view-ent #grid,body.view-ent #pulse{display:none!important}
+body:not(.view-ent) #entView{display:none}
 
 /* ===== DEVS DIRECTORY ===== */
 #devsView{min-height:60vh}
@@ -633,6 +635,46 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
   .dd{width:100vw}
   .fsel{max-width:none;flex:1}
 }
+/* ===== Entregas · cronograma ===== */
+#entView{max-width:1180px;margin:0 auto;padding:34px 20px 84px}
+.ent-head{margin-bottom:24px}
+.ent-eyebrow{font:700 11px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--em);margin-bottom:12px}
+.ent-title{font:600 clamp(26px,4vw,40px)/1.05 var(--serif);color:var(--ink);letter-spacing:-.01em;margin:0}
+.ent-sub{margin:10px 0 0;max-width:660px;color:var(--muted);font:400 15px/1.6 var(--sans)}
+.ent-filter{margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ent-filter label{font:600 12px var(--sans);color:var(--ink2)}
+.ent-filter select{font:500 14px var(--sans);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:9px 14px;cursor:pointer;box-shadow:var(--sh1)}
+.ent-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0 28px}
+.ent-kpi{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--sh1)}
+.ent-kpi .v{font:600 26px/1 var(--serif);color:var(--ink)}
+.ent-kpi .v small{font:600 12px var(--sans);color:var(--muted);margin-left:2px}
+.ent-kpi .l{margin-top:8px;font:600 11px/1.3 var(--sans);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.ent-kpi.hot .v{color:var(--em)}
+.ent-body{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:start}
+.ent-panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px 22px;box-shadow:var(--sh1)}
+.ent-panel-t{font:700 12px var(--sans);letter-spacing:.03em;text-transform:uppercase;color:var(--ink2);margin-bottom:14px}
+.ent-tl{display:flex;flex-direction:column;gap:1px;max-height:560px;overflow-y:auto}
+.ent-yr{position:sticky;top:0;background:var(--paper);z-index:2;font:700 12px var(--sans);color:var(--em);letter-spacing:.06em;padding:12px 0 6px;border-bottom:1px solid var(--line2);margin-bottom:2px}
+.ent-row{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;padding:6px 8px;border-radius:10px;cursor:pointer;transition:background .18s}
+.ent-row:hover{background:var(--paper2)}
+.ent-row.on{background:var(--emsoft);box-shadow:inset 0 0 0 1px var(--em)}
+.ent-row-lab{font:600 13px var(--sans);color:var(--ink2)}
+.ent-row.inm .ent-row-lab{color:var(--em)}
+.ent-bar-wrap{display:flex;align-items:center;gap:9px;min-width:0}
+.ent-bar{height:22px;border-radius:6px;background:linear-gradient(90deg,var(--em),var(--eml));min-width:3px;flex:none;transition:width .5s var(--ease)}
+.ent-row.inm .ent-bar{background:linear-gradient(90deg,var(--usd),#2d6fb0)}
+.ent-bar-v{font:600 13px var(--sans);color:var(--ink);white-space:nowrap}
+.ent-bar-v small{color:var(--muted);font-weight:500}
+.ent-detail-empty{color:var(--faint);font:400 14px/1.6 var(--sans);text-align:center;padding:44px 12px}
+.ent-dl{display:flex;flex-direction:column;gap:8px;max-height:560px;overflow-y:auto}
+.ent-dp{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:.18s}
+.ent-dp:hover{border-color:var(--em);box-shadow:var(--sh1);transform:translateX(2px)}
+.ent-dp-n{font:600 14px var(--sans);color:var(--ink)}
+.ent-dp-s{font:500 12px var(--sans);color:var(--muted);margin-top:2px}
+.ent-dp-u{font:700 13px var(--sans);color:var(--em);white-space:nowrap}
+.ent-dp-u small{color:var(--muted);font-weight:500}
+@media(max-width:820px){.ent-kpis{grid-template-columns:repeat(2,1fr)}.ent-body{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -655,6 +697,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
     <button class="htab on" id="tabPort" onclick="showTab('port')">Portafolio</button>
     <button class="htab" id="tabDevs" onclick="showTab('devs')">Desarrolladoras</button>
     <button class="htab" id="tabBiz" onclick="showTab('biz')">Para inmobiliarias</button>
+    <button class="htab" id="tabEnt" onclick="showTab('ent')">Entregas</button>
   </nav>
   <div class="hcta">
     <a class="hbtn hbtn-o" href="https://wa.me/51907528914" target="_blank" rel="noopener">Hablar con un asesor</a>
@@ -935,6 +978,23 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
     <span>Los enlaces abren las carpetas oficiales de cada desarrolladora. El acceso puede requerir permiso del propietario.</span>
   </div></div>
+</section>
+
+<section id="entView">
+  <div class="ent-head">
+    <div class="ent-eyebrow">Pipeline de entregas</div>
+    <h2 class="ent-title">Cronograma de entregas</h2>
+    <p class="ent-sub">Cuándo se libera el stock de toda la oferta: unidades y proyectos por mes de entrega. Filtra por distrito y haz clic en un período para ver los proyectos que entregan en ese momento.</p>
+    <div class="ent-filter">
+      <label for="entDist">Distrito</label>
+      <select id="entDist" onchange="window.__entFilter&&window.__entFilter(this.value)"></select>
+    </div>
+  </div>
+  <div class="ent-kpis" id="entKpis"></div>
+  <div class="ent-body">
+    <div class="ent-panel"><div class="ent-panel-t">Volumen por mes de entrega</div><div class="ent-tl" id="entTimeline"></div></div>
+    <div class="ent-panel"><div class="ent-panel-t" id="entDetailT">Proyectos del período</div><div id="entDetail"><div class="ent-detail-empty">Selecciona un período en la línea de tiempo para ver los proyectos que entregan.</div></div></div>
+  </div>
 </section>
 
 <footer>
@@ -1432,18 +1492,22 @@ function buildDD(){
   // hash routing
   if(location.hash==='#desarrolladoras')showTab('devs');
   else if(location.hash==='#inmobiliarias')showTab('biz');
+  else if(location.hash==='#entregas')showTab('ent');
 })();
 
 function showTab(which){
-  var devs=which==='devs', biz=which==='biz';
+  var devs=which==='devs', biz=which==='biz', ent=which==='ent';
   document.body.classList.toggle('view-devs',devs);
   document.body.classList.toggle('view-biz',biz);
+  document.body.classList.toggle('view-ent',ent);
   document.getElementById('tabDevs').classList.toggle('on',devs);
   document.getElementById('tabBiz').classList.toggle('on',biz);
-  document.getElementById('tabPort').classList.toggle('on',!devs&&!biz);
+  var te=document.getElementById('tabEnt');if(te)te.classList.toggle('on',ent);
+  document.getElementById('tabPort').classList.toggle('on',!devs&&!biz&&!ent);
   window.scrollTo({top:0,behavior:'instant' in window?'instant':'auto'});
-  history.replaceState(null,'',devs?'#desarrolladoras':(biz?'#inmobiliarias':'#top'));
+  history.replaceState(null,'',devs?'#desarrolladoras':(biz?'#inmobiliarias':(ent?'#entregas':'#top')));
   if(biz&&window.__revealBiz)setTimeout(window.__revealBiz,50);
+  if(ent&&window.__renderEnt)setTimeout(window.__renderEnt,30);
 }
 function renderDevs(){
   var g=document.getElementById('devsGrid');
@@ -1603,5 +1667,87 @@ function renderDevs(){
   if(document.readyState!=='loading')initBiz();else document.addEventListener('DOMContentLoaded',initBiz);
 })();
 </script>
+<script>
+/* ===== Entregas · cronograma (usa FECHA/F. ENTREGA vía ENT[]) ===== */
+(function(){
+  var MES={ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,set:9,sep:9,oct:10,nov:11,dic:12};
+  var MLAB=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Set','Oct','Nov','Dic'];
+  function parseEnt(s){
+    s=(s||'').trim(); if(!s||s.toLowerCase()==='null')return null;
+    if(s.toUpperCase().indexOf('INM')>=0)return {inm:true};
+    var m=s.match(/^([A-Za-zÁ-úñÑ]{3})-(\d{2})$/);
+    if(m){var mo=MES[m[1].toLowerCase()];if(mo)return {year:2000+(+m[2]),month:mo};}
+    var y=s.match(/^(20\d{2})$/); if(y)return {year:+y[1],month:0};
+    return null;
+  }
+  var entF='';
+  function build(){
+    var per={}, inm={units:0,projs:{}}, dated=0;
+    P.forEach(function(p){
+      if(entF && p.distN!==entF) return;
+      p.u.forEach(function(u){
+        var e=parseEnt(ENT[u[9]]); if(!e)return; dated++;
+        if(e.inm){inm.units++;inm.projs[p._i]=(inm.projs[p._i]||0)+1;return;}
+        var key=e.year*100+e.month;
+        var o=per[key]||(per[key]={year:e.year,month:e.month,units:0,projs:{}});
+        o.units++; o.projs[p._i]=(o.projs[p._i]||0)+1;
+      });
+    });
+    return {per:per,inm:inm,dated:dated};
+  }
+  var CUR=null;
+  function periodLabel(o){return (o.month?MLAB[o.month]+' ':'')+o.year;}
+  function render(){
+    var d=build(); CUR=d;
+    var keys=Object.keys(d.per).map(Number).sort(function(a,b){return a-b;});
+    var maxU=Math.max(1,d.inm.units);keys.forEach(function(k){if(d.per[k].units>maxU)maxU=d.per[k].units;});
+    var now=new Date(),nk=now.getFullYear()*100+(now.getMonth()+1),hk=nk+100,next12=0;
+    keys.forEach(function(k){if(k>=nk&&k<hk)next12+=d.per[k].units;});
+    var peak=null;keys.forEach(function(k){if(!peak||d.per[k].units>d.per[peak].units)peak=k;});
+    var kpis=[
+      ['hot',d.inm.units.toLocaleString('es-PE'),'','Entrega inmediata · unid.'],
+      ['',d.dated.toLocaleString('es-PE'),'','En cronograma · unid.'],
+      ['',next12.toLocaleString('es-PE'),'','Entregan en &lt; 12 meses'],
+      ['hot',peak?d.per[peak].units.toLocaleString('es-PE'):'—',peak?' · '+periodLabel(d.per[peak]):'','Pico de entregas']
+    ];
+    document.getElementById('entKpis').innerHTML=kpis.map(function(k){return '<div class="ent-kpi '+k[0]+'"><div class="v">'+k[1]+'<small>'+k[2]+'</small></div><div class="l">'+k[3]+'</div></div>';}).join('');
+    var html='';
+    if(d.inm.units){
+      html+='<div class="ent-row inm" data-k="inm" onclick="window.__entPick(\'inm\')"><div class="ent-row-lab">Inmediata</div><div class="ent-bar-wrap"><div class="ent-bar" style="width:'+(d.inm.units/maxU*100).toFixed(1)+'%"></div><div class="ent-bar-v">'+d.inm.units+' <small>u · '+Object.keys(d.inm.projs).length+' proy.</small></div></div></div>';
+    }
+    var curYr=null;
+    keys.forEach(function(k){
+      var o=d.per[k];
+      if(o.year!==curYr){curYr=o.year;html+='<div class="ent-yr">'+curYr+'</div>';}
+      html+='<div class="ent-row" data-k="'+k+'" onclick="window.__entPick('+k+')"><div class="ent-row-lab">'+(o.month?MLAB[o.month]:'—')+'</div><div class="ent-bar-wrap"><div class="ent-bar" style="width:'+(o.units/maxU*100).toFixed(1)+'%"></div><div class="ent-bar-v">'+o.units+' <small>u · '+Object.keys(o.projs).length+' proy.</small></div></div></div>';
+    });
+    document.getElementById('entTimeline').innerHTML=html||'<div class="ent-detail-empty">Sin fechas de entrega para este filtro.</div>';
+    document.getElementById('entDetail').innerHTML='<div class="ent-detail-empty">Selecciona un período en la línea de tiempo para ver los proyectos que entregan.</div>';
+    document.getElementById('entDetailT').textContent='Proyectos del período';
+  }
+  window.__entPick=function(k){
+    var src=k==='inm'?CUR.inm:CUR.per[k]; if(!src)return;
+    var ks=''+k;
+    document.querySelectorAll('#entTimeline .ent-row').forEach(function(r){r.classList.toggle('on',r.getAttribute('data-k')===ks);});
+    var lab=k==='inm'?'Entrega inmediata':periodLabel(CUR.per[k]);
+    document.getElementById('entDetailT').textContent='Proyectos · '+lab;
+    var arr=Object.keys(src.projs).map(function(i){return {i:+i,u:src.projs[i]};}).sort(function(a,b){return b.u-a.u;});
+    document.getElementById('entDetail').innerHTML='<div class="ent-dl">'+arr.map(function(o){
+      var p=P[o.i];
+      return '<div class="ent-dp" onclick="openDD('+o.i+')"><div><div class="ent-dp-n">'+projName(p)+'</div><div class="ent-dp-s">'+p.devN+' · '+p.distN+'</div></div><div class="ent-dp-u">'+o.u+' <small>u.</small></div></div>';
+    }).join('')+'</div>';
+  };
+  window.__entFilter=function(v){entF=v||'';render();};
+  window.__renderEnt=function(){
+    var sel=document.getElementById('entDist');
+    if(sel && !sel.options.length){
+      sel.innerHTML='<option value="">Todo Lima</option>'+DIST.slice().sort().map(function(d){return '<option value="'+d+'">'+d+'</option>';}).join('');
+    }
+    render();
+  };
+  if(location.hash==='#entregas'&&typeof showTab==='function')setTimeout(function(){showTab('ent');},40);
+})();
+</script>
+
 </body>
 </html>
