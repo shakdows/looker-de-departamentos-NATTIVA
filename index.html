@@ -2065,7 +2065,7 @@ function renderDevs(){
           var ey=entYear(ENT[u[9]]);if(ey)ents[ey]=1;
           if(u[10]===1)vis=true;
         });
-        EXP.push({p:p,_i:p._i,n:p.n,distN:p.distN,devN:p.devN,dorm:k,count:arr.length,
+        EXP.push({p:p,_i:p._i,n:p.n,distN:p.distN,devN:p.devN,dorm:k,count:arr.length,units:arr,
           desde:soles.length?Math.min.apply(null,soles):0,
           hasta:soles.length?Math.max.apply(null,soles):0,
           cuotaMin:cuo.length?Math.min.apply(null,cuo):0,
@@ -2079,19 +2079,50 @@ function renderDevs(){
   function matchDormIt(it){if(!F.dorms.length)return true;var d=it.dorm;if(F.dorms.indexOf(4)>=0&&d>=4)return true;return F.dorms.indexOf(Math.floor(d))>=0||F.dorms.indexOf(d)>=0;}
   function matchEntIt(it){if(!F.ents.length)return true;return F.ents.some(function(e){return it.ents[e];});}
 
+  function itemStats(it,arr){
+    var soles=[],cuo=[],areas=[],pp=[],ents={},vis=false;
+    arr.forEach(function(u){
+      if(u[7]===0&&u[8]>=50000)soles.push(u[8]);
+      if(u[11]>=100)cuo.push(u[11]);
+      if(u[4])areas.push(u[4]);
+      if(u[7]===0&&u[8]>=50000&&u[4]>10)pp.push(u[8]/u[4]);
+      var ey=entYear(ENT[u[9]]);if(ey)ents[ey]=1;
+      if(u[10]===1)vis=true;
+    });
+    return {p:it.p,_i:it._i,n:it.n,distN:it.distN,devN:it.devN,dorm:it.dorm,count:arr.length,units:arr,
+      desde:soles.length?Math.min.apply(null,soles):0,
+      hasta:soles.length?Math.max.apply(null,soles):0,
+      cuotaMin:cuo.length?Math.min.apply(null,cuo):0,
+      areaMin:areas.length?Math.min.apply(null,areas):0,
+      ppm2med:medOf(pp),ents:ents,visAny:vis};
+  }
+
   function filteredItems(){
     if(!EXP)buildEXP();
     var q=F.q.trim().toLowerCase(),pmin=parseFloat(F.pmin)||0,pmax=parseFloat(F.pmax)||Infinity;
-    var r=EXP.filter(function(it){
-      if(q&&(it.n+' '+it.devN+' '+it.distN).toLowerCase().indexOf(q)<0)return false;
-      if(F.dist&&it.distN!==F.dist)return false;
-      if(F.dev&&it.devN!==F.dev)return false;
-      if(F.vis&&!it.visAny)return false;
-      if(F.opp&&!isOppIt(it))return false;
-      if(!matchDormIt(it))return false;
-      if(!matchEntIt(it))return false;
-      if(it.desde&&(it.desde>pmax||it.hasta<pmin))return false;
-      return true;
+    var amin=parseFloat(F.amin)||0,amax=parseFloat(F.amax)||Infinity;
+    var areaOn=amin>0||amax<Infinity;
+    var unitFilter=areaOn||F.vis||F.ents.length>0;
+    var r=[];
+    EXP.forEach(function(it){
+      if(q&&(it.n+' '+it.devN+' '+it.distN).toLowerCase().indexOf(q)<0)return;
+      if(F.dist&&it.distN!==F.dist)return;
+      if(F.dev&&it.devN!==F.dev)return;
+      if(!matchDormIt(it))return;
+      var item=it;
+      if(unitFilter){
+        var sub=it.units.filter(function(u){
+          if(areaOn&&!(u[4]&&u[4]>=amin&&u[4]<=amax))return false;
+          if(F.vis&&u[10]!==1)return false;
+          if(F.ents.length){var ey=entYear(ENT[u[9]]);if(F.ents.indexOf(ey)<0)return false;}
+          return true;
+        });
+        if(!sub.length)return;
+        item=itemStats(it,sub);
+      }
+      if(F.opp&&!isOppIt(item))return;
+      if(item.desde&&(item.desde>pmax||item.hasta<pmin))return;
+      r.push(item);
     });
     r.sort(function(a,b){
       if(F.sort==='pa')return (a.desde||1e12)-(b.desde||1e12);
