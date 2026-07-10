@@ -854,6 +854,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
     <span class="flab">Precio S/</span>
     <input class="fnum num" id="pmin" type="number" placeholder="Desde" oninput="F.pmin=this.value;render()">
     <input class="fnum num" id="pmax" type="number" placeholder="Hasta" oninput="F.pmax=this.value;render()">
+    <div class="fdiv"></div>
+    <span class="flab">Área m²</span>
+    <input class="fnum num" id="amin" type="number" placeholder="Mín" oninput="F.amin=this.value;render()">
+    <input class="fnum num" id="amax" type="number" placeholder="Máx" oninput="F.amax=this.value;render()">
     <button class="fclr" onclick="resetF()">Limpiar</button>
   </div>
 </div>
@@ -1234,15 +1238,16 @@ function calcDD(p){
 function printDD(){document.body.classList.add('printing');window.print();setTimeout(function(){document.body.classList.remove('printing');},400);}
 
 /* ---- filter state ---- */
-var F={q:'',dist:'',dev:'',dorms:[],ents:[],vis:false,opp:false,pmin:'',pmax:'',sort:'units'};
+var F={q:'',dist:'',dev:'',dorms:[],ents:[],vis:false,opp:false,pmin:'',pmax:'',amin:'',amax:'',sort:'units'};
 function isOpp(p){var d=ppmDelta(p);return d!==null&&d<=-7;}
 function animateCount(id,target){var el=document.getElementById(id);if(!el)return;var st=null,dur=1100;function tick(now){if(!st)st=now;var p=Math.min(1,(now-st)/dur),e=1-Math.pow(1-p,3);el.textContent=Math.round(target*e).toLocaleString('es-PE');if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
 
 function togDorm(b,d){b.classList.toggle('on');var i=F.dorms.indexOf(d);if(i<0)F.dorms.push(d);else F.dorms.splice(i,1);render();}
 function togEnt(b,e){b.classList.toggle('on');var i=F.ents.indexOf(e);if(i<0)F.ents.push(e);else F.ents.splice(i,1);render();}
-function resetF(){F={q:'',dist:'',dev:'',dorms:[],ents:[],vis:false,opp:false,pmin:'',pmax:'',sort:'units'};
+function resetF(){F={q:'',dist:'',dev:'',dorms:[],ents:[],vis:false,opp:false,pmin:'',pmax:'',amin:'',amax:'',sort:'units'};
   document.getElementById('q').value='';document.getElementById('fdist').value='';document.getElementById('fdev').value='';
   document.getElementById('pmin').value='';document.getElementById('pmax').value='';document.getElementById('sort').value='units';
+  var _am=document.getElementById('amin');if(_am)_am.value='';var _ax=document.getElementById('amax');if(_ax)_ax.value='';
   document.querySelectorAll('.chip.on').forEach(function(c){c.classList.remove('on');});render();}
 
 function matchDorm(p){if(!F.dorms.length)return true;return p.dorms.some(function(d){if(F.dorms.indexOf(4)>=0&&d>=4)return true;return F.dorms.indexOf(Math.floor(d))>=0||F.dorms.indexOf(d)>=0;});}
@@ -1251,6 +1256,8 @@ function matchEnt(p){if(!F.ents.length)return true;return F.ents.some(function(e
 function filtered(){
   var q=F.q.trim().toLowerCase();
   var pmin=parseFloat(F.pmin)||0,pmax=parseFloat(F.pmax)||Infinity;
+  var amin=parseFloat(F.amin)||0,amax=parseFloat(F.amax)||Infinity;
+  var areaOn=amin>0||amax<Infinity;
   var r=P.filter(function(p){
     if(q&&(p.n+' '+p.devN+' '+p.distN).toLowerCase().indexOf(q)<0)return false;
     if(F.dist&&p.distN!==F.dist)return false;
@@ -1260,6 +1267,7 @@ function filtered(){
     if(!matchDorm(p))return false;
     if(!matchEnt(p))return false;
     if(p.desde&&(p.desde>pmax||p.hasta<pmin))return false;
+    if(areaOn&&!p.u.some(function(u){return u[4]&&u[4]>=amin&&u[4]<=amax;}))return false;
     return true;
   });
   r.sort(function(a,b){
