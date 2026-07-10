@@ -1610,16 +1610,19 @@ function showTab(which){
   if(sum&&window.__renderSum)setTimeout(window.__renderSum,20);
 }
 function devWM(img){var w=document.createElement('div');w.className='ptile-wm';w.innerHTML='<small>Aliado NATTIVA</small>'+img.getAttribute('data-wm');img.replaceWith(w);}
-function verDev(i){var dev=PARTNERS[i].u;F.dev=dev;var sel=document.getElementById('fdev');if(sel)sel.value=dev;showTab('port');render();var el=document.getElementById('proyectos');if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+function partnerDev(p){if(p.s==='dev')return p.u;var n=(p.n||'').toLowerCase();for(var i=0;i<DEV.length;i++)if(DEV[i].toLowerCase()===n)return DEV[i];return null;}
+function verDev(dev){F.dev=dev;var sel=document.getElementById('fdev');if(sel)sel.value=dev;showTab('port');render();var el=document.getElementById('proyectos');if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
 function renderDevs(){
   var g=document.getElementById('devsGrid');
   g.innerHTML=PARTNERS.map(function(p,i){
-    var dev=p.s==='dev';
+    var pdev=partnerDev(p);
+    var isFilter=!!pdev;
+    var pcount=isFilter?P.filter(function(x){return x.devN===pdev;}).length:0;
     var logo=p.logo
       ? '<img class="ptile-img" src="'+p.logo+'" alt="'+p.n+'" loading="lazy" referrerpolicy="no-referrer" data-wm="'+p.n+'" onerror="devWM(this)">'
-      : '<div class="ptile-wm"><small>'+(dev?'Desarrolladora':'Aliado NATTIVA')+'</small>'+p.n+'</div>';
-    var srcLabel=dev?(p.count+' proyecto'+(p.count===1?'':'s')):(p.s==='dropbox'?'Dropbox':(p.s==='sheet'?'Lista de precios':'Google Drive'));
-    var srcIcon=dev?'<svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+      : '<div class="ptile-wm"><small>'+(isFilter?'Desarrolladora':'Aliado NATTIVA')+'</small>'+p.n+'</div>';
+    var srcLabel=isFilter?(pcount+' proyecto'+(pcount===1?'':'s')):(p.s==='dropbox'?'Dropbox':(p.s==='sheet'?'Lista de precios':'Google Drive'));
+    var srcIcon=isFilter?'<svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
     var feat=p.feat?' ptile-feat':'';
     var badge=p.feat?'<span class="ptile-badge">Principal</span>':'';
     var inner='<div class="ptile-logo">'+badge+logo+'</div>'
@@ -1627,7 +1630,7 @@ function renderDevs(){
       +'<div class="ptile-src">'+srcIcon+srcLabel+'</div></div>'
       +'<div class="ptile-go"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div></div>';
     var st='animation-delay:'+Math.min(i*32,440)+'ms';
-    if(dev)return '<div class="ptile ptile-dev'+feat+'" role="button" tabindex="0" onclick="verDev('+i+')" style="'+st+'">'+inner+'</div>';
+    if(isFilter)return '<div class="ptile ptile-dev'+feat+'" role="button" tabindex="0" onclick="verDev(\''+pdev.replace(/'/g,"\\'")+'\')" style="'+st+'">'+inner+'</div>';
     return '<a class="ptile'+feat+'" href="'+p.u+'" target="_blank" rel="noopener" style="'+st+'">'+inner+'</a>';
   }).join('');
 }
