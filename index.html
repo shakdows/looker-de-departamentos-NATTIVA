@@ -255,6 +255,17 @@ body:not(.view-sum) #sumView{display:none}
 .cmp-table td.best{color:var(--em)}
 .cmp-table td.best::after{content:' ★';color:var(--gold);font-size:10px}
 .cmp-wa{display:inline-flex;align-items:center;gap:6px;background:var(--em);color:#fff;font-weight:700;font-size:12px;padding:9px 14px;border-radius:8px}
+.cmpu-sec{border-bottom:1px solid var(--line);padding-bottom:10px}
+.cmpu-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:18px clamp(1.2rem,3vw,2rem) 12px}
+.cmpu-proj{font-family:var(--serif);font-size:1.2rem;color:var(--ink);line-height:1.2}
+.cmpu-meta{font-family:var(--sans);font-size:11.5px;font-weight:700;color:var(--muted);margin-top:4px}
+.cmpu-tablewrap{overflow-x:auto;padding:0 clamp(1.2rem,3vw,2rem) 6px}
+.cmpu-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.cmpu-table th,.cmpu-table td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line2);white-space:nowrap}
+.cmpu-table thead th{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.cmpu-table td{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.cmpu-table th.r,.cmpu-table td.r{text-align:right}
+.cmpu-table tbody tr:hover{background:var(--paper)}
 
 /* ===== MAP & UNIT DETAIL (drill-down) ===== */
 .dd-section{padding:18px clamp(1.2rem,3vw,2.4rem) 0}
@@ -1370,48 +1381,38 @@ function render(){
 function openCompare(){
   if(CMP.length<2)return;
   var ps=CMP.map(function(i){return P[i];});
-  var rows=[
-    ['Distrito',function(p){return p.distN;}],
-    ['Desarrolladora',function(p){return p.devN;}],
-    ['Unidades',function(p){return p.u.length;},'max'],
-    ['Precio desde',function(p){return p.desde;},'minMoney'],
-    ['Precio hasta',function(p){return p.hasta;},'maxMoney'],
-    ['Cuota desde',function(p){return p.cuotaMin;},'minMoney'],
-    ['Dormitorios',function(p){var d=p.dorms.filter(function(x){return x>0;});return d.length?d.map(dormLabel).join(', '):'—';}],
-    ['Área m²',function(p){var a=p.u.map(function(u){return u[4];}).filter(Boolean);return a.length?Math.min.apply(null,a)+'–'+Math.max.apply(null,a):'—';}],
-    ['VIS',function(p){return p.visAny?'Sí':'No';}],
-    ['Entrega inmediata',function(p){return p.ents['INM']?'Sí':'No';}]
+  var money=function(u,v){return v?(u[7]===1?'US$ '+v.toLocaleString('en-US'):pen(v)):'—';};
+  var cols=[
+    ['Unidad',function(u){return (u[0]||'—')+(u[1]?' · '+u[1]:'');},'l'],
+    ['Dorm.',function(u){return dormLabel(u[6]);},'l'],
+    ['Á. techada',function(u){return u[2]?u[2]+' m²':'—';},'r'],
+    ['Á. libre',function(u){return u[3]?u[3]+' m²':'—';},'r'],
+    ['Á. total',function(u){return u[4]?u[4]+' m²':'—';},'r'],
+    ['Vista',function(u){return VISTA[u[5]]||'—';},'l'],
+    ['Entrega',function(u){return ENT[u[9]]||'—';},'l'],
+    ['VIS',function(u){return u[10]===1?'Sí':(u[10]===0?'No':'—');},'l'],
+    ['Banco',function(u){return BANCO[u[12]]||'—';},'l'],
+    ['Cuota/mes',function(u){return money(u,u[11]);},'r'],
+    ['Precio',function(u){return money(u,u[8]);},'r']
   ];
-  // best markers
-  function bestIdx(getter,mode){
-    var vals=ps.map(getter);
-    var valid=vals.map(function(v,k){return {v:v,k:k};}).filter(function(o){return typeof o.v==='number'&&o.v>0;});
-    if(!valid.length)return -1;
-    valid.sort(function(a,b){return mode==='max'?b.v-a.v:a.v-b.v;});
-    return valid[0].k;
-  }
-  var head='<th>Característica</th>'+ps.map(function(p){return '<th><div class="cmp-proj">'+projName(p)+'<small>'+p.devN+'</small></div></th>';}).join('');
-  var body=rows.map(function(row){
-    var label=row[0],getter=row[1],mode=row[2];
-    var best=-1;
-    if(mode==='max')best=bestIdx(getter,'max');
-    else if(mode==='minMoney')best=bestIdx(getter,'min');
-    else if(mode==='maxMoney')best=bestIdx(getter,'max');
-    var cells=ps.map(function(p,k){
-      var v=getter(p);
-      if(typeof v==='number'&&(mode==='minMoney'||mode==='maxMoney'))v=v?pen(v):'—';
-      var cls=(k===best&&best>=0)?' class="best"':'';
-      return '<td'+cls+'>'+v+'</td>';
+  var head='<tr>'+cols.map(function(c){return '<th class="'+(c[2]==='r'?'r':'')+'">'+c[0]+'</th>';}).join('')+'</tr>';
+  var sections=ps.map(function(p){
+    var us=p.u.slice().sort(function(a,b){return (a[6]||0)-(b[6]||0)||(a[4]||0)-(b[4]||0);});
+    var rows=us.map(function(u){
+      return '<tr>'+cols.map(function(c){return '<td class="'+(c[2]==='r'?'r':'')+'">'+c[1](u)+'</td>';}).join('')+'</tr>';
     }).join('');
-    return '<tr><th>'+label+'</th>'+cells+'</tr>';
-  }).join('');
-  var ctaRow='<tr><th></th>'+ps.map(function(p){
     var msg=encodeURIComponent('Hola NATTIVA, me interesa el proyecto '+p.n+' ('+p.distN+'). Quisiera más información.');
-    return '<td><a class="cmp-wa" href="https://wa.me/51907528914?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a></td>';
-  }).join('')+'</tr>';
+    var meta='<div class="cmpu-meta">'+p.distN+' · '+p.devN+' · '+p.u.length+' unidad'+(p.u.length===1?'':'es')
+      +(p.desde?' · desde '+pen(p.desde):'')+(p.hasta?' · hasta '+pen(p.hasta):'')+'</div>';
+    return '<div class="cmpu-sec">'
+      +'<div class="cmpu-head"><div class="cmpu-proj">'+projName(p)+meta+'</div>'
+      +'<a class="cmp-wa" href="https://wa.me/51907528914?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a></div>'
+      +'<div class="cmpu-tablewrap"><table class="cmpu-table"><thead>'+head+'</thead><tbody>'+rows+'</tbody></table></div>'
+    +'</div>';
+  }).join('');
   document.getElementById('cmp').innerHTML=
-    '<div class="cmp-head"><h2>Comparar proyectos</h2><button class="dd-close" style="position:static;background:var(--line2);color:var(--ink2)" onclick="closeCompare()">×</button></div>'
-    +'<div class="cmp-body"><table class="cmp-table"><thead><tr>'+head+'</tr></thead><tbody>'+body+ctaRow+'</tbody></table></div>';
+    '<div class="cmp-head"><h2>Comparar proyectos · detalle por unidad</h2><button class="dd-close" style="position:static;background:var(--line2);color:var(--ink2)" onclick="closeCompare()">×</button></div>'
+    +'<div class="cmp-body">'+sections+'</div>';
   document.getElementById('cmpbg').classList.add('on');
   document.getElementById('cmp').classList.add('on');
 }
