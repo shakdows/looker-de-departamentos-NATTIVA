@@ -1,0 +1,611 @@
+<title>NATTIVA · Inteligencia de Mercado — Departamentos en Lima</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* ============================ TOKENS ============================ */
+:root{
+  /* cool-green–biased neutrals (chosen, not defaulted) */
+  --ground:#eef1f0; --surface:#ffffff; --surface-2:#f5f8f7; --inset:#eef3f1;
+  --ink:#0f1a18; --secondary:#4c5754; --muted:#7f8b87; --hairline:#e2e8e6; --hairline-2:#d5ddda;
+  /* brand — petrol teal */
+  --brand:#0b6459; --brand-strong:#084b43; --brand-soft:#dbeae6; --brand-dim:#6aa79d;
+  /* sequential price ramp (light→dark = low→high) */
+  --r1:#d5e8e3; --r2:#9ecbc2; --r3:#5fa89c; --r4:#298577; --r5:#0b5f54;
+  /* categorical (vista) — validated */
+  --cat1:#2a78d6; --cat2:#eb6834; --cat3:#1baf7a; --cat4:#4a3aa7; --cat0:#9aa4a0;
+  /* semantic */
+  --good:#1f8f5f; --shadow:0 1px 2px rgba(16,26,24,.05),0 8px 24px -12px rgba(16,26,24,.16);
+  --radius:14px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#0b110f; --surface:#141c19; --surface-2:#18211e; --inset:#101816;
+    --ink:#eef3f1; --secondary:#a6b2ae; --muted:#6d7a75; --hairline:#243029; --hairline-2:#2f3d36;
+    --brand:#3fb8a8; --brand-strong:#5fd0c0; --brand-soft:#173f39; --brand-dim:#2f7d72;
+    --r1:#153f39; --r2:#1f5a51; --r3:#2f7c70; --r4:#4aa294; --r5:#77c8ba;
+    --cat1:#3987e5; --cat2:#d95926; --cat3:#199e70; --cat4:#9085e9; --cat0:#5c6864;
+    --good:#3fbd83; --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="light"]{
+  --ground:#eef1f0; --surface:#ffffff; --surface-2:#f5f8f7; --inset:#eef3f1;
+  --ink:#0f1a18; --secondary:#4c5754; --muted:#7f8b87; --hairline:#e2e8e6; --hairline-2:#d5ddda;
+  --brand:#0b6459; --brand-strong:#084b43; --brand-soft:#dbeae6; --brand-dim:#6aa79d;
+  --r1:#d5e8e3; --r2:#9ecbc2; --r3:#5fa89c; --r4:#298577; --r5:#0b5f54;
+  --cat1:#2a78d6; --cat2:#eb6834; --cat3:#1baf7a; --cat4:#4a3aa7; --cat0:#9aa4a0;
+  --good:#1f8f5f; --shadow:0 1px 2px rgba(16,26,24,.05),0 8px 24px -12px rgba(16,26,24,.16);
+}
+:root[data-theme="dark"]{
+  --ground:#0b110f; --surface:#141c19; --surface-2:#18211e; --inset:#101816;
+  --ink:#eef3f1; --secondary:#a6b2ae; --muted:#6d7a75; --hairline:#243029; --hairline-2:#2f3d36;
+  --brand:#3fb8a8; --brand-strong:#5fd0c0; --brand-soft:#173f39; --brand-dim:#2f7d72;
+  --r1:#153f39; --r2:#1f5a51; --r3:#2f7c70; --r4:#4aa294; --r5:#77c8ba;
+  --cat1:#3987e5; --cat2:#d95926; --cat3:#199e70; --cat4:#9085e9; --cat0:#5c6864;
+  --good:#3fbd83; --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.6);
+}
+/* ============================ BASE ============================ */
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums;}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:600}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+@media (prefers-reduced-motion:no-preference){
+  .bar-fill,.col-fill,.seg{transition:width .5s cubic-bezier(.2,.7,.2,1),height .5s cubic-bezier(.2,.7,.2,1)}
+}
+
+/* ============================ HEADER ============================ */
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--hairline)}
+.hbar{display:flex;align-items:center;gap:16px;padding:14px 22px;max-width:1180px;margin:0 auto;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(145deg,var(--brand),var(--brand-strong));
+  display:grid;place-items:center;color:#fff;font-family:var(--serif);font-size:17px;font-weight:700;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.brand b{font-family:var(--serif);font-size:19px;letter-spacing:.02em;font-weight:600}
+.brand span{display:block;font-size:11px;color:var(--muted);letter-spacing:.04em;margin-top:-2px}
+.spacer{flex:1}
+.theme-btn{background:var(--surface-2);border:1px solid var(--hairline);color:var(--secondary);
+  width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:15px;display:grid;place-items:center}
+.theme-btn:hover{border-color:var(--hairline-2);color:var(--ink)}
+
+/* filters */
+.filters{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;padding:14px 0 2px}
+.fgroup{display:flex;flex-direction:column;gap:6px}
+.fgroup>label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+select{appearance:none;background:var(--surface);border:1px solid var(--hairline-2);color:var(--ink);
+  font:inherit;font-size:14px;padding:9px 34px 9px 12px;border-radius:10px;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%237f8b87' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 12px center;min-width:180px}
+select:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+.seg{display:inline-flex;background:var(--inset);border:1px solid var(--hairline);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--secondary);font:inherit;font-size:13px;font-weight:500;
+  padding:6px 12px;border-radius:7px;cursor:pointer}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow);font-weight:600}
+.seg button:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+.reset{margin-left:auto;align-self:center;background:transparent;border:0;color:var(--brand);font:inherit;
+  font-size:13px;font-weight:600;cursor:pointer;padding:8px 6px;border-radius:8px}
+.reset:hover{text-decoration:underline}
+.ctx{font-size:13px;color:var(--secondary);padding:2px 0 4px}
+.ctx b{color:var(--ink);font-weight:600}
+
+/* ============================ KPI ROW ============================ */
+main{padding:26px 0 60px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0 26px}
+.kpi{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius);
+  padding:16px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.kpi .val{font-size:31px;font-weight:600;letter-spacing:-.01em;line-height:1.05}
+.kpi .val small{font-size:15px;color:var(--muted);font-weight:500}
+.kpi .sub{font-size:12.5px;color:var(--secondary);display:flex;align-items:center;gap:6px}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:2px 7px;
+  border-radius:999px;background:var(--brand-soft);color:var(--brand)}
+.pill.up{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+
+/* ============================ CARDS / GRID ============================ */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.card{background:var(--surface);border:1px solid var(--hairline);border-radius:var(--radius);
+  padding:18px 20px 20px;box-shadow:var(--shadow);min-width:0}
+.card.c12{grid-column:span 12}.card.c8{grid-column:span 8}.card.c6{grid-column:span 6}
+.card.c5{grid-column:span 5}.card.c7{grid-column:span 7}.card.c4{grid-column:span 4}
+.card-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:16px}
+.card-head h2{font-family:var(--serif);font-size:18px;font-weight:600;letter-spacing:.01em}
+.card-head .note{font-size:12px;color:var(--muted)}
+
+/* horizontal bars */
+.hbars{display:flex;flex-direction:column;gap:9px}
+.hrow{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:12px;cursor:default}
+.hrow .lab{font-size:13px;color:var(--secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hrow.sel .lab{color:var(--ink);font-weight:600}
+.track{position:relative;height:14px;background:var(--inset);border-radius:7px;overflow:hidden}
+.bar-fill{position:absolute;left:0;top:0;height:100%;border-radius:7px;background:var(--brand-dim)}
+.hrow.sel .bar-fill{background:var(--brand)}
+.hrow .val{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;min-width:64px;text-align:right}
+.hrow:hover .track{outline:2px solid var(--brand-soft);outline-offset:2px}
+
+/* vertical columns */
+.cols{display:flex;align-items:flex-end;gap:10px;height:180px;padding-top:8px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;height:100%;min-width:0}
+.col .cval{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap}
+.col-track{width:100%;flex:1;display:flex;align-items:flex-end;border-radius:6px 6px 0 0}
+.col-fill{width:100%;background:var(--brand);border-radius:6px 6px 0 0;min-height:3px}
+.col.sel .col-fill{background:var(--brand-strong)}
+.col .clab{font-size:12px;color:var(--secondary);white-space:nowrap;text-align:center}
+.col.sel .clab{color:var(--ink);font-weight:600}
+.col:hover .col-fill{filter:brightness(1.06)}
+/* ramp classes */
+.col-fill.r1{background:var(--r1)}.col-fill.r2{background:var(--r2)}.col-fill.r3{background:var(--r3)}
+.col-fill.r4{background:var(--r4)}.col-fill.r5{background:var(--r5)}
+
+/* composition bar (vista) */
+.comp{display:flex;height:22px;border-radius:8px;overflow:hidden;gap:2px;background:var(--surface)}
+.comp .seg{height:100%;min-width:3px}
+.comp .seg.cat1{background:var(--cat1)}.comp .seg.cat2{background:var(--cat2)}
+.comp .seg.cat3{background:var(--cat3)}.comp .seg.cat4{background:var(--cat4)}.comp .seg.cat0{background:var(--cat0)}
+.legend{display:flex;flex-wrap:wrap;gap:14px 18px;margin-top:16px}
+.lg{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--secondary)}
+.lg .dot{width:11px;height:11px;border-radius:3px;flex:none}
+.lg .dot.cat1{background:var(--cat1)}.lg .dot.cat2{background:var(--cat2)}
+.lg .dot.cat3{background:var(--cat3)}.lg .dot.cat4{background:var(--cat4)}.lg .dot.cat0{background:var(--cat0)}
+.lg b{color:var(--ink);font-weight:600}
+
+/* district gallery */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.dcard{background:var(--surface-2);border:1px solid var(--hairline);border-radius:12px;padding:15px 16px;
+  display:flex;flex-direction:column;gap:11px}
+.dcard.sel{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.dcard .dtop{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.dcard .dname{font-family:var(--serif);font-size:16px;font-weight:600}
+.dcard .dn{font-size:12px;color:var(--muted)}
+.dstats{display:flex;gap:18px}
+.dstat .dl{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.dstat .dv{font-size:16px;font-weight:600;margin-top:1px}
+.mix{display:flex;height:7px;border-radius:4px;overflow:hidden;gap:1.5px}
+.mix i{height:100%}
+.mix i.r1{background:var(--r1)}.mix i.r2{background:var(--r2)}.mix i.r3{background:var(--r3)}
+.mix i.r4{background:var(--r4)}.mix i.r5{background:var(--r5)}
+.mixleg{font-size:11px;color:var(--muted)}
+
+/* contact form */
+.contact{margin-top:16px;background:linear-gradient(150deg,var(--brand),var(--brand-strong));
+  border-radius:var(--radius);padding:30px;color:#fff;display:grid;grid-template-columns:1fr 1.1fr;gap:30px;
+  box-shadow:var(--shadow)}
+.contact h2{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.15;color:#fff}
+.contact .lead{margin-top:12px;font-size:14.5px;color:rgba(255,255,255,.82);max-width:34ch}
+.contact ul{list-style:none;padding:0;margin:20px 0 0;display:flex;flex-direction:column;gap:9px}
+.contact li{font-size:13.5px;color:rgba(255,255,255,.9);display:flex;gap:9px;align-items:center}
+.contact li svg{flex:none}
+.form{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:20px;
+  display:flex;flex-direction:column;gap:13px;backdrop-filter:blur(4px)}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.field input,.field select.fs,.field textarea{background:rgba(255,255,255,.95);border:1px solid transparent;
+  border-radius:9px;padding:10px 12px;font:inherit;font-size:14px;color:#0f1a18;width:100%}
+.field select.fs{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%237f8b87' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center;appearance:none}
+.field input:focus,.field select.fs:focus,.field textarea:focus{outline:2px solid rgba(255,255,255,.9);outline-offset:1px}
+.field textarea{resize:vertical;min-height:58px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.submit{background:#fff;color:var(--brand-strong);border:0;border-radius:9px;padding:12px;font:inherit;
+  font-size:14.5px;font-weight:700;cursor:pointer;margin-top:3px}
+.submit:hover{background:#f0f5f3}
+.formnote{font-size:11.5px;color:rgba(255,255,255,.65);text-align:center}
+.ok{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:10px;padding:14px;
+  font-size:14px;color:#fff;display:none;align-items:center;gap:10px}
+.ok.show{display:flex}
+
+/* tooltip */
+#tip{position:fixed;pointer-events:none;z-index:50;background:var(--ink);color:var(--ground);
+  font-size:12.5px;padding:7px 10px;border-radius:8px;box-shadow:0 6px 20px -6px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(4px);transition:opacity .12s;max-width:240px;line-height:1.4}
+#tip.show{opacity:1;transform:none}
+#tip b{color:#fff;color:var(--surface);}
+:root[data-theme="dark"] #tip b,:root:not([data-theme]) #tip b{color:var(--ink)}
+#tip .tv{font-weight:700}
+
+/* footer */
+footer{border-top:1px solid var(--hairline);margin-top:44px;padding:24px 0 40px;color:var(--muted);font-size:12.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer b{color:var(--secondary)}
+
+.section-title{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--secondary);
+  margin:30px 0 14px;letter-spacing:.01em}
+
+/* ============================ RESPONSIVE ============================ */
+@media (max-width:920px){
+  .card.c8,.card.c7,.card.c6,.card.c5,.card.c4{grid-column:span 12}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .contact{grid-template-columns:1fr;padding:24px}
+  .gal{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .gal{grid-template-columns:1fr}
+  .hrow{grid-template-columns:88px 1fr auto}
+  .row2{grid-template-columns:1fr}
+  .brand span{display:none}
+}
+</style>
+
+<header>
+  <div class="hbar">
+    <div class="brand">
+      <div class="mark">N</div>
+      <div><b>NATTIVA</b><span>Inteligencia de Mercado Inmobiliario</span></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="theme-btn" id="themeBtn" title="Cambiar tema" aria-label="Cambiar tema">◐</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="filters">
+    <div class="fgroup">
+      <label for="fDist">Distrito</label>
+      <select id="fDist" aria-label="Filtrar por distrito"></select>
+    </div>
+    <div class="fgroup">
+      <label>Dormitorios</label>
+      <div class="seg" id="fDorm" role="group" aria-label="Filtrar por dormitorios"></div>
+    </div>
+    <button class="reset" id="reset">Restablecer</button>
+  </div>
+  <div class="ctx" id="ctx"></div>
+</div>
+
+<main class="wrap">
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grid">
+    <div class="card c7">
+      <div class="card-head"><h2>Precio por m² según distrito</h2><span class="note" id="noteA">S/ por m² · promedio</span></div>
+      <div class="hbars" id="chDist"></div>
+    </div>
+
+    <div class="card c5">
+      <div class="card-head"><h2>Composición por vista</h2><span class="note">participación del stock</span></div>
+      <div class="comp" id="chVista"></div>
+      <div class="legend" id="legVista"></div>
+    </div>
+
+    <div class="card c4">
+      <div class="card-head"><h2>Stock por dormitorios</h2><span class="note">unidades</span></div>
+      <div class="cols" id="chDormN"></div>
+    </div>
+
+    <div class="card c4">
+      <div class="card-head"><h2>Precio promedio</h2><span class="note">por dormitorios</span></div>
+      <div class="cols" id="chDormP"></div>
+    </div>
+
+    <div class="card c4">
+      <div class="card-head"><h2>Rango de precio</h2><span class="note">distribución</span></div>
+      <div class="cols" id="chRange"></div>
+    </div>
+
+    <div class="card c6">
+      <div class="card-head"><h2>Cronograma de entrega</h2><span class="note">unidades por año</span></div>
+      <div class="cols" id="chYear"></div>
+    </div>
+
+    <div class="card c6">
+      <div class="card-head"><h2>Principales desarrolladoras</h2><span class="note">unidades en stock</span></div>
+      <div class="hbars" id="chDev"></div>
+    </div>
+  </div>
+
+  <h3 class="section-title">Distritos destacados</h3>
+  <div class="gal" id="gallery"></div>
+
+  <section class="contact">
+    <div>
+      <h2>Recibe el informe completo de mercado</h2>
+      <p class="lead">Reportes de precios, absorción y stock por distrito, actualizados con la data comercial de NATTIVA.</p>
+      <ul>
+        <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Benchmarks de precio/m² por zona y tipología</li>
+        <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ranking de proyectos y desarrolladoras</li>
+        <li><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Cronograma de entregas y velocidad de venta</li>
+      </ul>
+    </div>
+    <form class="form" id="leadForm" novalidate>
+      <div class="field">
+        <label for="nm">Nombre</label>
+        <input id="nm" name="nm" type="text" placeholder="Nombre y apellido" required>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="em">Correo</label>
+          <input id="em" name="em" type="email" placeholder="tu@correo.com" required>
+        </div>
+        <div class="field">
+          <label for="ph">Teléfono</label>
+          <input id="ph" name="ph" type="tel" placeholder="+51 999 999 999">
+        </div>
+      </div>
+      <div class="field">
+        <label for="it">Interés</label>
+        <select id="it" name="it" class="fs">
+          <option>Comprar para vivir</option>
+          <option>Inversión / renta</option>
+          <option>Análisis de mercado</option>
+          <option>Desarrollo inmobiliario</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="ms">Mensaje</label>
+        <textarea id="ms" name="ms" placeholder="Cuéntanos qué distrito o tipología te interesa…"></textarea>
+      </div>
+      <button class="submit" type="submit">Solicitar informe</button>
+      <div class="ok" id="ok"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="okmsg"></span></div>
+      <p class="formnote">Demostración — el formulario no envía datos a ningún servidor.</p>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Elaborado por <b>NATTIVA</b> · Panel de inteligencia de mercado</span>
+    <span id="footcount"></span>
+    <span>Datos referenciales de oferta primaria — Lima Metropolitana</span>
+  </div>
+</footer>
+
+<div id="tip" role="status"></div>
+
+<script>
+const DATA={"meta":{"total":12372,"nDistritos":19,"nProyectos":201,"nDesarrolladoras":46},"cells":{"Surquillo|3":{"n":235,"sp":120832191,"sa":16714.2,"sm":1690345.3,"bk":[0,77,73,84,1],"yr":{"2027":80,"2028":139,"2026":11},"vi":{"Externa":171,"Otra":48,"Interna":16},"dv":{"V&V":43,"AMMA":91,"VITAIN":48,"GRATTO INMOBILIARIA":22,"ALBAMAR":26,"GRUPO LAR":5}},"Surquillo|2":{"n":427,"sp":191022327,"sa":24704.4,"sm":3297565.5,"bk":[0,211,209,5,2],"yr":{"2027":236,"2028":127,"2026":11},"vi":{"Esquina":13,"Externa":172,"Interna":195,"Otra":47},"dv":{"ALBAMAR":27,"GRUPO LAR":53,"V&V":88,"AMMA":80,"VITAIN":47,"GRATTO INMOBILIARIA":121,"EDIFICA":11}},"Surquillo|1":{"n":437,"sp":141440123,"sa":16921.5,"sm":3677761.7,"bk":[165,253,19,0,0],"yr":{"2027":210,"2026":118,"2028":85},"vi":{"Interna":211,"Externa":174,"Otra":52},"dv":{"V&V":47,"EDIFICA":117,"GRATTO INMOBILIARIA":152,"VITAIN":52,"GRUPO LAR":24,"AMMA":33,"ALBAMAR":12}},"Surquillo|Estudio":{"n":44,"sp":8702000,"sa":1211.8,"sm":316050.9,"bk":[44,0,0,0,0],"yr":{"2028":44},"vi":{"Interna":44},"dv":{"AMMA":44}},"Surco|3":{"n":134,"sp":97309290,"sa":11732.3,"sm":1138845.6,"bk":[0,0,27,63,44],"yr":{"2026":57,"2027":60,"2028":16},"vi":{"Externa":80,"Interna":43,"Parque":11},"dv":{"EE INMOBILIARIA":25,"AZZURRA":51,"INMGENIO":15,"IMAGINA":25,"ESPACIO URBANO":6,"V&V":6,"GROU":6}},"Surco|2":{"n":209,"sp":108536685,"sa":14079.4,"sm":1667445.1,"bk":[0,98,81,12,18],"yr":{"2027":117,"2026":15,"2028":61},"vi":{"Interna":132,"Externa":62,"Parque":15},"dv":{"IMAGINA":77,"V&V":87,"MAKE":13,"EE INMOBILIARIA":6,"AZZURRA":17,"VERDANT":2,"GROU":2,"ESPACIO URBANO":3,"INMGENIO":1,"SENDA":1}},"Surco|1":{"n":57,"sp":23785300,"sa":2495.2,"sm":547451.3,"bk":[0,50,7,0,0],"yr":{"2027":25,"2028":18,"2026":14},"vi":{"Interna":29,"Externa":28},"dv":{"AZZURRA":23,"IMAGINA":20,"V&V":6,"EE INMOBILIARIA":8}},"Surco|4+":{"n":1,"sp":1378585,"sa":218.1,"sm":6320.6,"bk":[0,0,0,0,1],"yr":{"2026":1},"vi":{"Externa":1},"dv":{"INMGENIO":1}},"San Miguel|2":{"n":896,"sp":340267351,"sa":51694.6,"sm":5888424.4,"bk":[144,624,116,12,0],"yr":{"2026":127,"2028":292,"2027":350,"2030":27},"vi":{"Interna":582,"Externa":231,"Otra":80,"Parque":3},"dv":{"IMAGINA":183,"VITAIN":209,"COLINDANTE":105,"ALBAMAR":36,"GRUPO REYNA":55,"GRUPO MG":116,"CÁDIZ INMOBILIARIA":26,"GRUPO T&C":85,"CAPAC":13,"INARCO":33,"LIMA METRO CUADRADO":19,"CANTABRIA":1,"GDC":4,"KALLPA":10,"URBANA":1}},"San Miguel|3":{"n":571,"sp":251739986,"sa":39298.1,"sm":3656821.6,"bk":[13,280,261,15,2],"yr":{"2026":176,"2027":241,"2028":91,"2030":16},"vi":{"Externa":304,"Interna":155,"Otra":73,"Parque":39},"dv":{"IMAGINA":31,"GRUPO REYNA":31,"GRUPO MG":85,"VITAIN":168,"COLINDANTE":95,"CAPAC":7,"KALLPA":2,"CÁDIZ INMOBILIARIA":16,"LIMA METRO CUADRADO":8,"GRUPO T&C":73,"INARCO":18,"CASA BONITA":31,"GDC":6}},"San Miguel|1":{"n":619,"sp":163343353,"sa":24172.7,"sm":4252221.7,"bk":[483,109,27,0,0],"yr":{"2028":364,"2026":30,"2030":16,"2027":157},"vi":{"Interna":388,"Otra":87,"Externa":144},"dv":{"VITAIN":97,"GRUPO T&C":307,"GRUPO MG":49,"IMAGINA":22,"GRUPO REYNA":54,"ALBAMAR":31,"INARCO":33,"CÁDIZ INMOBILIARIA":9,"COLINDANTE":2,"URBANA":7,"KALLPA":2,"LIMA METRO CUADRADO":5,"CAPAC":1}},"San Miguel|4+":{"n":1,"sp":926211,"sa":177.4,"sm":5221.3,"bk":[0,0,0,0,1],"yr":{},"vi":{"Interna":1},"dv":{"GRUPO T&C":1}},"San Miguel|Estudio":{"n":1,"sp":269180,"sa":45.0,"sm":5975.1,"bk":[1,0,0,0,0],"yr":{},"vi":{"Interna":1},"dv":{"GRUPO REYNA":1}},"San Martin De Porres|2":{"n":3,"sp":777000,"sa":152.2,"sm":15313.4,"bk":[3,0,0,0,0],"yr":{},"vi":{"Otra":3},"dv":{"INARCO":3}},"San Isidro|1":{"n":838,"sp":359929771,"sa":37774.2,"sm":7997088.7,"bk":[114,382,266,71,5],"yr":{"2028":465,"2026":157,"2027":130},"vi":{"Interna":368,"Externa":460,"Otra":10},"dv":{"GRUPO T&C":569,"TUCAN":33,"EDIFICA":28,"CANTABRIA":12,"ESPARQ INVERSIONES":10,"CONFORTA":2,"GRATTO INMOBILIARIA":90,"MARCAN":3,"ZAFIRA":6,"SENDA":83,"V&V":2}},"San Isidro|2":{"n":601,"sp":365575637,"sa":38212.0,"sm":5746949.1,"bk":[0,46,286,202,67],"yr":{"2026":159,"2028":125,"2027":136},"vi":{"Externa":354,"Otra":84,"Interna":163},"dv":{"TUCAN":38,"GRUPO T&C":258,"ESPARQ INVERSIONES":70,"CANTABRIA":21,"EDIFICA":52,"GRATTO INMOBILIARIA":63,"V&V":24,"GDC":5,"SENDA":68,"LANDER":2}},"San Isidro|3":{"n":183,"sp":142264945,"sa":15573.7,"sm":1665783.7,"bk":[0,0,25,103,55],"yr":{"2027":47,"2026":62},"vi":{"Externa":92,"Interna":53,"Otra":38},"dv":{"CANTABRIA":21,"GRATTO INMOBILIARIA":26,"ESPARQ INVERSIONES":37,"GDC":7,"GRUPO T&C":73,"MARCAN":8,"IMAGINA":1,"LANDER":10}},"San Isidro|4+":{"n":15,"sp":13550000,"sa":1486.8,"sm":135132.7,"bk":[0,0,0,10,5],"yr":{"2026":15},"vi":{"Otra":14,"Interna":1},"dv":{"ESPARQ INVERSIONES":14,"MARCAN":1}},"San Isidro|Estudio":{"n":7,"sp":3306747,"sa":342.9,"sm":67486.7,"bk":[0,4,3,0,0],"yr":{"2026":7},"vi":{"Interna":7},"dv":{"GRUPO T&C":7}},"San Borja|3":{"n":33,"sp":39850205,"sa":4796.8,"sm":284868.7,"bk":[0,0,0,2,31],"yr":{"2026":15},"vi":{"Externa":21,"Interna":6,"Parque":6},"dv":{"INMGENIO":16,"GRUPO MG":7,"ESPARQ INVERSIONES":10}},"San Borja|2":{"n":21,"sp":16829490,"sa":1940.5,"sm":188955.3,"bk":[0,0,2,10,9],"yr":{"2026":2},"vi":{"Interna":14,"Externa":7},"dv":{"INMGENIO":2,"GRUPO MG":19}},"San Borja|4+":{"n":18,"sp":27699750,"sa":3873.4,"sm":128661.7,"bk":[0,0,0,0,18],"yr":{},"vi":{"Externa":6,"Parque":12},"dv":{"ESPARQ INVERSIONES":18}},"San Bartolo|3":{"n":49,"sp":25981000,"sa":3736.7,"sm":345877.0,"bk":[0,0,45,0,4],"yr":{"2026":34},"vi":{"Externa":49},"dv":{"GRUPO SANTA MARÍA":49}},"San Bartolo|2":{"n":30,"sp":13416000,"sa":1927.8,"sm":211856.8,"bk":[0,26,0,4,0],"yr":{"2026":29},"vi":{"Externa":30},"dv":{"GRUPO SANTA MARÍA":30}},"Punta Hermosa|3":{"n":4,"sp":3355000,"sa":381.8,"sm":35149.3,"bk":[0,0,0,0,4],"yr":{},"vi":{"Otra":4},"dv":{"NOI":4}},"Punta Hermosa|2":{"n":2,"sp":1380000,"sa":150.5,"sm":18336.4,"bk":[0,0,0,2,0],"yr":{},"vi":{"Otra":2},"dv":{"NOI":2}},"Punta Hermosa|Estudio":{"n":1,"sp":115000,"sa":39.8,"sm":2889.4,"bk":[1,0,0,0,0],"yr":{},"vi":{"Otra":1},"dv":{"NOI":1}},"Punta Hermosa|1":{"n":1,"sp":545000,"sa":55.3,"sm":9851.8,"bk":[0,0,1,0,0],"yr":{},"vi":{"Otra":1},"dv":{"NOI":1}},"Pueblo Libre|2":{"n":46,"sp":19112309,"sa":2783.2,"sm":317687.7,"bk":[0,39,7,0,0],"yr":{"2026":2,"2027":17},"vi":{"Externa":27,"Interna":19},"dv":{"VERDANT":24,"GRUPO MG":4,"MAKE":17,"CANNY ARQUITECTOS":1}},"Pueblo Libre|1":{"n":178,"sp":65739408,"sa":10494.0,"sm":1123376.2,"bk":[10,166,1,1,0],"yr":{"2026":161,"2027":8},"vi":{"Interna":156,"Externa":22},"dv":{"GRUPO MG":163,"VERDANT":7,"MAKE":8}},"Pueblo Libre|3":{"n":10,"sp":4956155,"sa":741.6,"sm":66786.8,"bk":[0,3,7,0,0],"yr":{"2027":4},"vi":{"Externa":6,"Interna":4},"dv":{"MAKE":4,"GRUPO MG":1,"VERDANT":4,"CANNY ARQUITECTOS":1}},"Miraflores|2":{"n":631,"sp":486278009,"sa":51803.2,"sm":5973940.2,"bk":[0,0,146,262,223],"yr":{"2026":230,"2028":181,"2027":130},"vi":{"Externa":272,"Interna":300,"Otra":57,"Esquina":2},"dv":{"ESPARQ INVERSIONES":30,"EDIFICA":150,"CONFORTA":37,"V&V":12,"INARCO":42,"GRUPO T&C":22,"VIDARQ":24,"CAMBRILS":10,"GRATTO INMOBILIARIA":139,"ALBAMAR":47,"MAKE":43,"URBANA":27,"MARCAN":19,"INMGENIO":3,"GRUPO REYNA":2,"IFI":1,"ARMÓNICA":2,"EE INMOBILIARIA":9,"CANTABRIA":1,"IMAGINA":11}},"Miraflores|1":{"n":455,"sp":276500216,"sa":27992.5,"sm":4621981.2,"bk":[0,96,176,115,68],"yr":{"2026":289,"2028":31,"2027":52},"vi":{"Interna":341,"Externa":85,"Otra":29},"dv":{"ESPARQ INVERSIONES":16,"EDIFICA":262,"V&V":18,"GRUPO T&C":12,"ALBAMAR":56,"CONFORTA":3,"GRATTO INMOBILIARIA":5,"INARCO":14,"URBANA":19,"INMGENIO":14,"MARCAN":15,"INVENT":1,"EE INMOBILIARIA":3,"IMAGINA":17}},"Miraflores|3":{"n":353,"sp":283291115,"sa":32027.9,"sm":3139488.7,"bk":[0,0,0,218,135],"yr":{"2028":173,"2027":46,"2026":112},"vi":{"Externa":298,"Interna":42,"Otra":12,"Esquina":1},"dv":{"CONFORTA":28,"INARCO":12,"VIDARQ":44,"CAMBRILS":17,"ALBAMAR":29,"MAKE":58,"FRANCA":2,"GRATTO INMOBILIARIA":108,"GRUPO T&C":6,"V&V":12,"EDIFICA":1,"ARMÓNICA":9,"EE INMOBILIARIA":5,"CANTABRIA":1,"IMAGINA":21}},"Miraflores|4+":{"n":2,"sp":3464036,"sa":393.3,"sm":17096.1,"bk":[0,0,0,0,2],"yr":{"2028":1},"vi":{"Externa":1,"Interna":1},"dv":{"MAKE":1,"GRUPO REYNA":1}},"Magdalena Del Mar|1":{"n":65,"sp":20892397,"sa":2504.2,"sm":539939.7,"bk":[23,42,0,0,0],"yr":{"2028":24,"2026":37},"vi":{"Interna":29,"Externa":34,"Otra":2},"dv":{"MAKE":24,"GDC":21,"V&V":16,"INVENT":4}},"Magdalena Del Mar|2":{"n":134,"sp":64311150,"sa":7768.5,"sm":1101348.6,"bk":[0,69,50,7,8],"yr":{"2026":96,"2028":28},"vi":{"Otra":5,"Interna":78,"Externa":49,"Parque":2},"dv":{"GDC":54,"MAKE":28,"V&V":42,"IMAGINA":2,"INVENT":8}},"Magdalena Del Mar|3":{"n":97,"sp":57806170,"sa":7154.3,"sm":779454.2,"bk":[0,0,67,21,9],"yr":{"2028":43,"2026":47},"vi":{"Externa":75,"Otra":11,"Interna":11},"dv":{"MAKE":43,"V&V":25,"INVENT":2,"GDC":22,"GRUPO T&C":2,"IMAGINA":3}},"Lince|2":{"n":184,"sp":95614926,"sa":10908.3,"sm":1607709.8,"bk":[0,41,115,27,1],"yr":{"2026":10,"2027":49},"vi":{"Interna":153,"Externa":31},"dv":{"V&V":109,"RESIDENTE":10,"CIUDARIS":16,"GRUPO T&C":38,"EDIFICA":11}},"Lince|3":{"n":44,"sp":33340000,"sa":3681.0,"sm":396258.4,"bk":[0,0,9,9,26],"yr":{"2026":5},"vi":{"Externa":41,"Interna":3},"dv":{"V&V":29,"RESIDENTE":5,"CIUDARIS":10}},"Lince|1":{"n":288,"sp":102625159,"sa":11401.8,"sm":2634336.3,"bk":[99,125,64,0,0],"yr":{"2027":198,"2026":1},"vi":{"Interna":158,"Externa":130},"dv":{"EDIFICA":75,"GRUPO T&C":123,"RESIDENTE":1,"CIUDARIS":89}},"La Victoria|3":{"n":283,"sp":142454832,"sa":19468.1,"sm":2070451.7,"bk":[0,26,238,19,0],"yr":{"2028":37,"2027":94,"2026":63},"vi":{"Interna":121,"Externa":138,"Otra":7,"Parque":17},"dv":{"V&V":83,"GDC":63,"GRUPO LAR":89,"NOI":48}},"La Victoria|2":{"n":442,"sp":185565310,"sa":25420.6,"sm":3230508.8,"bk":[0,380,50,12,0],"yr":{"2028":159,"2027":115,"2026":36},"vi":{"Interna":282,"Externa":105,"Parque":27,"Otra":28},"dv":{"V&V":234,"GRUPO LAR":107,"GDC":36,"URBANA":25,"NOI":40}},"La Victoria|1":{"n":132,"sp":41758426,"sa":5360.8,"sm":1031602.8,"bk":[45,86,1,0,0],"yr":{"2028":57,"2027":34,"2026":1},"vi":{"Interna":94,"Parque":34,"Otra":1,"Externa":3},"dv":{"V&V":76,"GRUPO LAR":40,"GDC":1,"NOI":15}},"Jesús María|2":{"n":223,"sp":122999890,"sa":13656.0,"sm":2003273.7,"bk":[0,41,146,12,24],"yr":{"2026":64},"vi":{"Interna":156,"Externa":65,"Otra":2},"dv":{"V&V":6,"ALBAMAR":27,"CIUDARIS":15,"INVENT":132,"GRUPO MG":43}},"Jesús María|3":{"n":53,"sp":35289844,"sa":4415.4,"sm":427080.5,"bk":[0,0,21,24,8],"yr":{"2026":30},"vi":{"Otra":6,"Externa":32,"Interna":10,"Esquina":5},"dv":{"CIUDARIS":14,"ALBAMAR":18,"GRUPO T&C":2,"INVENT":8,"V&V":11}},"Jesús María|1":{"n":132,"sp":49919482,"sa":5939.5,"sm":1118918.3,"bk":[7,122,3,0,0],"yr":{"2026":38},"vi":{"Externa":18,"Interna":112,"Otra":2},"dv":{"V&V":3,"ALBAMAR":43,"CIUDARIS":2,"INVENT":51,"GRUPO MG":33}},"Chorrillos|2":{"n":214,"sp":74688720,"sa":12039.5,"sm":1327246.2,"bk":[63,132,18,1,0],"yr":{"2027":113},"vi":{"Interna":97,"Otra":7,"Externa":110},"dv":{"GDC":25,"V&V":71,"ALBAMAR":103,"IFI":3,"INVENT":12}},"Chorrillos|3":{"n":135,"sp":57287748,"sa":9439.2,"sm":815825.6,"bk":[0,92,41,0,2],"yr":{"2027":90},"vi":{"Interna":89,"Externa":28,"Otra":9,"Esquina":9},"dv":{"GDC":29,"V&V":78,"INARCO":1,"ALBAMAR":25,"INVENT":2}},"Chorrillos|1":{"n":254,"sp":73272268,"sa":10241.8,"sm":1821016.8,"bk":[135,118,1,0,0],"yr":{"2027":56},"vi":{"Interna":217,"Externa":32,"Otra":5},"dv":{"V&V":25,"ALBAMAR":61,"GDC":154,"INVENT":14}},"Cercado De Lima|2":{"n":435,"sp":152612311,"sa":25403.6,"sm":2649318.9,"bk":[148,206,78,2,1],"yr":{"2027":35,"2026":191},"vi":{"Externa":206,"Interna":156,"Otra":1,"Parque":72},"dv":{"ALBAMAR":280,"GRUPO MG":18,"INVENT":41,"URBANA":1,"CANTABRIA":29,"VERDANT":10,"GRUPO T&C":56}},"Cercado De Lima|1":{"n":340,"sp":89201876,"sa":14611.5,"sm":2127533.3,"bk":[294,42,2,2,0],"yr":{"2027":18,"2026":218},"vi":{"Interna":266,"Externa":41,"Otra":2,"Parque":31},"dv":{"ALBAMAR":202,"GRUPO MG":6,"URBANA":2,"CANTABRIA":6,"GRUPO T&C":124}},"Cercado De Lima|3":{"n":398,"sp":159697843,"sa":26519.0,"sm":2388630.5,"bk":[16,307,73,0,2],"yr":{"2027":9,"2026":11,"2028":174},"vi":{"Externa":93,"Interna":6,"Esquina":19,"Otra":275,"Parque":5},"dv":{"ALBAMAR":101,"GRUPO MG":11,"IMAGINA":265,"INVENT":2,"URBANA":19}},"Cercado De Lima|Estudio":{"n":47,"sp":10699306,"sa":1265.4,"sm":397485.9,"bk":[47,0,0,0,0],"yr":{"2026":47},"vi":{"Interna":47},"dv":{"GRUPO T&C":47}},"Callao|3":{"n":370,"sp":131346000,"sa":24875.3,"sm":1951857.1,"bk":[3,365,2,0,0],"yr":{"2028":281,"2026":83},"vi":{"Externa":54,"Parque":145,"Interna":82,"Otra":89},"dv":{"IMAGINA":370}},"Callao|2":{"n":91,"sp":30000900,"sa":4641.6,"sm":588212.9,"bk":[7,84,0,0,0],"yr":{"2028":91},"vi":{"Externa":58,"Parque":33},"dv":{"IMAGINA":91}},"Callao|1":{"n":1,"sp":364600,"sa":45.1,"sm":8078.9,"bk":[0,1,0,0,0],"yr":{"2028":1},"vi":{"Parque":1},"dv":{"IMAGINA":1}},"Breña|2":{"n":144,"sp":49790810,"sa":8166.1,"sm":879133.9,"bk":[14,130,0,0,0],"yr":{},"vi":{"Interna":87,"Externa":37,"Esquina":20},"dv":{"ALBAMAR":138,"INARCO":6}},"Breña|1":{"n":91,"sp":26487300,"sa":4271.2,"sm":566753.0,"bk":[37,54,0,0,0],"yr":{},"vi":{"Interna":36,"Externa":55},"dv":{"ALBAMAR":91}},"Breña|3":{"n":36,"sp":15214939,"sa":2528.1,"sm":218301.8,"bk":[0,32,3,1,0],"yr":{},"vi":{"Interna":2,"Externa":34},"dv":{"ALBAMAR":34,"INARCO":2}},"Breña|Estudio":{"n":10,"sp":1942700,"sa":277.3,"sm":70047.4,"bk":[10,0,0,0,0],"yr":{},"vi":{"Externa":10},"dv":{"ALBAMAR":10}},"Barranco|3":{"n":25,"sp":15853118,"sa":1924.1,"sm":205974.2,"bk":[0,1,8,15,1],"yr":{"2026":15},"vi":{"Otra":15,"Externa":10},"dv":{"GRUPO T&C":16,"ALBAMAR":8,"INVENT":1}},"Barranco|2":{"n":144,"sp":88027750,"sa":9272.3,"sm":1380720.1,"bk":[0,5,78,44,17],"yr":{"2026":13,"2027":73},"vi":{"Externa":71,"Interna":70,"Otra":3},"dv":{"GRUPO T&C":13,"FRANCA":11,"ALBAMAR":31,"INVENT":13,"EDIFICA":60,"VERDANT":13,"GDC":3}},"Barranco|1":{"n":447,"sp":199251517,"sa":18662.5,"sm":4786852.1,"bk":[4,250,179,13,1],"yr":{"2026":46,"2027":366},"vi":{"Interna":355,"Externa":89,"Otra":3},"dv":{"GRUPO T&C":46,"FRANCA":8,"ALBAMAR":12,"INVENT":12,"EDIFICA":337,"VERDANT":29,"GDC":3}}}};
+/* ============================ ENGINE ============================ */
+const DORMS=['Estudio','1','2','3','4+'];
+const DORM_LABEL={'Estudio':'Estudio','1':'1 dorm','2':'2 dorm','3':'3 dorm','4+':'4+ dorm'};
+const RANGE_LABELS=['< 300k','300–450k','450–600k','600–800k','> 800k'];
+const VISTA_ORDER=[['Interna','cat1'],['Externa','cat2'],['Parque','cat3'],['Esquina','cat4'],['Otra','cat0']];
+const cells=DATA.cells;
+const DISTRITOS=[...new Set(Object.keys(cells).map(k=>k.split('|')[0]))].sort((a,b)=>a.localeCompare(b,'es'));
+
+let fDist='Todos', fDorm='Todos';
+
+const es=n=>Math.round(n).toLocaleString('es-PE');
+const money=n=>'S/ '+es(n);
+const kMoney=n=> n>=1e6? 'S/ '+(n/1e6).toFixed(2)+' M' : 'S/ '+es(Math.round(n/1000)*1000);
+const kShort=n=> !n?'—': n>=1e6? 'S/ '+(n/1e6).toFixed(2)+'M' : 'S/ '+Math.round(n/1000)+'k';
+
+function agg(dist,dorm){
+  const o={n:0,sp:0,sa:0,sm:0,bk:[0,0,0,0,0],yr:{},vi:{},dv:{}};
+  for(const key in cells){
+    const i=key.indexOf('|'), d=key.slice(0,i), dm=key.slice(i+1);
+    if(dist!=='Todos'&&d!==dist) continue;
+    if(dorm!=='Todos'&&dm!==dorm) continue;
+    const c=cells[key];
+    o.n+=c.n;o.sp+=c.sp;o.sa+=c.sa;o.sm+=c.sm;
+    for(let j=0;j<5;j++)o.bk[j]+=c.bk[j];
+    for(const y in c.yr)o.yr[y]=(o.yr[y]||0)+c.yr[y];
+    for(const v in c.vi)o.vi[v]=(o.vi[v]||0)+c.vi[v];
+    for(const k in c.dv)o.dv[k]=(o.dv[k]||0)+c.dv[k];
+  }
+  return o;
+}
+// per-district, honoring dorm only
+function byDistrict(dorm){
+  const m={};
+  for(const key in cells){
+    const i=key.indexOf('|'), d=key.slice(0,i), dm=key.slice(i+1);
+    if(dorm!=='Todos'&&dm!==dorm) continue;
+    (m[d]=m[d]||{n:0,sm:0}); m[d].n+=cells[key].n; m[d].sm+=cells[key].sm;
+  }
+  return Object.entries(m).map(([d,v])=>({d,ppm2:v.sm/v.n,n:v.n})).filter(x=>x.n>=30).sort((a,b)=>b.ppm2-a.ppm2);
+}
+// per-dorm, honoring district only
+function byDorm(dist){
+  const m={}; DORMS.forEach(d=>m[d]={n:0,sp:0});
+  for(const key in cells){
+    const i=key.indexOf('|'), d=key.slice(0,i), dm=key.slice(i+1);
+    if(dist!=='Todos'&&d!==dist) continue;
+    if(!m[dm]) continue;
+    m[dm].n+=cells[key].n; m[dm].sp+=cells[key].sp;
+  }
+  return DORMS.map(d=>({d,n:m[d].n,avg:m[d].n?m[d].sp/m[d].n:0}));
+}
+// per-district mix (all dorms) for gallery
+function districtMix(dist){
+  const bk=[0,0,0,0,0]; let n=0,sp=0,sm=0;
+  for(const key in cells){ if(key.slice(0,key.indexOf('|'))!==dist)continue;
+    const c=cells[key]; n+=c.n; sp+=c.sp; sm+=c.sm; for(let j=0;j<5;j++)bk[j]+=c.bk[j]; }
+  return {n,avg:sp/n,ppm2:sm/n,bk};
+}
+
+/* ============================ TOOLTIP ============================ */
+const tip=document.getElementById('tip');
+function showTip(e,html){tip.innerHTML=html;tip.classList.add('show');moveTip(e);}
+function moveTip(e){const p=12,w=tip.offsetWidth,h=tip.offsetHeight;
+  let x=e.clientX+p,y=e.clientY+p;
+  if(x+w>innerWidth-8)x=e.clientX-w-p; if(y+h>innerHeight-8)y=e.clientY-h-p;
+  tip.style.left=x+'px';tip.style.top=y+'px';}
+function hideTip(){tip.classList.remove('show');}
+function bindTip(el,html){el.addEventListener('mouseenter',e=>showTip(e,html));
+  el.addEventListener('mousemove',moveTip);el.addEventListener('mouseleave',hideTip);}
+
+/* ============================ RENDER ============================ */
+function hbars(container,items,{max,fmt,sel,tip:tipFn}){
+  container.innerHTML='';
+  const mx=max||Math.max(...items.map(i=>i.v),1);
+  items.forEach(it=>{
+    const row=document.createElement('div');row.className='hrow'+(it.d===sel?' sel':'');
+    row.innerHTML=`<span class="lab" title="${it.label}">${it.label}</span>
+      <span class="track"><span class="bar-fill" style="width:${(it.v/mx*100).toFixed(1)}%"></span></span>
+      <span class="val num">${fmt(it.v)}</span>`;
+    if(tipFn)bindTip(row,tipFn(it));
+    container.appendChild(row);
+  });
+}
+function cols(container,items,{fmt,max,ramp,sel,tip:tipFn}){
+  container.innerHTML='';
+  const mx=max||Math.max(...items.map(i=>i.v),1);
+  items.forEach((it,idx)=>{
+    const col=document.createElement('div');col.className='col'+(it.k===sel?' sel':'');
+    const cls=ramp?('r'+(idx+1)):'';
+    col.innerHTML=`<span class="cval num">${fmt(it.v)}</span>
+      <span class="col-track"><span class="col-fill ${cls}" style="height:${it.v>0?Math.max(it.v/mx*100,2):0}%"></span></span>
+      <span class="clab">${it.label}</span>`;
+    if(tipFn)bindTip(col,tipFn(it));
+    container.appendChild(col);
+  });
+}
+
+function render(){
+  const a=agg(fDist,fDorm), base=agg('Todos','Todos');
+  const ppm2=a.n?a.sm/a.n:0, avgP=a.n?a.sp/a.n:0, avgA=a.n?a.sa/a.n:0;
+  const basePpm2=base.sm/base.n;
+  const nDev=Object.keys(a.dv).length;
+
+  // context line
+  document.getElementById('ctx').innerHTML=
+    `Mostrando <b>${es(a.n)}</b> unidades`+
+    (fDist!=='Todos'?` en <b>${fDist}</b>`:` en <b>${DISTRITOS.length}</b> distritos`)+
+    (fDorm!=='Todos'?` · <b>${DORM_LABEL[fDorm]}</b>`:'')+
+    ` · ${nDev} desarrolladoras`;
+
+  // KPIs
+  const diff=((ppm2-basePpm2)/basePpm2*100);
+  const diffTxt=(diff>=0?'+':'')+diff.toFixed(0)+'%';
+  document.getElementById('kpis').innerHTML=`
+    <div class="kpi"><span class="eyebrow">Unidades en stock</span>
+      <span class="val num">${es(a.n)}</span>
+      <span class="sub">${DATA.meta.nProyectos} proyectos · ${DATA.meta.nDesarrolladoras} desarrolladoras</span></div>
+    <div class="kpi"><span class="eyebrow">Precio promedio</span>
+      <span class="val num">${money(avgP)}</span>
+      <span class="sub">mediana del portafolio en soles</span></div>
+    <div class="kpi"><span class="eyebrow">Precio por m²</span>
+      <span class="val num">${money(ppm2)}</span>
+      <span class="sub"><span class="pill ${diff>=0?'up':''}">${diffTxt}</span> vs. promedio Lima</span></div>
+    <div class="kpi"><span class="eyebrow">Área promedio</span>
+      <span class="val num">${avgA.toFixed(0)}<small> m²</small></span>
+      <span class="sub">área total por unidad</span></div>`;
+
+  // Chart A — price/m² by district
+  const bd=byDistrict(fDorm);
+  document.getElementById('noteA').textContent='S/ por m² · '+(fDorm!=='Todos'?DORM_LABEL[fDorm]:'todas las tipologías');
+  hbars(document.getElementById('chDist'),
+    bd.map(x=>({d:x.d,label:x.d,v:x.ppm2,n:x.n})),
+    {fmt:v=>money(v),sel:fDist,
+     tip:it=>`<b>${it.label}</b><br>Precio/m²: <span class="tv">${money(it.v)}</span><br>${es(it.n)} unidades`});
+
+  // Vista composition
+  const totV=Object.values(a.vi).reduce((s,x)=>s+x,0)||1;
+  const comp=document.getElementById('chVista'); comp.innerHTML='';
+  const leg=document.getElementById('legVista'); leg.innerHTML='';
+  VISTA_ORDER.forEach(([name,cls])=>{
+    const v=a.vi[name]||0; if(v===0)return;
+    const pct=v/totV*100;
+    const s=document.createElement('div');s.className='seg '+cls;s.style.width=pct+'%';
+    bindTip(s,`<b>${name}</b><br><span class="tv">${pct.toFixed(1)}%</span> · ${es(v)} unidades`);
+    comp.appendChild(s);
+    const l=document.createElement('div');l.className='lg';
+    l.innerHTML=`<span class="dot ${cls}"></span>${name} <b class="num">${pct.toFixed(0)}%</b>`;
+    leg.appendChild(l);
+  });
+
+  // Dorm stock
+  const dn=byDorm(fDist);
+  cols(document.getElementById('chDormN'),
+    dn.map(x=>({k:x.d,label:DORM_LABEL[x.d].replace(' dorm',''),v:x.n})),
+    {fmt:v=>es(v),sel:fDorm,
+     tip:it=>`<b>${DORM_LABEL[it.k]}</b><br><span class="tv">${es(it.v)}</span> unidades`});
+  // Dorm avg price
+  cols(document.getElementById('chDormP'),
+    dn.map(x=>({k:x.d,label:DORM_LABEL[x.d].replace(' dorm',''),v:x.avg})),
+    {fmt:v=>kShort(v),sel:fDorm,
+     tip:it=>`<b>${DORM_LABEL[it.k]}</b><br>Promedio: <span class="tv">${it.v?money(it.v):'—'}</span>`});
+
+  // Price range (sequential ramp)
+  cols(document.getElementById('chRange'),
+    a.bk.map((v,i)=>({k:i,label:RANGE_LABELS[i],v})),
+    {fmt:v=>es(v),ramp:true,
+     tip:it=>`<b>S/ ${it.label}</b><br><span class="tv">${es(it.v)}</span> unidades · ${(it.v/a.n*100).toFixed(0)}%`});
+
+  // Entrega by year
+  const years=Object.keys(a.yr).sort();
+  cols(document.getElementById('chYear'),
+    years.map(y=>({k:y,label:y,v:a.yr[y]})),
+    {fmt:v=>es(v),sel:null,
+     tip:it=>`Entrega <b>${it.label}</b><br><span class="tv">${es(it.v)}</span> unidades`});
+
+  // Top desarrolladoras
+  const devs=Object.entries(a.dv).sort((x,y)=>y[1]-x[1]).slice(0,8);
+  hbars(document.getElementById('chDev'),
+    devs.map(([d,v])=>({d,label:d,v})),
+    {fmt:v=>es(v),max:devs.length?devs[0][1]:1,
+     tip:it=>`<b>${it.label}</b><br><span class="tv">${es(it.v)}</span> unidades · ${(it.v/a.n*100).toFixed(0)}% del stock`});
+
+  // Gallery — top 6 districts by units (honoring dorm)
+  const rank=byDistrict(fDorm).map(x=>x.d);
+  const counts={}; byDistrict(fDorm).forEach(x=>counts[x.d]=x.n);
+  const top=[...rank].sort((p,q)=>counts[q]-counts[p]).slice(0,6);
+  const gal=document.getElementById('gallery');gal.innerHTML='';
+  top.forEach(d=>{
+    const m=districtMix(d);
+    const bkTot=m.bk.reduce((s,x)=>s+x,0)||1;
+    const seg=m.bk.map((v,i)=>v>0?`<i class="r${i+1}" style="width:${(v/bkTot*100)}%"></i>`:'').join('');
+    const card=document.createElement('div');card.className='dcard'+(d===fDist?' sel':'');
+    card.innerHTML=`
+      <div class="dtop"><span class="dname">${d}</span><span class="dn num">${es(counts[d]||m.n)} und.</span></div>
+      <div class="dstats">
+        <div class="dstat"><div class="dl">Precio prom.</div><div class="dv num">${kMoney(m.avg)}</div></div>
+        <div class="dstat"><div class="dl">S/ / m²</div><div class="dv num">${es(m.ppm2)}</div></div>
+      </div>
+      <div class="mix">${seg}</div>
+      <div class="mixleg">Mezcla por rango de precio</div>`;
+    card.style.cursor='pointer';
+    card.addEventListener('click',()=>{fDist=(fDist===d?'Todos':d);syncControls();render();});
+    gal.appendChild(card);
+  });
+
+  document.getElementById('footcount').innerHTML=`Universo analizado: <b>${es(DATA.meta.total)}</b> unidades · oferta primaria`;
+}
+
+/* ============================ CONTROLS ============================ */
+function syncControls(){
+  document.getElementById('fDist').value=fDist;
+  document.querySelectorAll('#fDorm button').forEach(b=>b.classList.toggle('on',b.dataset.v===fDorm));
+}
+function buildControls(){
+  const sel=document.getElementById('fDist');
+  sel.innerHTML='<option value="Todos">Todos los distritos</option>'+
+    DISTRITOS.map(d=>`<option value="${d}">${d}</option>`).join('');
+  sel.addEventListener('change',()=>{fDist=sel.value;render();});
+  const seg=document.getElementById('fDorm');
+  seg.innerHTML=['Todos',...DORMS].map(d=>
+    `<button data-v="${d}" class="${d==='Todos'?'on':''}">${d==='Todos'?'Todos':DORM_LABEL[d].replace(' dorm','')}</button>`).join('');
+  seg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    fDorm=b.dataset.v;syncControls();render();}));
+  document.getElementById('reset').addEventListener('click',()=>{
+    fDist='Todos';fDorm='Todos';syncControls();render();});
+}
+
+/* ============================ THEME ============================ */
+const tb=document.getElementById('themeBtn');
+tb.addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const sysDark=matchMedia('(prefers-color-scheme:dark)').matches;
+  const now=cur||(sysDark?'dark':'light');
+  document.documentElement.setAttribute('data-theme',now==='dark'?'light':'dark');
+});
+
+/* ============================ FORM ============================ */
+document.getElementById('leadForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const nm=document.getElementById('nm').value.trim();
+  const em=document.getElementById('em').value.trim();
+  const ok=document.getElementById('ok');
+  if(!nm||!/.+@.+\..+/.test(em)){
+    document.getElementById('okmsg').textContent='Completa tu nombre y un correo válido.';
+    ok.style.background='rgba(0,0,0,.18)';ok.classList.add('show');return;
+  }
+  document.getElementById('okmsg').textContent='¡Gracias, '+nm.split(' ')[0]+'! Te enviaremos el informe a '+em+'.';
+  ok.classList.add('show'); e.target.reset();
+});
+
+/* ============================ INIT ============================ */
+buildControls();
+render();
+</script>
