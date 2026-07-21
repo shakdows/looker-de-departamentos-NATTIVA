@@ -2396,7 +2396,7 @@ function fpToggle(el,arr,val){var i=arr.indexOf(val);if(i<0)arr.push(val);else a
 function fpClear(){resetF();buildFilterPanel();var rc=document.getElementById('rc'),go=document.getElementById('fpGo');if(go&&rc)go.textContent='Ver '+rc.textContent;}
 function buildFilterPanel(){
   function esc(s){return (''+s).replace(/'/g,"\\'");}
-  function grp(lab,cnt,chips){return '<div class="fp-grp"><div class="fp-lab">'+lab+(cnt?' <b>'+cnt+'</b>':'')+'</div><div class="fp-chips">'+chips+'</div></div>';}
+  function grp(lab,cnt,chips,wide){return '<div class="fp-grp'+(wide?' wide':'')+'"><div class="fp-lab">'+lab+(cnt?' <b>'+cnt+'</b>':'')+'</div><div class="fp-chips">'+chips+'</div></div>';}
   var distChips=DIST.slice().sort().map(function(d){return '<span class="fp-chip'+(F.dists.indexOf(d)>=0?' on':'')+'" onclick="fpToggle(this,F.dists,\''+esc(d)+'\')">'+d+'</span>';}).join('');
   var devChips=DEV.slice().sort().map(function(d){return '<span class="fp-chip'+(F.devs.indexOf(d)>=0?' on':'')+'" onclick="fpToggle(this,F.devs,\''+esc(d)+'\')">'+d+'</span>';}).join('');
   var dormChips=[[1,'1'],[2,'2'],[3,'3'],[4,'4+']].map(function(o){return '<span class="fp-chip'+(F.dorms.indexOf(o[0])>=0?' on':'')+'" onclick="fpToggle(this,F.dorms,'+o[0]+')">'+o[1]+' dorm.</span>';}).join('');
@@ -2404,8 +2404,8 @@ function buildFilterPanel(){
   var html=''
    +'<div class="fp-head"><h2>Filtros</h2><button class="fp-x" onclick="closeFilters()">×</button></div>'
    +'<div class="fp-body">'
-     +grp('Distritos',F.dists.length?F.dists.length+' sel.':'',distChips)
-     +grp('Desarrolladoras',F.devs.length?F.devs.length+' sel.':'',devChips)
+     +grp('Distritos',F.dists.length?F.dists.length+' sel.':'',distChips,true)
+     +grp('Desarrolladoras',F.devs.length?F.devs.length+' sel.':'',devChips,true)
      +grp('Dormitorios','',dormChips)
      +grp('Entrega','',entChips)
      +'<div class="fp-grp"><div class="fp-lab">Área (m²)</div><div class="fp-range"><input type="number" placeholder="Mín" value="'+(F.amin||'')+'" oninput="F.amin=this.value;fpApply()"><span>—</span><input type="number" placeholder="Máx" value="'+(F.amax||'')+'" oninput="F.amax=this.value;fpApply()"></div></div>'
