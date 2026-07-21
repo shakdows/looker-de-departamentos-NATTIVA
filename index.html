@@ -243,6 +243,7 @@ body:not(.view-sum) #sumView{display:none}
 .cmp.on{transform:none;opacity:1;pointer-events:auto}
 .cmp-head{display:flex;align-items:center;justify-content:space-between;padding:20px clamp(1.2rem,3vw,2rem);border-bottom:1px solid var(--line);background:var(--paper)}
 .cmp-head h2{font-family:var(--serif);font-weight:400;font-size:1.5rem;color:var(--ink)}
+.cmp-sub{font-size:11px;font-weight:800;letter-spacing:.03em;color:var(--em);margin-top:5px;text-transform:uppercase}
 .cmp-body{flex:1;overflow:auto;padding:0}
 .cmp-table{width:100%;border-collapse:collapse;font-size:13px}
 .cmp-table th,.cmp-table td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line2);vertical-align:top}
@@ -1518,49 +1519,86 @@ function render(){
 }
 
 /* ---- compare modal ---- */
+function unitPassesF(u){
+  if(F.dorms.length){var d=u[6],ok=(F.dorms.indexOf(4)>=0&&d>=4)||F.dorms.indexOf(Math.floor(d))>=0||F.dorms.indexOf(d)>=0;if(!ok)return false;}
+  var amin=parseFloat(F.amin)||0,amax=parseFloat(F.amax)||Infinity;
+  if((amin>0||amax<Infinity)&&!(u[4]&&u[4]>=amin&&u[4]<=amax))return false;
+  if(F.ents.length){var ey=entYear(ENT[u[9]]);if(F.ents.indexOf(ey)<0)return false;}
+  if(F.vis&&u[10]!==1)return false;
+  var pmin=parseFloat(F.pmin)||0,pmax=parseFloat(F.pmax)||Infinity;
+  if((pmin>0||pmax<Infinity)&&!(u[8]&&u[8]>=pmin&&u[8]<=pmax))return false;
+  return true;
+}
+function cmpStats(p){
+  var us=p.u.filter(unitPassesF);var filtered=us.length>0;if(!us.length)us=p.u;
+  var soles=[],cuo=[],areas=[],pp=[],dorms={},ents={},vis=false;
+  us.forEach(function(u){
+    if(u[7]===0&&u[8]>=50000)soles.push(u[8]);
+    if(u[11]>=100)cuo.push(u[11]);
+    if(u[4])areas.push(u[4]);
+    if(u[7]===0&&u[8]>=50000&&u[4]>10)pp.push(u[8]/u[4]);
+    dorms[u[6]]=1;var ey=entYear(ENT[u[9]]);if(ey)ents[ey]=1;if(u[10]===1)vis=true;
+  });
+  return {p:p,n:us.length,filtered:filtered,
+    desde:soles.length?Math.min.apply(null,soles):0,
+    hasta:soles.length?Math.max.apply(null,soles):0,
+    cuota:cuo.length?Math.min.apply(null,cuo):0,
+    areaMin:areas.length?Math.min.apply(null,areas):0,
+    areaMax:areas.length?Math.max.apply(null,areas):0,
+    dorms:Object.keys(dorms).map(Number).sort(function(a,b){return a-b;}),
+    ppm:medOf(pp),ents:ents,vis:vis};
+}
 function openCompare(){
   if(CMP.length<2)return;
   var ps=CMP.map(function(i){return P[i];});
-  function areaR(p){var a=p.u.map(function(u){return u[4];}).filter(Boolean);return a.length?(Math.min.apply(null,a)+'–'+Math.max.apply(null,a)+' m²'):'—';}
-  function dormsT(p){var d=p.dorms.filter(function(x){return x>0;});return d.length?d.map(dormLabel).join(', ')+' dorm.':'—';}
-  function entsT(p){var k=Object.keys(p.ents||{});return k.length?k.sort().join(', '):'—';}
+  var S=ps.map(cmpStats);
+  function areaR(s){return s.areaMin?(s.areaMin+'–'+s.areaMax+' m²'):'—';}
+  function dormsT(s){var d=s.dorms.filter(function(x){return x>0;});return d.length?d.map(dormLabel).join(', ')+' dorm.':'—';}
+  function entsT(s){var k=Object.keys(s.ents);return k.length?k.sort().join(', '):'—';}
   var rows=[
-    ['Distrito',function(p){return p.distN;}],
-    ['Desarrolladora',function(p){return p.devN;}],
-    ['Unidades',function(p){return p.u.length;},'max','num'],
-    ['Dormitorios',function(p){return dormsT(p);}],
-    ['Área',function(p){return areaR(p);}],
-    ['Precio desde',function(p){return p.desde;},'min','money'],
-    ['Precio hasta',function(p){return p.hasta;},'max','money'],
-    ['Cuota desde',function(p){return p.cuotaMin;},'min','money'],
-    ['Precio / m²',function(p){return p.ppm2med;},'min','money'],
-    ['Entrega',function(p){return entsT(p);}],
-    ['VIS',function(p){return p.visAny?'Sí':'No';}]
+    ['Distrito',function(s){return s.p.distN;}],
+    ['Desarrolladora',function(s){return s.p.devN;}],
+    ['Unidades',function(s){return s.n;},'max','num'],
+    ['Dormitorios',function(s){return dormsT(s);}],
+    ['Área',function(s){return areaR(s);}],
+    ['Precio desde',function(s){return s.desde;},'min','money'],
+    ['Precio hasta',function(s){return s.hasta;},'max','money'],
+    ['Cuota desde',function(s){return s.cuota;},'min','money'],
+    ['Precio / m²',function(s){return s.ppm;},'min','money'],
+    ['Entrega',function(s){return entsT(s);}],
+    ['VIS',function(s){return s.vis?'Sí':'No';}]
   ];
   function bestIdx(getter,mode){
-    var vals=ps.map(getter).map(function(v,k){return {v:v,k:k};}).filter(function(o){return typeof o.v==='number'&&o.v>0;});
+    var vals=S.map(getter).map(function(v,k){return {v:v,k:k};}).filter(function(o){return typeof o.v==='number'&&o.v>0;});
     if(vals.length<2)return -1;
     vals.sort(function(a,b){return mode==='max'?b.v-a.v:a.v-b.v;});
     return vals[0].k;
   }
-  var head='<th>Característica</th>'+ps.map(function(p){return '<th><div class="cmp-proj">'+projName(p)+'<small>'+p.devN+'</small></div></th>';}).join('');
+  var head='<th>Característica</th>'+S.map(function(s){return '<th><div class="cmp-proj">'+projName(s.p)+'<small>'+s.p.devN+'</small></div></th>';}).join('');
   var body=rows.map(function(row){
     var label=row[0],getter=row[1],mode=row[2],fmt=row[3];
     var best=mode?bestIdx(getter,mode):-1;
-    var cells=ps.map(function(p,k){
-      var v=getter(p);
+    var cells=S.map(function(s,k){
+      var v=getter(s);
       if(typeof v==='number')v=v?(fmt==='money'?pen(v):v.toLocaleString('es-PE')):'—';
       var cls=(k===best&&best>=0)?' class="best"':'';
       return '<td'+cls+'>'+v+'</td>';
     }).join('');
     return '<tr><th>'+label+'</th>'+cells+'</tr>';
   }).join('');
-  var ctaRow='<tr><th></th>'+ps.map(function(p){
-    var msg=encodeURIComponent('Hola NATTIVA, me interesa el proyecto '+p.n+' ('+p.distN+'). Quisiera más información.');
+  var ctaRow='<tr><th></th>'+S.map(function(s){
+    var msg=encodeURIComponent('Hola NATTIVA, me interesa el proyecto '+s.p.n+' ('+s.p.distN+'). Quisiera más información.');
     return '<td><a class="cmp-wa" href="https://wa.me/51907528914?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a></td>';
   }).join('')+'</tr>';
+  var fparts=[];
+  if(F.dorms.length)fparts.push(F.dorms.map(function(d){return d===4?'4+ dorm.':dormLabel(d)+' dorm.';}).join(', '));
+  var famin=parseFloat(F.amin)||0,famax=parseFloat(F.amax)||0;if(famin||famax)fparts.push('Área '+(famin||'0')+'–'+(famax||'∞')+' m²');
+  var fpmin=parseFloat(F.pmin)||0,fpmax=parseFloat(F.pmax)||0;if(fpmin||fpmax)fparts.push('Precio '+(fpmin?pen(fpmin):'0')+'–'+(fpmax?pen(fpmax):'∞'));
+  if(F.ents.length)fparts.push('Entrega '+F.ents.join(', '));
+  if(F.vis)fparts.push('Con VIS');
+  var sub=fparts.length?'<div class="cmp-sub">Comparando solo: '+fparts.join(' · ')+'</div>':'';
   document.getElementById('cmp').innerHTML=
-    '<div class="cmp-head"><h2>Comparar proyectos</h2><button class="dd-close" style="position:static;background:var(--line2);color:var(--ink2)" onclick="closeCompare()">×</button></div>'
+    '<div class="cmp-head"><div><h2>Comparar proyectos</h2>'+sub+'</div><button class="dd-close" style="position:static;background:var(--line2);color:var(--ink2)" onclick="closeCompare()">×</button></div>'
     +'<div class="cmp-body"><table class="cmp-table"><thead><tr>'+head+'</tr></thead><tbody>'+body+ctaRow+'</tbody></table></div>';
   document.getElementById('cmpbg').classList.add('on');
   document.getElementById('cmp').classList.add('on');
