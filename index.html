@@ -338,31 +338,42 @@ body:not(.view-sum) #sumView{display:none}
 .rpdf svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.9}
 @media(max-width:680px){.rpdf span{display:none}}
 #resumen{display:none}
-.rz-wrap{max-width:900px;margin:0 auto;padding:34px 40px;color:#141619;font-family:var(--sans)}
-.rz-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid var(--em);padding-bottom:16px;margin-bottom:6px}
-.rz-brand{font-family:var(--serif);font-size:2rem;color:var(--em);line-height:1}
-.rz-brand small{display:block;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
-.rz-meta{text-align:right;font-size:11px;font-weight:700;color:var(--muted);line-height:1.6}
-.rz-title{font-family:var(--serif);font-size:1.35rem;color:var(--ink);margin:20px 0 4px}
-.rz-sub{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:22px}
-.rz-dev{margin-bottom:22px;break-inside:avoid}
-.rz-dev-h{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:4px}
-.rz-dev-n{font-size:14px;font-weight:800;color:var(--ink);letter-spacing:.02em;text-transform:uppercase}
-.rz-dev-c{font-size:11px;font-weight:700;color:var(--muted)}
-.rz-tbl{width:100%;border-collapse:collapse;font-size:12px}
-.rz-tbl th{text-align:left;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 8px;border-bottom:1px solid var(--line2)}
-.rz-tbl td{padding:9px 8px;border-bottom:1px solid var(--line2);color:var(--ink2);font-weight:600;vertical-align:top}
+.rz-wrap{max-width:980px;margin:0 auto;padding:46px 52px 40px;color:var(--ink2);font-family:var(--sans);font-size:11.5px;line-height:1.5}
+.rz-head{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:22px;margin-bottom:30px;border-bottom:1px solid var(--ink)}
+.rz-brand{font-family:var(--serif);font-size:2.5rem;font-weight:400;color:var(--em);line-height:.92;letter-spacing:.005em}
+.rz-brand::after{content:"";display:block;width:44px;height:2px;background:var(--em);margin-top:12px}
+.rz-brand small{display:block;font-family:var(--sans);font-size:9px;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin-top:11px}
+.rz-meta{text-align:right;font-size:10px;font-weight:700;letter-spacing:.02em;color:var(--muted);line-height:1.8}
+.rz-meta b{color:var(--ink);font-weight:800}
+.rz-title{font-family:var(--serif);font-size:1.8rem;font-weight:400;color:var(--ink);margin:0 0 7px;letter-spacing:.005em}
+.rz-sub{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);margin-bottom:34px}
+.rz-sub b{color:var(--em);font-weight:800}
+.rz-dev{margin-bottom:30px;break-inside:avoid}
+.rz-dev-h{display:flex;align-items:baseline;gap:13px;margin-bottom:2px}
+.rz-dev-n{font-family:var(--serif);font-size:1.2rem;font-weight:500;color:var(--ink);letter-spacing:.01em;white-space:nowrap}
+.rz-dev-c{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.rz-dev-h::after{content:"";flex:1;height:1px;background:var(--line);align-self:center}
+.rz-tbl{width:100%;border-collapse:collapse;font-size:11px;margin-top:9px}
+.rz-tbl thead th{text-align:left;font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 11px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
 .rz-tbl th.r,.rz-tbl td.r{text-align:right;font-variant-numeric:tabular-nums}
+.rz-tbl tbody td{padding:9px 11px;border-bottom:1px solid var(--line2);color:var(--ink2);font-weight:600;white-space:nowrap;vertical-align:middle}
+.rz-tbl tbody tr:nth-child(even) td{background:var(--paper2)}
 .rz-proj{font-weight:800;color:var(--ink)}
+.rz-dist{color:var(--muted);font-weight:600}
 .rz-price{font-weight:800;color:var(--em)}
-.rz-foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:700;color:var(--muted)}
-.rz-foot b{color:var(--em)}
-.rz-empty{padding:40px;text-align:center;color:var(--muted);font-weight:700}
+.rz-foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint)}
+.rz-foot b{color:var(--em);font-weight:800}
+.rz-empty{padding:54px;text-align:center;color:var(--muted);font-weight:700}
 @media print{
-  @page{margin:1.1cm}
+  @page{margin:1.2cm}
   body.printing-res{background:#fff!important}
   body.printing-res>*:not(#resumen){display:none!important}
   body.printing-res #resumen{display:block!important;position:static!important}
+  body.printing-res .rz-wrap{max-width:none!important;padding:0!important}
+  body.printing-res .rz-dev-n{font-size:1.05rem}
+  body.printing-res .rz-tbl{font-size:9.5px}
+  body.printing-res .rz-tbl thead th{font-size:7.5px;padding:0 8px 7px}
+  body.printing-res .rz-tbl tbody td{padding:7px 8px}
   body.printing-res *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
 .dd-sec-t{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:8px}
@@ -2258,7 +2269,7 @@ function renderDevs(){
           var precio=it.desde?(pen(it.desde)+(it.hasta&&it.hasta>it.desde?' – '+pen(it.hasta):'')):'—';
           var dorm=it.dorm===0?'Estudio':(dormLabel(it.dorm)+' dorm.');
           var ent=Object.keys(it.ents).length?Object.keys(it.ents).sort().join(', '):'—';
-          return '<tr><td class="rz-proj">'+projName(it.p)+'</td><td>'+it.distN+'</td><td>'+dorm+'</td><td class="r">'+it.count+'</td><td class="r">'+arTxt+'</td><td class="r rz-price">'+precio+'</td><td class="r">'+(it.cuotaMin?pen(it.cuotaMin):'—')+'</td><td>'+ent+'</td></tr>';
+          return '<tr><td class="rz-proj">'+projName(it.p)+'</td><td class="rz-dist">'+it.distN+'</td><td>'+dorm+'</td><td class="r">'+it.count+'</td><td class="r">'+arTxt+'</td><td class="r rz-price">'+precio+'</td><td class="r">'+(it.cuotaMin?pen(it.cuotaMin):'—')+'</td><td>'+ent+'</td></tr>';
         }).join('');
         return '<div class="rz-dev"><div class="rz-dev-h"><span class="rz-dev-n">'+dev+'</span><span class="rz-dev-c">'+list.length+' proyecto'+(list.length===1?'':'s')+' · '+count+' unidades</span></div>'
           +'<table class="rz-tbl"><thead><tr><th>Proyecto</th><th>Distrito</th><th>Tipo</th><th class="r">Unid.</th><th class="r">Área</th><th class="r">Precio desde–hasta</th><th class="r">Cuota/mes</th><th>Entrega</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
