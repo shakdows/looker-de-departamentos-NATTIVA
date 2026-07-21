@@ -947,7 +947,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
       <button class="chip" data-d="1" onclick="togDorm(this,1)">1</button>
       <button class="chip" data-d="2" onclick="togDorm(this,2)">2</button>
       <button class="chip" data-d="3" onclick="togDorm(this,3)">3</button>
-      <button class="chip" data-d="4" onclick="togDorm(this,4)">4+</button>
+      <button class="chip" data-d="4" onclick="togDorm(this,4)">4</button>
+      <button class="chip" data-d="5" onclick="togDorm(this,5)">5</button>
     </div>
     <div class="fchips">
       <span class="flab">Entrega</span>
@@ -1383,7 +1384,7 @@ function syncBar(){
   var co=document.getElementById('copp');if(co)co.classList.toggle('on',!!F.opp);
 }
 
-function dormSel(d){return F.dorms.some(function(n){if(n===4)return d>=4||d===3.5;return d===n||d===n-0.5||d===n+0.5;});}
+function dormSel(d){return F.dorms.some(function(n){return d===n||d===n-0.5||d===n+0.5;});}
 function matchDorm(p){if(!F.dorms.length)return true;return p.dorms.some(dormSel);}
 function matchEnt(p){if(!F.ents.length)return true;return F.ents.some(function(e){return p.ents[e];});}
 
@@ -1592,7 +1593,7 @@ function openCompare(){
     return '<td><a class="cmp-wa" href="https://wa.me/51907528914?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a></td>';
   }).join('')+'</tr>';
   var fparts=[];
-  if(F.dorms.length)fparts.push(F.dorms.map(function(d){return d===4?'4+ dorm.':dormLabel(d)+' dorm.';}).join(', '));
+  if(F.dorms.length)fparts.push(F.dorms.map(function(d){return dormLabel(d)+' dorm.';}).join(', '));
   var famin=parseFloat(F.amin)||0,famax=parseFloat(F.amax)||0;if(famin||famax)fparts.push('Área '+(famin||'0')+'–'+(famax||'∞')+' m²');
   var fpmin=parseFloat(F.pmin)||0,fpmax=parseFloat(F.pmax)||0;if(fpmin||fpmax)fparts.push('Precio '+(fpmin?pen(fpmin):'0')+'–'+(fpmax?pen(fpmax):'∞'));
   if(F.ents.length)fparts.push('Entrega '+F.ents.join(', '));
@@ -2364,7 +2365,7 @@ function renderDevs(){
     if(usingSel)items=items.filter(function(it){return CMP.indexOf(it._i)>=0;});
     var parts=[];
     if(usingSel)parts.push('Selección de '+CMP.length+' proyecto'+(CMP.length===1?'':'s'));
-    if(F.dorms.length)parts.push(F.dorms.map(function(d){return d===4?'4+ dorm.':(d===0?'Estudio':dormLabel(d)+' dorm.');}).join(', '));
+    if(F.dorms.length)parts.push(F.dorms.map(function(d){return d===0?'Estudio':dormLabel(d)+' dorm.';}).join(', '));
     if(F.dists.length)parts.push(F.dists.length<=3?F.dists.join(', '):F.dists.length+' distritos');
     if(F.devs.length)parts.push(F.devs.length<=3?F.devs.join(', '):F.devs.length+' desarrolladoras');
     var amin=parseFloat(F.amin)||0,amax=parseFloat(F.amax)||0;
@@ -2447,7 +2448,7 @@ function buildFilterPanel(){
   function grp(lab,cnt,chips,wide){return '<div class="fp-grp'+(wide?' wide':'')+'"><div class="fp-lab">'+lab+(cnt?' <b>'+cnt+'</b>':'')+'</div><div class="fp-chips">'+chips+'</div></div>';}
   var distChips=DIST.slice().sort().map(function(d){return '<span class="fp-chip'+(F.dists.indexOf(d)>=0?' on':'')+'" onclick="fpToggle(this,F.dists,\''+esc(d)+'\')">'+d+'</span>';}).join('');
   var devChips=DEV.slice().sort().map(function(d){return '<span class="fp-chip'+(F.devs.indexOf(d)>=0?' on':'')+'" onclick="fpToggle(this,F.devs,\''+esc(d)+'\')">'+d+'</span>';}).join('');
-  var dormChips=[[1,'1'],[2,'2'],[3,'3'],[4,'4+']].map(function(o){return '<span class="fp-chip'+(F.dorms.indexOf(o[0])>=0?' on':'')+'" onclick="fpToggle(this,F.dorms,'+o[0]+')">'+o[1]+' dorm.</span>';}).join('');
+  var dormChips=[[1,'1'],[2,'2'],[3,'3'],[4,'4'],[5,'5']].map(function(o){return '<span class="fp-chip'+(F.dorms.indexOf(o[0])>=0?' on':'')+'" onclick="fpToggle(this,F.dorms,'+o[0]+')">'+o[1]+' dorm.</span>';}).join('');
   var entChips=[['INM','Inmediata'],['2026','2026'],['2027','2027'],['2028','2028']].map(function(o){return '<span class="fp-chip'+(F.ents.indexOf(o[0])>=0?' on':'')+'" onclick="fpToggle(this,F.ents,\''+o[0]+'\')">'+o[1]+'</span>';}).join('');
   var html=''
    +'<div class="fp-head"><h2>Filtros</h2><button class="fp-x" onclick="closeFilters()">×</button></div>'
