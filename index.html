@@ -332,6 +332,39 @@ body:not(.view-sum) #sumView{display:none}
   body.printing .urow .ar{display:none!important}
   body.printing *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
+/* ===== Botón + hoja de resumen para cliente ===== */
+.rpdf{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 15px;border-radius:9px;background:var(--em);color:#fff;font-weight:700;font-size:12.5px;border:none;cursor:pointer;white-space:nowrap;transition:filter .15s}
+.rpdf:hover{filter:brightness(1.08)}
+.rpdf svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.9}
+@media(max-width:680px){.rpdf span{display:none}}
+#resumen{display:none}
+.rz-wrap{max-width:900px;margin:0 auto;padding:34px 40px;color:#141619;font-family:var(--sans)}
+.rz-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid var(--em);padding-bottom:16px;margin-bottom:6px}
+.rz-brand{font-family:var(--serif);font-size:2rem;color:var(--em);line-height:1}
+.rz-brand small{display:block;font-family:var(--sans);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.rz-meta{text-align:right;font-size:11px;font-weight:700;color:var(--muted);line-height:1.6}
+.rz-title{font-family:var(--serif);font-size:1.35rem;color:var(--ink);margin:20px 0 4px}
+.rz-sub{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:22px}
+.rz-dev{margin-bottom:22px;break-inside:avoid}
+.rz-dev-h{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:4px}
+.rz-dev-n{font-size:14px;font-weight:800;color:var(--ink);letter-spacing:.02em;text-transform:uppercase}
+.rz-dev-c{font-size:11px;font-weight:700;color:var(--muted)}
+.rz-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.rz-tbl th{text-align:left;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 8px;border-bottom:1px solid var(--line2)}
+.rz-tbl td{padding:9px 8px;border-bottom:1px solid var(--line2);color:var(--ink2);font-weight:600;vertical-align:top}
+.rz-tbl th.r,.rz-tbl td.r{text-align:right;font-variant-numeric:tabular-nums}
+.rz-proj{font-weight:800;color:var(--ink)}
+.rz-price{font-weight:800;color:var(--em)}
+.rz-foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:700;color:var(--muted)}
+.rz-foot b{color:var(--em)}
+.rz-empty{padding:40px;text-align:center;color:var(--muted);font-weight:700}
+@media print{
+  @page{margin:1.1cm}
+  body.printing-res{background:#fff!important}
+  body.printing-res>*:not(#resumen){display:none!important}
+  body.printing-res #resumen{display:block!important;position:static!important}
+  body.printing-res *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
 .dd-sec-t{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:8px}
 .dd-sec-t::before{content:'';width:18px;height:1.5px;background:var(--gold)}
 .dd-map{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);height:230px;background:var(--paper2)}
@@ -888,6 +921,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
       <option value="ppm">Precio / m²: menor a mayor</option>
       <option value="name">Nombre A–Z</option>
     </select>
+    <button class="rpdf" onclick="descargarResumen()" title="Genera un PDF con lo que tienes filtrado, agrupado por inmobiliaria"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4v-7h16v7h-2M8 14h8v8H8z"/></svg><span>Resumen PDF</span></button>
   </div>
 </div>
 
@@ -904,6 +938,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
 
 <div class="ddbg" id="ddbg" onclick="if(event.target.id=='ddbg')closeDD()"></div>
 <aside class="dd" id="dd" aria-hidden="true"></aside>
+
+<div id="resumen" aria-hidden="true"></div>
 
 <section id="bizView">
   <div class="bz-hero"><div class="bz-in">
@@ -2188,6 +2224,64 @@ function renderDevs(){
     syncCmpUI();
   };
   window.render=render;
+
+  window.descargarResumen=function(){
+    var items=filteredItems();
+    var parts=[];
+    if(F.dorms.length)parts.push(F.dorms.map(function(d){return d===4?'4+ dorm.':(d===0?'Estudio':dormLabel(d)+' dorm.');}).join(', '));
+    if(F.dist)parts.push(F.dist);
+    if(F.dev)parts.push(F.dev);
+    var amin=parseFloat(F.amin)||0,amax=parseFloat(F.amax)||0;
+    if(amin||amax)parts.push('Área '+(amin||'0')+'–'+(amax||'∞')+' m²');
+    var pmin=parseFloat(F.pmin)||0,pmax=parseFloat(F.pmax)||0;
+    if(pmin||pmax)parts.push('Precio '+(pmin?pen(pmin):'0')+'–'+(pmax?pen(pmax):'∞'));
+    if(F.ents.length)parts.push('Entrega '+F.ents.join(', '));
+    if(F.vis)parts.push('Con VIS');
+    if(F.q)parts.push('«'+F.q+'»');
+    var subtitle=parts.length?parts.join(' · '):'Todo el portafolio';
+
+    var groups={};
+    items.forEach(function(it){(groups[it.devN]=groups[it.devN]||[]).push(it);});
+    var devNames=Object.keys(groups).sort();
+    var totalU=items.reduce(function(a,it){return a+it.count;},0);
+
+    var body;
+    if(!devNames.length){
+      body='<div class="rz-empty">No hay resultados con los filtros actuales. Ajusta los filtros e inténtalo de nuevo.</div>';
+    }else{
+      body=devNames.map(function(dev){
+        var list=groups[dev].slice().sort(function(a,b){return (a.desde||1e12)-(b.desde||1e12);});
+        var count=list.reduce(function(a,it){return a+it.count;},0);
+        var rows=list.map(function(it){
+          var areas=it.units?it.units.map(function(u){return u[4];}).filter(Boolean):[];
+          var arTxt=areas.length?(Math.min.apply(null,areas)+(Math.max.apply(null,areas)>Math.min.apply(null,areas)?'–'+Math.max.apply(null,areas):'')+' m²'):'—';
+          var precio=it.desde?(pen(it.desde)+(it.hasta&&it.hasta>it.desde?' – '+pen(it.hasta):'')):'—';
+          var dorm=it.dorm===0?'Estudio':(dormLabel(it.dorm)+' dorm.');
+          var ent=Object.keys(it.ents).length?Object.keys(it.ents).sort().join(', '):'—';
+          return '<tr><td class="rz-proj">'+projName(it.p)+'</td><td>'+it.distN+'</td><td>'+dorm+'</td><td class="r">'+it.count+'</td><td class="r">'+arTxt+'</td><td class="r rz-price">'+precio+'</td><td class="r">'+(it.cuotaMin?pen(it.cuotaMin):'—')+'</td><td>'+ent+'</td></tr>';
+        }).join('');
+        return '<div class="rz-dev"><div class="rz-dev-h"><span class="rz-dev-n">'+dev+'</span><span class="rz-dev-c">'+list.length+' proyecto'+(list.length===1?'':'s')+' · '+count+' unidades</span></div>'
+          +'<table class="rz-tbl"><thead><tr><th>Proyecto</th><th>Distrito</th><th>Tipo</th><th class="r">Unid.</th><th class="r">Área</th><th class="r">Precio desde–hasta</th><th class="r">Cuota/mes</th><th>Entrega</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+      }).join('');
+    }
+
+    var d=new Date();
+    var meses=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    var fecha=d.getDate()+' '+meses[d.getMonth()]+' '+d.getFullYear();
+    document.getElementById('resumen').innerHTML=
+      '<div class="rz-wrap">'
+      +'<div class="rz-head"><div class="rz-brand">NATTIVA<small>Portafolio de departamentos · Lima</small></div>'
+      +'<div class="rz-meta">'+devNames.length+' inmobiliaria'+(devNames.length===1?'':'s')+'<br>'+items.length+' tipos · '+totalU.toLocaleString('es-PE')+' unidades<br>'+fecha+'</div></div>'
+      +'<div class="rz-title">Resumen para el cliente</div>'
+      +'<div class="rz-sub">Filtros aplicados: '+subtitle+'</div>'
+      +body
+      +'<div class="rz-foot"><span>Elaborado por NATTIVA · Inteligencia inmobiliaria</span><span>Consultas: <b>WhatsApp +51 907 528 914</b></span></div>'
+      +'</div>';
+    document.body.classList.add('printing-res');
+    window.print();
+    setTimeout(function(){document.body.classList.remove('printing-res');},600);
+  };
+
   if(document.getElementById('grid'))render();
 })();
 </script>
