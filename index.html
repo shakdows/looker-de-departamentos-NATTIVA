@@ -1521,38 +1521,47 @@ function render(){
 function openCompare(){
   if(CMP.length<2)return;
   var ps=CMP.map(function(i){return P[i];});
-  var money=function(u,v){return v?(u[7]===1?'US$ '+v.toLocaleString('en-US'):pen(v)):'—';};
-  var cols=[
-    ['Unidad',function(u){return (u[0]||'—')+(u[1]?' · '+u[1]:'');},'l'],
-    ['Dorm.',function(u){return dormLabel(u[6]);},'l'],
-    ['Á. techada',function(u){return u[2]?u[2]+' m²':'—';},'r'],
-    ['Á. libre',function(u){return u[3]?u[3]+' m²':'—';},'r'],
-    ['Á. total',function(u){return u[4]?u[4]+' m²':'—';},'r'],
-    ['Vista',function(u){return VISTA[u[5]]||'—';},'l'],
-    ['Entrega',function(u){return ENT[u[9]]||'—';},'l'],
-    ['VIS',function(u){return u[10]===1?'Sí':(u[10]===0?'No':'—');},'l'],
-    ['Banco',function(u){return BANCO[u[12]]||'—';},'l'],
-    ['Cuota/mes',function(u){return money(u,u[11]);},'r'],
-    ['Precio',function(u){return money(u,u[8]);},'r']
+  function areaR(p){var a=p.u.map(function(u){return u[4];}).filter(Boolean);return a.length?(Math.min.apply(null,a)+'–'+Math.max.apply(null,a)+' m²'):'—';}
+  function dormsT(p){var d=p.dorms.filter(function(x){return x>0;});return d.length?d.map(dormLabel).join(', ')+' dorm.':'—';}
+  function entsT(p){var k=Object.keys(p.ents||{});return k.length?k.sort().join(', '):'—';}
+  var rows=[
+    ['Distrito',function(p){return p.distN;}],
+    ['Desarrolladora',function(p){return p.devN;}],
+    ['Unidades',function(p){return p.u.length;},'max','num'],
+    ['Dormitorios',function(p){return dormsT(p);}],
+    ['Área',function(p){return areaR(p);}],
+    ['Precio desde',function(p){return p.desde;},'min','money'],
+    ['Precio hasta',function(p){return p.hasta;},'max','money'],
+    ['Cuota desde',function(p){return p.cuotaMin;},'min','money'],
+    ['Precio / m²',function(p){return p.ppm2med;},'min','money'],
+    ['Entrega',function(p){return entsT(p);}],
+    ['VIS',function(p){return p.visAny?'Sí':'No';}]
   ];
-  var head='<tr>'+cols.map(function(c){return '<th class="'+(c[2]==='r'?'r':'')+'">'+c[0]+'</th>';}).join('')+'</tr>';
-  var sections=ps.map(function(p){
-    var us=p.u.slice().sort(function(a,b){return (a[6]||0)-(b[6]||0)||(a[4]||0)-(b[4]||0);});
-    var rows=us.map(function(u){
-      return '<tr>'+cols.map(function(c){return '<td class="'+(c[2]==='r'?'r':'')+'">'+c[1](u)+'</td>';}).join('')+'</tr>';
+  function bestIdx(getter,mode){
+    var vals=ps.map(getter).map(function(v,k){return {v:v,k:k};}).filter(function(o){return typeof o.v==='number'&&o.v>0;});
+    if(vals.length<2)return -1;
+    vals.sort(function(a,b){return mode==='max'?b.v-a.v:a.v-b.v;});
+    return vals[0].k;
+  }
+  var head='<th>Característica</th>'+ps.map(function(p){return '<th><div class="cmp-proj">'+projName(p)+'<small>'+p.devN+'</small></div></th>';}).join('');
+  var body=rows.map(function(row){
+    var label=row[0],getter=row[1],mode=row[2],fmt=row[3];
+    var best=mode?bestIdx(getter,mode):-1;
+    var cells=ps.map(function(p,k){
+      var v=getter(p);
+      if(typeof v==='number')v=v?(fmt==='money'?pen(v):v.toLocaleString('es-PE')):'—';
+      var cls=(k===best&&best>=0)?' class="best"':'';
+      return '<td'+cls+'>'+v+'</td>';
     }).join('');
-    var msg=encodeURIComponent('Hola NATTIVA, me interesa el proyecto '+p.n+' ('+p.distN+'). Quisiera más información.');
-    var meta='<div class="cmpu-meta">'+p.distN+' · '+p.devN+' · '+p.u.length+' unidad'+(p.u.length===1?'':'es')
-      +(p.desde?' · desde '+pen(p.desde):'')+(p.hasta?' · hasta '+pen(p.hasta):'')+'</div>';
-    return '<div class="cmpu-sec">'
-      +'<div class="cmpu-head"><div class="cmpu-proj">'+projName(p)+meta+'</div>'
-      +'<a class="cmp-wa" href="https://wa.me/51907528914?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a></div>'
-      +'<div class="cmpu-tablewrap"><table class="cmpu-table"><thead>'+head+'</thead><tbody>'+rows+'</tbody></table></div>'
-    +'</div>';
+    return '<tr><th>'+label+'</th>'+cells+'</tr>';
   }).join('');
+  var ctaRow='<tr><th></th>'+ps.map(function(p){
+    var msg=encodeURIComponent('Hola NATTIVA, me interesa el proyecto '+p.n+' ('+p.distN+'). Quisiera más información.');
+    return '<td><a class="cmp-wa" href="https://wa.me/51907528914?text='+msg+'" target="_blank" rel="noopener">WhatsApp</a></td>';
+  }).join('')+'</tr>';
   document.getElementById('cmp').innerHTML=
-    '<div class="cmp-head"><h2>Comparar proyectos · detalle por unidad</h2><button class="dd-close" style="position:static;background:var(--line2);color:var(--ink2)" onclick="closeCompare()">×</button></div>'
-    +'<div class="cmp-body">'+sections+'</div>';
+    '<div class="cmp-head"><h2>Comparar proyectos</h2><button class="dd-close" style="position:static;background:var(--line2);color:var(--ink2)" onclick="closeCompare()">×</button></div>'
+    +'<div class="cmp-body"><table class="cmp-table"><thead><tr>'+head+'</tr></thead><tbody>'+body+ctaRow+'</tbody></table></div>';
   document.getElementById('cmpbg').classList.add('on');
   document.getElementById('cmp').classList.add('on');
 }
