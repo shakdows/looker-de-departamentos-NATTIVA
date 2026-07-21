@@ -332,6 +332,66 @@ body:not(.view-sum) #sumView{display:none}
   body.printing .urow .ar{display:none!important}
   body.printing *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
+/* ===== Botón + hoja de resumen para cliente ===== */
+.rpdf{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 15px;border-radius:9px;background:var(--em);color:#fff;font-weight:700;font-size:12.5px;border:none;cursor:pointer;white-space:nowrap;transition:filter .15s}
+.rpdf:hover{filter:brightness(1.08)}
+.rpdf svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.9}
+@media(max-width:680px){.rpdf span{display:none}}
+#resumen{display:none}
+.rz-wrap{max-width:1000px;margin:0 auto;padding:0 0 42px;color:var(--ink2);font-family:var(--sans);font-size:11.5px;line-height:1.5;background:#fff}
+.rz-topline{height:5px;background:linear-gradient(90deg,var(--emd),var(--em) 55%,var(--gold))}
+.rz-head{display:flex;justify-content:space-between;align-items:center;padding:26px 54px 20px}
+.rz-brand{display:flex;align-items:center;gap:17px}
+.rz-logo{height:40px;width:auto;display:block}
+.rz-wordmark{font-family:var(--serif);font-size:2rem;color:var(--em)}
+.rz-tag{font-size:8px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--faint);border-left:1px solid var(--line);padding-left:17px;line-height:1.4}
+.rz-meta{text-align:right;font-size:10px;font-weight:700;letter-spacing:.03em;color:var(--muted);line-height:1.8}
+.rz-meta b{color:var(--ink);font-weight:800;letter-spacing:.02em}
+.rz-cover{padding:20px 54px 30px;border-top:1px solid var(--line);border-bottom:1.5px solid var(--ink);margin-bottom:32px}
+.rz-kicker{font-size:9.5px;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--em);margin-bottom:14px}
+.rz-title{font-family:var(--serif);font-size:2.7rem;font-weight:400;color:var(--ink);line-height:1;letter-spacing:.004em;margin:0 0 20px}
+.rz-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.rz-chip{font-size:9.5px;font-weight:800;letter-spacing:.05em;color:var(--emd);background:var(--emsoft);border:1px solid #c8102e2b;padding:6px 13px;border-radius:20px;text-transform:uppercase}
+.rz-stats{display:flex;gap:34px}
+.rz-stat b{display:block;font-family:var(--serif);font-size:1.6rem;font-weight:500;color:var(--ink);line-height:1}
+.rz-stat span{font-size:8.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.rz-dev{padding:0 54px;margin-bottom:36px;break-inside:avoid}
+.rz-dev-h{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.rz-idx{font-family:var(--serif);font-size:.95rem;font-weight:600;color:var(--em)}
+.rz-dev-n{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--ink);letter-spacing:.01em;white-space:nowrap}
+.rz-dev-c{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.rz-dev-h::after{content:"";flex:1;height:1px;background:var(--line);align-self:center}
+.rz-tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:12px}
+.rz-tbl thead th{text-align:left;font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 12px 11px;border-bottom:1px solid var(--line);white-space:nowrap}
+.rz-tbl th.r,.rz-tbl td.r{text-align:right;font-variant-numeric:tabular-nums}
+.rz-tbl tbody td{padding:13px 12px;border-bottom:1px solid var(--line2);color:var(--ink2);font-weight:600;white-space:nowrap;vertical-align:middle}
+.rz-tbl tbody tr:nth-child(even) td{background:var(--paper2)}
+.rz-proj{font-weight:800;color:var(--ink)}
+.rz-dist{color:var(--muted);font-weight:600}
+.rz-price{font-weight:800;color:var(--em)}
+.rz-foot{margin:36px 54px 0;padding:20px 24px;background:var(--ink);border-radius:13px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.rz-foot-l{font-family:var(--serif);font-size:1.15rem;color:#fff;line-height:1}
+.rz-foot-l small{display:block;font-family:var(--sans);font-size:8px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:5px}
+.rz-foot-r{text-align:right;font-size:10px;font-weight:700;color:rgba(255,255,255,.82);line-height:1.7}
+.rz-foot-r b{color:#fff;font-weight:800}
+.rz-fine{padding:14px 54px 0;font-size:8px;font-weight:600;color:var(--faint);line-height:1.55;letter-spacing:.01em}
+.rz-empty{padding:54px;text-align:center;color:var(--muted);font-weight:700}
+@media print{
+  @page{margin:1.7cm 1.6cm}
+  body.printing-res{background:#fff!important}
+  body.printing-res>*:not(#resumen){display:none!important}
+  body.printing-res #resumen{display:block!important;position:static!important}
+  body.printing-res .rz-wrap{max-width:none!important}
+  body.printing-res .rz-head,body.printing-res .rz-cover,body.printing-res .rz-dev,body.printing-res .rz-fine{padding-left:10px!important;padding-right:10px!important}
+  body.printing-res .rz-foot{margin-left:10px!important;margin-right:10px!important}
+  body.printing-res .rz-title{font-size:2.2rem}
+  body.printing-res .rz-dev-n{font-size:1.08rem}
+  body.printing-res .rz-dev{margin-bottom:26px}
+  body.printing-res .rz-tbl{font-size:9.5px}
+  body.printing-res .rz-tbl thead th{font-size:7.5px;padding:0 8px 8px}
+  body.printing-res .rz-tbl tbody td{padding:9.5px 8px}
+  body.printing-res *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
 .dd-sec-t{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:8px}
 .dd-sec-t::before{content:'';width:18px;height:1.5px;background:var(--gold)}
 .dd-map{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);height:230px;background:var(--paper2)}
@@ -888,6 +948,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
       <option value="ppm">Precio / m²: menor a mayor</option>
       <option value="name">Nombre A–Z</option>
     </select>
+    <button class="rpdf" onclick="descargarResumen()" title="Genera un PDF agrupado por inmobiliaria. Si marcas proyectos con «Comparar», el PDF incluye solo esos."><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4v-7h16v7h-2M8 14h8v8H8z"/></svg><span>Resumen PDF</span></button>
   </div>
 </div>
 
@@ -904,6 +965,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
 
 <div class="ddbg" id="ddbg" onclick="if(event.target.id=='ddbg')closeDD()"></div>
 <aside class="dd" id="dd" aria-hidden="true"></aside>
+
+<div id="resumen" aria-hidden="true"></div>
 
 <section id="bizView">
   <div class="bz-hero"><div class="bz-in">
@@ -2188,6 +2251,80 @@ function renderDevs(){
     syncCmpUI();
   };
   window.render=render;
+
+  window.descargarResumen=function(){
+    var items=filteredItems();
+    var usingSel=(typeof CMP!=='undefined')&&CMP.length>0;
+    if(usingSel)items=items.filter(function(it){return CMP.indexOf(it._i)>=0;});
+    var parts=[];
+    if(usingSel)parts.push('Selección de '+CMP.length+' proyecto'+(CMP.length===1?'':'s'));
+    if(F.dorms.length)parts.push(F.dorms.map(function(d){return d===4?'4+ dorm.':(d===0?'Estudio':dormLabel(d)+' dorm.');}).join(', '));
+    if(F.dist)parts.push(F.dist);
+    if(F.dev)parts.push(F.dev);
+    var amin=parseFloat(F.amin)||0,amax=parseFloat(F.amax)||0;
+    if(amin||amax)parts.push('Área '+(amin||'0')+'–'+(amax||'∞')+' m²');
+    var pmin=parseFloat(F.pmin)||0,pmax=parseFloat(F.pmax)||0;
+    if(pmin||pmax)parts.push('Precio '+(pmin?pen(pmin):'0')+'–'+(pmax?pen(pmax):'∞'));
+    if(F.ents.length)parts.push('Entrega '+F.ents.join(', '));
+    if(F.vis)parts.push('Con VIS');
+    if(F.q)parts.push('«'+F.q+'»');
+    var subtitle=parts.length?parts.join(' · '):'Todo el portafolio';
+
+    var groups={};
+    items.forEach(function(it){(groups[it.devN]=groups[it.devN]||[]).push(it);});
+    var devNames=Object.keys(groups).sort();
+    var totalU=items.reduce(function(a,it){return a+it.count;},0);
+
+    var body;
+    if(!devNames.length){
+      body='<div class="rz-empty">No hay resultados con los filtros actuales. Ajusta los filtros e inténtalo de nuevo.</div>';
+    }else{
+      body=devNames.map(function(dev,gi){
+        var list=groups[dev].slice().sort(function(a,b){return (a.desde||1e12)-(b.desde||1e12);});
+        var count=list.reduce(function(a,it){return a+it.count;},0);
+        var idx=('0'+(gi+1)).slice(-2);
+        var rows=list.map(function(it){
+          var areas=it.units?it.units.map(function(u){return u[4];}).filter(Boolean):[];
+          var arTxt=areas.length?(Math.min.apply(null,areas)+(Math.max.apply(null,areas)>Math.min.apply(null,areas)?'–'+Math.max.apply(null,areas):'')+' m²'):'—';
+          var precio=it.desde?(pen(it.desde)+(it.hasta&&it.hasta>it.desde?' – '+it.hasta.toLocaleString('es-PE'):'')):'—';
+          var dorm=it.dorm===0?'Estudio':(dormLabel(it.dorm)+' dorm.');
+          var ent=Object.keys(it.ents).length?Object.keys(it.ents).sort().join(', '):'—';
+          return '<tr><td class="rz-proj">'+projName(it.p)+'</td><td class="rz-dist">'+it.distN+'</td><td>'+dorm+'</td><td class="r">'+arTxt+'</td><td class="r rz-price">'+precio+'</td><td class="r">'+(it.cuotaMin?pen(it.cuotaMin):'—')+'</td><td class="r">'+ent+'</td></tr>';
+        }).join('');
+        return '<div class="rz-dev"><div class="rz-dev-h"><span class="rz-idx">'+idx+'</span><span class="rz-dev-n">'+dev+'</span><span class="rz-dev-c">'+list.length+' proyecto'+(list.length===1?'':'s')+' · '+count+' unidades</span></div>'
+          +'<table class="rz-tbl"><thead><tr><th>Proyecto</th><th>Distrito</th><th>Tipo</th><th class="r">Área</th><th class="r">Precio desde – hasta</th><th class="r">Cuota/mes</th><th class="r">Entrega</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+      }).join('');
+    }
+
+    var d=new Date();
+    var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    var fecha=d.getDate()+' de '+meses[d.getMonth()]+' de '+d.getFullYear();
+    var logoEl=document.querySelector('.brand img');
+    var logo=logoEl?'<img class="rz-logo" src="'+logoEl.src+'" alt="NATTIVA">':'<span class="rz-wordmark">NATTIVA</span>';
+    var chips=parts.length?parts.map(function(x){return '<span class="rz-chip">'+x+'</span>';}).join(''):'<span class="rz-chip">Todo el portafolio</span>';
+    document.getElementById('resumen').innerHTML=
+      '<div class="rz-wrap">'
+      +'<div class="rz-topline"></div>'
+      +'<div class="rz-head"><div class="rz-brand">'+logo+'<span class="rz-tag">Real Estate<br>Intelligence</span></div>'
+      +'<div class="rz-meta"><b>Lima · Perú</b><br>'+fecha+'</div></div>'
+      +'<div class="rz-cover"><div class="rz-kicker">Selección curada para el cliente</div>'
+      +'<h1 class="rz-title">Departamentos seleccionados</h1>'
+      +'<div class="rz-chips">'+chips+'</div>'
+      +'<div class="rz-stats">'
+        +'<div class="rz-stat"><b>'+devNames.length+'</b><span>Inmobiliaria'+(devNames.length===1?'':'s')+'</span></div>'
+        +'<div class="rz-stat"><b>'+items.length+'</b><span>Tipos</span></div>'
+        +'<div class="rz-stat"><b>'+totalU.toLocaleString('es-PE')+'</b><span>Unidades</span></div>'
+      +'</div></div>'
+      +body
+      +'<div class="rz-foot"><div class="rz-foot-l">NATTIVA<small>Real Estate Intelligence</small></div>'
+      +'<div class="rz-foot-r">Un asesor te comparte planos y disponibilidad al instante<br><b>WhatsApp +51 907 528 914</b></div></div>'
+      +'<div class="rz-fine">Información referencial recopilada por NATTIVA, sujeta a disponibilidad y a variación por parte de cada desarrolladora. Precios y cuotas estimados; no constituyen una oferta contractual. Generado el '+fecha+'.</div>'
+      +'</div>';
+    document.body.classList.add('printing-res');
+    window.print();
+    setTimeout(function(){document.body.classList.remove('printing-res');},600);
+  };
+
   if(document.getElementById('grid'))render();
 })();
 </script>
