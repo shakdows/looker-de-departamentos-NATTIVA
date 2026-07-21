@@ -377,19 +377,19 @@ body:not(.view-sum) #sumView{display:none}
 .rz-fine{padding:14px 54px 0;font-size:8px;font-weight:600;color:var(--faint);line-height:1.55;letter-spacing:.01em}
 .rz-empty{padding:54px;text-align:center;color:var(--muted);font-weight:700}
 @media print{
-  @page{margin:1.1cm}
+  @page{margin:1.7cm 1.6cm}
   body.printing-res{background:#fff!important}
   body.printing-res>*:not(#resumen){display:none!important}
   body.printing-res #resumen{display:block!important;position:static!important}
   body.printing-res .rz-wrap{max-width:none!important}
-  body.printing-res .rz-head,body.printing-res .rz-cover,body.printing-res .rz-dev,body.printing-res .rz-fine{padding-left:2px!important;padding-right:2px!important}
-  body.printing-res .rz-foot{margin-left:2px!important;margin-right:2px!important}
+  body.printing-res .rz-head,body.printing-res .rz-cover,body.printing-res .rz-dev,body.printing-res .rz-fine{padding-left:10px!important;padding-right:10px!important}
+  body.printing-res .rz-foot{margin-left:10px!important;margin-right:10px!important}
   body.printing-res .rz-title{font-size:2.2rem}
   body.printing-res .rz-dev-n{font-size:1.08rem}
   body.printing-res .rz-dev{margin-bottom:26px}
-  body.printing-res .rz-tbl{font-size:10px}
-  body.printing-res .rz-tbl thead th{font-size:7.5px;padding:0 9px 8px}
-  body.printing-res .rz-tbl tbody td{padding:9.5px 9px}
+  body.printing-res .rz-tbl{font-size:9.5px}
+  body.printing-res .rz-tbl thead th{font-size:7.5px;padding:0 8px 8px}
+  body.printing-res .rz-tbl tbody td{padding:9.5px 8px}
   body.printing-res *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
 .dd-sec-t{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:8px}
@@ -2286,13 +2286,13 @@ function renderDevs(){
         var rows=list.map(function(it){
           var areas=it.units?it.units.map(function(u){return u[4];}).filter(Boolean):[];
           var arTxt=areas.length?(Math.min.apply(null,areas)+(Math.max.apply(null,areas)>Math.min.apply(null,areas)?'–'+Math.max.apply(null,areas):'')+' m²'):'—';
-          var precio=it.desde?(pen(it.desde)+(it.hasta&&it.hasta>it.desde?' – '+pen(it.hasta):'')):'—';
+          var precio=it.desde?(pen(it.desde)+(it.hasta&&it.hasta>it.desde?' – '+it.hasta.toLocaleString('es-PE'):'')):'—';
           var dorm=it.dorm===0?'Estudio':(dormLabel(it.dorm)+' dorm.');
           var ent=Object.keys(it.ents).length?Object.keys(it.ents).sort().join(', '):'—';
-          return '<tr><td class="rz-proj">'+projName(it.p)+'</td><td class="rz-dist">'+it.distN+'</td><td>'+dorm+'</td><td class="r">'+it.count+'</td><td class="r">'+arTxt+'</td><td class="r rz-price">'+precio+'</td><td class="r">'+(it.cuotaMin?pen(it.cuotaMin):'—')+'</td><td>'+ent+'</td></tr>';
+          return '<tr><td class="rz-proj">'+projName(it.p)+'</td><td class="rz-dist">'+it.distN+'</td><td>'+dorm+'</td><td class="r">'+arTxt+'</td><td class="r rz-price">'+precio+'</td><td class="r">'+(it.cuotaMin?pen(it.cuotaMin):'—')+'</td><td class="r">'+ent+'</td></tr>';
         }).join('');
         return '<div class="rz-dev"><div class="rz-dev-h"><span class="rz-idx">'+idx+'</span><span class="rz-dev-n">'+dev+'</span><span class="rz-dev-c">'+list.length+' proyecto'+(list.length===1?'':'s')+' · '+count+' unidades</span></div>'
-          +'<table class="rz-tbl"><thead><tr><th>Proyecto</th><th>Distrito</th><th>Tipo</th><th class="r">Unid.</th><th class="r">Área</th><th class="r">Precio desde–hasta</th><th class="r">Cuota/mes</th><th>Entrega</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+          +'<table class="rz-tbl"><thead><tr><th>Proyecto</th><th>Distrito</th><th>Tipo</th><th class="r">Área</th><th class="r">Precio desde – hasta</th><th class="r">Cuota/mes</th><th class="r">Entrega</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
       }).join('');
     }
 
