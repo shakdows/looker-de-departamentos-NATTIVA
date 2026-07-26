@@ -1873,7 +1873,12 @@ function renderDevs(){
   });
   var tiles=[];
   // 1) TODAS las desarrolladoras con proyectos -> tarjeta que filtra el portafolio
-  Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a];}).forEach(function(d){
+  //    (las destacadas, ej. EDIFICA, van primero; luego por número de proyectos)
+  Object.keys(cnt).sort(function(a,b){
+    var fa=(meta[a]&&meta[a].feat)?1:0,fb=(meta[b]&&meta[b].feat)?1:0;
+    if(fa!==fb)return fb-fa;
+    return cnt[b]-cnt[a];
+  }).forEach(function(d){
     var m=meta[d]||{};
     tiles.push({filter:true,dev:d,name:m.name||titleCase(d),logo:m.logo||'',feat:!!m.feat,count:cnt[d]});
   });
