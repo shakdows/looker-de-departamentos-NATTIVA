@@ -1863,24 +1863,41 @@ function partnerDev(p){if(p.s==='dev')return p.u;var n=(p.n||'').toLowerCase();f
 function verDev(dev){F.devs=[dev];var sel=document.getElementById('fdev');if(sel)sel.value=dev;showTab('port');render();var el=document.getElementById('proyectos');if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
 function renderDevs(){
   var g=document.getElementById('devsGrid');
-  g.innerHTML=PARTNERS.map(function(p,i){
-    var pdev=partnerDev(p);
-    var isFilter=!!pdev;
-    var pcount=isFilter?P.filter(function(x){return x.devN===pdev;}).length:0;
-    var logo=p.logo
-      ? '<img class="ptile-img" src="'+p.logo+'" alt="'+p.n+'" loading="lazy" referrerpolicy="no-referrer" data-wm="'+p.n+'" onerror="devWM(this)">'
-      : '<div class="ptile-wm"><small>'+(isFilter?'Desarrolladora':'Aliado NATTIVA')+'</small>'+p.n+'</div>';
-    var srcLabel=isFilter?(pcount+' proyecto'+(pcount===1?'':'s')):(p.s==='dropbox'?'Dropbox':(p.s==='sheet'?'Lista de precios':'Google Drive'));
-    var srcIcon=isFilter?'<svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
-    var feat=p.feat?' ptile-feat':'';
-    var badge=p.feat?'<span class="ptile-badge">Principal</span>':'';
+  // conteo real de proyectos por desarrolladora (desde la data)
+  var cnt={}; P.forEach(function(pr){cnt[pr.devN]=(cnt[pr.devN]||0)+1;});
+  // metadata (logo/feat/drive/nombre bonito) de PARTNERS, indexada por nombre en mayúsculas
+  var meta={};
+  PARTNERS.forEach(function(p){
+    var key=(p.s==='dev'?p.u:(p.n||'')).toUpperCase();
+    meta[key]={logo:p.logo||'',feat:!!p.feat,name:p.n,drive:(p.s!=='dev'?p.u:''),s:p.s};
+  });
+  var tiles=[];
+  // 1) TODAS las desarrolladoras con proyectos -> tarjeta que filtra el portafolio
+  Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a];}).forEach(function(d){
+    var m=meta[d]||{};
+    tiles.push({filter:true,dev:d,name:m.name||titleCase(d),logo:m.logo||'',feat:!!m.feat,count:cnt[d]});
+  });
+  // 2) aliados de solo-enlace (Google Drive) que NO están en el portafolio
+  PARTNERS.forEach(function(p){
+    if(p.s==='dev')return;
+    if(cnt[(p.n||'').toUpperCase()])return;
+    tiles.push({filter:false,name:p.n,url:p.u,logo:p.logo||'',s:p.s});
+  });
+  g.innerHTML=tiles.map(function(t,i){
+    var logo=t.logo
+      ? '<img class="ptile-img" src="'+t.logo+'" alt="'+t.name+'" loading="lazy" referrerpolicy="no-referrer" data-wm="'+t.name+'" onerror="devWM(this)">'
+      : '<div class="ptile-wm"><small>'+(t.filter?'Desarrolladora':'Aliado NATTIVA')+'</small>'+t.name+'</div>';
+    var srcLabel=t.filter?(t.count+' proyecto'+(t.count===1?'':'s')):(t.s==='dropbox'?'Dropbox':(t.s==='sheet'?'Lista de precios':'Google Drive'));
+    var srcIcon=t.filter?'<svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+    var feat=t.feat?' ptile-feat':'';
+    var badge=t.feat?'<span class="ptile-badge">Principal</span>':'';
     var inner='<div class="ptile-logo">'+badge+logo+'</div>'
-      +'<div class="ptile-body"><div><div class="ptile-name">'+p.n+'</div>'
+      +'<div class="ptile-body"><div><div class="ptile-name">'+t.name+'</div>'
       +'<div class="ptile-src">'+srcIcon+srcLabel+'</div></div>'
       +'<div class="ptile-go"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></div></div>';
     var st='animation-delay:'+Math.min(i*32,440)+'ms';
-    if(isFilter)return '<div class="ptile ptile-dev'+feat+'" role="button" tabindex="0" onclick="verDev(\''+pdev.replace(/'/g,"\\'")+'\')" style="'+st+'">'+inner+'</div>';
-    return '<a class="ptile'+feat+'" href="'+p.u+'" target="_blank" rel="noopener" style="'+st+'">'+inner+'</a>';
+    if(t.filter)return '<div class="ptile ptile-dev'+feat+'" role="button" tabindex="0" onclick="verDev(\''+t.dev.replace(/'/g,"\\'")+'\')" style="'+st+'">'+inner+'</div>';
+    return '<a class="ptile'+feat+'" href="'+t.url+'" target="_blank" rel="noopener" style="'+st+'">'+inner+'</a>';
   }).join('');
 }
 
