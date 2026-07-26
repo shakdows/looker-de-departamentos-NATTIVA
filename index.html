@@ -1687,6 +1687,19 @@ var PROJFOLDERS={
   "HIGH LIVING":"https://drive.google.com/drive/folders/13vqVV8I6yhH4CjYRl9fVkjXkaxgTtD3X",
   "PRESTON":"https://drive.google.com/drive/folders/1fAg5Iq-TO7OMuSCBgegPigCqoGXUHwuB"
 };
+/* Carpeta de Drive por DESARROLLADORA (flyers/fotos/brochures). Enlace temporal
+   mientras no haya un brochure por proyecto. Clave = nombre EXACTO de la desarrolladora. */
+var DEVFOLDERS={
+  "EDIFICA":"https://drive.google.com/drive/folders/1PYISbVezhFTLOYUpahM2hf9uuCBHlDYl",
+  "ALBAMAR":"https://drive.google.com/drive/folders/1dTgtNHh_FV3LnSxgXQward8yST-lTKkX",
+  "GRUPO MG":"https://drive.google.com/drive/folders/1x60GCYfdGl-d0q7XZreNOeWBNqOs7Wqm",
+  "CANTABRIA":"https://drive.google.com/drive/folders/1h2p73w7hHhKXnRTjOqJUw1gpU4LceUbh",
+  "IMAGINA":"https://drive.google.com/drive/folders/1EY5jE48LZUY2UZcBzjFfDYqaEd7GfFxD",
+  "GRATTO INMOBILIARIA":"https://drive.google.com/drive/folders/1NUIRt0Ul1kOdcZXjHfo7eM8Uj162ELu0",
+  "FRANCA":"https://drive.google.com/drive/folders/18wnmzxKMDutQ1v42Pkt4yzOujoLfxt_5",
+  "FRONTERA":"https://drive.google.com/drive/folders/1DcAyeiEcJH6OYRApkzL9HiL-5AeYokUG",
+  "CONFORTA":"https://drive.google.com/drive/folders/1_gqtlLhLjUY5w37Qhux3kef1w4HOVE-L"
+};
 /* Portada (foto/render) por proyecto: ID de un archivo público de Drive (PDF brochure o imagen).
    Se renderiza como fondo del hero vía el endpoint de thumbnail. Si falla, cae al gradiente.
    Agregar más proyectos aquí a medida que haya renders/flyers limpios y públicos. */
@@ -1793,8 +1806,9 @@ function buildDD(){
 
   // ---- desarrolladora (abajo) ----
   var partner=findPartner(p.devN);
+  var partnerUrl=(partner&&/^https?:/i.test(partner.u))?partner.u:'';
   var projFolder=PROJFOLDERS[p.n];
-  var folderUrl=projFolder||(partner?partner.u:'');
+  var folderUrl=projFolder||DEVFOLDERS[p.devN]||partnerUrl;
   var folderLabel=projFolder?'Ver flyers y fotos del proyecto':'Ver flyers y fotos en Drive';
   var devLink=folderUrl?'<a class="dd-devbox-link" href="'+folderUrl+'" target="_blank" rel="noopener"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>'+folderLabel+' →</a>':'';
   var devbox='<div class="dd-devbox"><div class="dd-devbox-l"><div class="dd-devbox-mono">'+monogram({n:p.devN})+'</div>'
