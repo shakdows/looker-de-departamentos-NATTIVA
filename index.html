@@ -1244,6 +1244,18 @@ function dormLabel(d){return d<0?'—':(d===0?'St':(d%1?d.toString().replace('.'
 
 /* ---- precompute project aggregates ---- */
 function medOf(a){if(!a||!a.length)return 0;a=a.slice().sort(function(x,y){return x-y;});var m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2;}
+/* Corrección de AÑO DE ENTREGA por proyecto (fuente: tabla oficial "AÑO DE ENTREGA").
+   Úsalo cuando la fecha por unidad de la hoja esté equivocada. Clave = nombre EXACTO del proyecto. */
+var ENTREGA_FIX={
+  "BENAVIDES 1361":"2028"
+};
+(function(){
+  Object.keys(ENTREGA_FIX).forEach(function(name){
+    var yr=''+ENTREGA_FIX[name];
+    var ei=ENT.indexOf(yr);if(ei<0){ENT.push(yr);ei=ENT.length-1;}
+    P.forEach(function(p){if(p.n===name){p.u.forEach(function(u){u[9]=ei;});}});
+  });
+})();
 var DISTPPM={},_allPpm=[],DISTUNITS={};
 P.forEach(function(p){
   var precios=[],cuotas=[],dorms={},ents={},visAny=false,monUSD=0,pp=[];
