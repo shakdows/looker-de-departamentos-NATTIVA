@@ -957,6 +957,11 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
       <button class="chip" data-e="2027" onclick="togEnt(this,'2027')">2027</button>
       <button class="chip" data-e="2028" onclick="togEnt(this,'2028')">2028</button>
     </div>
+    <div class="fchips">
+      <span class="flab">Vista</span>
+      <button class="chip" data-vst="int" onclick="togVista(this,'int')">Interior</button>
+      <button class="chip" data-vst="ext" onclick="togVista(this,'ext')">Exterior</button>
+    </div>
     <button class="chip" id="cvis" onclick="F.vis=!F.vis;this.classList.toggle('on');render()">Con VIS</button>
     <button class="chip chip-opp" id="copp" onclick="F.opp=!F.opp;this.classList.toggle('on');render()" title="Proyectos bajo el precio/m² de su distrito">★ Oportunidades</button>
     <div class="fdiv"></div>
@@ -1372,6 +1377,7 @@ function animateCount(id,target){var el=document.getElementById(id);if(!el)retur
 
 function togDorm(b,d){b.classList.toggle('on');var i=F.dorms.indexOf(d);if(i<0)F.dorms.push(d);else F.dorms.splice(i,1);render();}
 function togEnt(b,e){b.classList.toggle('on');var i=F.ents.indexOf(e);if(i<0)F.ents.push(e);else F.ents.splice(i,1);render();}
+function togVista(b,v){b.classList.toggle('on');var i=F.vistas.indexOf(v);if(i<0)F.vistas.push(v);else F.vistas.splice(i,1);render();}
 function resetF(){F={q:'',dist:'',dev:'',dists:[],devs:[],dorms:[],ents:[],vistas:[],vis:false,opp:false,pmin:'',pmax:'',amin:'',amax:'',sort:'units'};
   document.getElementById('q').value='';
   document.getElementById('pmin').value='';document.getElementById('pmax').value='';document.getElementById('sort').value='units';
@@ -1394,6 +1400,7 @@ function syncBar(){
   var amax=document.getElementById('amax');if(amax)amax.value=F.amax||'';
   document.querySelectorAll('.chip[data-d]').forEach(function(c){c.classList.toggle('on',F.dorms.indexOf(+c.getAttribute('data-d'))>=0);});
   document.querySelectorAll('.chip[data-e]').forEach(function(c){c.classList.toggle('on',F.ents.indexOf(c.getAttribute('data-e'))>=0);});
+  document.querySelectorAll('.chip[data-vst]').forEach(function(c){c.classList.toggle('on',F.vistas.indexOf(c.getAttribute('data-vst'))>=0);});
   var cv=document.getElementById('cvis');if(cv)cv.classList.toggle('on',!!F.vis);
   var co=document.getElementById('copp');if(co)co.classList.toggle('on',!!F.opp);
 }
