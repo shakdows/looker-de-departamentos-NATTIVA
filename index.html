@@ -1897,7 +1897,7 @@ function showTab(which){
 }
 function devWM(img){var w=document.createElement('div');w.className='ptile-wm';w.innerHTML='<small>Aliado NATTIVA</small>'+img.getAttribute('data-wm');img.replaceWith(w);}
 function partnerDev(p){if(p.s==='dev')return p.u;var n=(p.n||'').toLowerCase();for(var i=0;i<DEV.length;i++)if(DEV[i].toLowerCase()===n)return DEV[i];return null;}
-function verDev(dev){F.devs=[dev];var sel=document.getElementById('fdev');if(sel)sel.value=dev;showTab('port');render();var el=document.getElementById('proyectos');if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+function verDev(dev){resetF();F.devs=[dev];var sel=document.getElementById('fdev');if(sel)sel.value=dev;showTab('port');syncBar();render();var el=document.getElementById('proyectos');if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
 function renderDevs(){
   var g=document.getElementById('devsGrid');
   // conteo real de proyectos por desarrolladora (desde la data)
@@ -2269,8 +2269,8 @@ function renderDevs(){
   }
 
   function nav(dev,val){var s=document.getElementById(dev);if(s)s.value=val;showTab('port');window.render&&window.render();var el=document.getElementById('proyectos');if(el)setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
-  window.verDist=function(d){F.dists=[d];nav('fdist',d);};
-  window.verDevName=function(d){F.devs=[d];nav('fdev',d);};
+  window.verDist=function(d){if(window.resetF)window.resetF();F.dists=[d];nav('fdist',d);};
+  window.verDevName=function(d){if(window.resetF)window.resetF();F.devs=[d];nav('fdev',d);};
   window.__renderSum=render;
 })();
 </script>
