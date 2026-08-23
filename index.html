@@ -990,6 +990,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
     </div>
     <span class="flab">Ordenar</span>
     <select class="fsel" id="sort" onchange="F.sort=this.value;render()">
+      <option value="zona">Zona y proyecto · precio ↑</option>
       <option value="units">Más unidades</option>
       <option value="pa">Precio: menor a mayor</option>
       <option value="pd">Precio: mayor a menor</option>
@@ -1310,6 +1311,8 @@ function dormBreakdown(p){
   var groups={};
   p.u.forEach(function(u){var k=u[6];(groups[k]=groups[k]||[]).push(u);});
   var keys=Object.keys(groups).map(Number).sort(function(a,b){return a-b;});
+  // si la ficha se abrió para una tipología específica, mostrar solo esa (sin mezclar)
+  if(typeof ddDorm==='number')keys=keys.filter(function(k){return k===ddDorm;});
   if(!keys.length)return '';
   var cards=keys.map(function(k){
     var g=groups[k];
@@ -1374,7 +1377,7 @@ function calcDD(p){
 function printDD(){document.body.classList.add('printing');window.print();setTimeout(function(){document.body.classList.remove('printing');},400);}
 
 /* ---- filter state ---- */
-var F={q:'',dist:'',dev:'',dists:[],devs:[],dorms:[],ents:[],vistas:[],vis:false,opp:false,pmin:'',pmax:'',amin:'',amax:'',sort:'units'};
+var F={q:'',dist:'',dev:'',dists:[],devs:[],dorms:[],ents:[],vistas:[],vis:false,opp:false,pmin:'',pmax:'',amin:'',amax:'',sort:'zona'};
 /* clasifica una vista en interior / exterior */
 function vistaCat(v){v=(''+(v||'')).toLowerCase();if(!v||v==='null'||/pendiente|confirmar/.test(v))return '';if(/intern|interior|inter\./.test(v))return 'int';return 'ext';}
 function isOpp(p){var d=ppmDelta(p);return d!==null&&d<=-7;}
@@ -1383,9 +1386,9 @@ function animateCount(id,target){var el=document.getElementById(id);if(!el)retur
 function togDorm(b,d){b.classList.toggle('on');var i=F.dorms.indexOf(d);if(i<0)F.dorms.push(d);else F.dorms.splice(i,1);render();}
 function togEnt(b,e){b.classList.toggle('on');var i=F.ents.indexOf(e);if(i<0)F.ents.push(e);else F.ents.splice(i,1);render();}
 function togVista(b,v){b.classList.toggle('on');var i=F.vistas.indexOf(v);if(i<0)F.vistas.push(v);else F.vistas.splice(i,1);render();}
-function resetF(){F={q:'',dist:'',dev:'',dists:[],devs:[],dorms:[],ents:[],vistas:[],vis:false,opp:false,pmin:'',pmax:'',amin:'',amax:'',sort:'units'};
+function resetF(){F={q:'',dist:'',dev:'',dists:[],devs:[],dorms:[],ents:[],vistas:[],vis:false,opp:false,pmin:'',pmax:'',amin:'',amax:'',sort:'zona'};
   document.getElementById('q').value='';
-  document.getElementById('pmin').value='';document.getElementById('pmax').value='';document.getElementById('sort').value='units';
+  document.getElementById('pmin').value='';document.getElementById('pmax').value='';document.getElementById('sort').value='zona';
   var _am=document.getElementById('amin');if(_am)_am.value='';var _ax=document.getElementById('amax');if(_ax)_ax.value='';
   document.querySelectorAll('.chip.on').forEach(function(c){c.classList.remove('on');});
   syncBar();render();}
@@ -1751,8 +1754,20 @@ function buildDD(){
   var dormTxt=dormR.length?dormR.map(dormLabel).join(', ')+' dorm.':'—';
   var ar=p.u.map(function(u){return u[4];}).filter(Boolean);
   var arTxt=ar.length?Math.min.apply(null,ar)+'–'+Math.max.apply(null,ar)+' m²':'—';
-  var shownU=ddDorm===null?p.u.length:p.u.filter(function(u){return u[6]===ddDorm;}).length;
+  // si la ficha se abrió desde una tarjeta de tipología, TODOS los indicadores reflejan solo esa tipología
+  var selU=ddDorm===null?p.u:p.u.filter(function(u){return u[6]===ddDorm;});
+  var shownU=selU.length;
   var ddDormTxt=ddDorm===null?'':(ddDorm<0?'Por confirmar':(ddDorm===0?'Estudio':dormLabel(ddDorm)+' dorm.'));
+  var _soles=selU.filter(function(u){return u[7]===0&&u[8]>=50000;}).map(function(u){return u[8];});
+  var selDesde=ddDorm===null?p.desde:(_soles.length?Math.min.apply(null,_soles):0);
+  var selHasta=ddDorm===null?p.hasta:(_soles.length?Math.max.apply(null,_soles):0);
+  var _cuo=selU.map(function(u){return u[11];}).filter(function(v){return v>=100;});
+  var selCuota=ddDorm===null?p.cuotaMin:(_cuo.length?Math.min.apply(null,_cuo):0);
+  var _ppm=selU.filter(function(u){return u[7]===0&&u[8]>=50000&&u[4]>0;}).map(function(u){return u[8]/u[4];}).sort(function(a,b){return a-b;});
+  var selPpm=ddDorm===null?p.ppm2med:(_ppm.length?Math.round(_ppm[_ppm.length>>1]):0);
+  var selDormTxt=ddDorm===null?dormTxt:ddDormTxt;
+  var selAr=selU.map(function(u){return u[4];}).filter(Boolean);
+  arTxt=selAr.length?Math.min.apply(null,selAr)+'–'+Math.max.apply(null,selAr)+' m²':'—';
   var brocUrl = p.b || BROCHURES[p.n];
   var broc = brocUrl
     ? '<a class="dd-broc" href="'+brocUrl+'" target="_blank" rel="noopener" title="Abrir brochure del proyecto"><svg viewBox="0 0 24 24"><path d="M4 4h10l6 6v10a0 0 0 0 1 0 0H4z"/><path d="M14 4v6h6"/><path d="M8 14h8M8 17h6"/></svg><span>Ver brochure</span></a>'
@@ -1764,12 +1779,12 @@ function buildDD(){
     +'<div class="dd-name">'+name+'</div>'
     +'<div class="dd-dev">'+p.devN+'</div>'
     +'<div class="dd-kpis">'
-      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+p.u.length+'</span><span class="dd-kpi-k">Unidades</span></div>'
-      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(p.desde?pen(p.desde):'—')+'</span><span class="dd-kpi-k">Desde</span></div>'
-      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(p.hasta?pen(p.hasta):'—')+'</span><span class="dd-kpi-k">Hasta</span></div>'
-      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(p.cuotaMin?pen(p.cuotaMin):'—')+'</span><span class="dd-kpi-k">Cuota desde</span></div>'
-      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(p.ppm2med?pen(p.ppm2med):'—')+'</span><span class="dd-kpi-k">Precio / m²</span></div>'
-      +'<div class="dd-kpi"><span class="dd-kpi-v">'+dormTxt+'</span><span class="dd-kpi-k">Dormitorios</span></div>'
+      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+shownU+'</span><span class="dd-kpi-k">Unidades</span></div>'
+      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(selDesde?pen(selDesde):'—')+'</span><span class="dd-kpi-k">Desde</span></div>'
+      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(selHasta?pen(selHasta):'—')+'</span><span class="dd-kpi-k">Hasta</span></div>'
+      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(selCuota?pen(selCuota):'—')+'</span><span class="dd-kpi-k">Cuota desde</span></div>'
+      +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(selPpm?pen(selPpm):'—')+'</span><span class="dd-kpi-k">Precio / m²</span></div>'
+      +'<div class="dd-kpi"><span class="dd-kpi-v">'+selDormTxt+'</span><span class="dd-kpi-k">Dormitorios</span></div>'
     +'</div></div>'
     +'<div class="dd-bar"><div class="dd-bar-t"><b>'+shownU+'</b> unidades'+(ddDorm===null?' disponibles':' de '+ddDormTxt)+' · marca la columna «Comparar» para verlas lado a lado</div>'
       +'<div class="dd-cmpwrap">'
@@ -2370,6 +2385,18 @@ function renderDevs(){
       if(item.desde&&(item.desde>pmax||item.hasta<pmin))return;
       r.push(item);
     });
+    if(F.sort==='zona'){
+      // agrupado: zona (A–Z) → proyecto (del más barato al más caro) → tipologías de menor a mayor precio
+      var minP={};
+      r.forEach(function(it){var v=it.desde||1e12;if(!(it._i in minP)||v<minP[it._i])minP[it._i]=v;});
+      r.sort(function(a,b){
+        var z=a.distN.localeCompare(b.distN);if(z)return z;
+        var d=(minP[a._i]||1e12)-(minP[b._i]||1e12);if(d)return d;
+        var n=a.n.localeCompare(b.n);if(n)return n;
+        return (a.desde||1e12)-(b.desde||1e12);
+      });
+      return r;
+    }
     r.sort(function(a,b){
       if(F.sort==='pa')return (a.desde||1e12)-(b.desde||1e12);
       if(F.sort==='pd')return (b.desde||0)-(a.desde||0);
