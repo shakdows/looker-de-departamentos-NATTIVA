@@ -400,6 +400,7 @@ body:not(.view-sum) #sumView{display:none}
 .rz-tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:12px}
 .rz-tbl thead th{text-align:left;font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 12px 11px;border-bottom:1px solid var(--line);white-space:nowrap}
 .rz-tbl th.r,.rz-tbl td.r{text-align:right;font-variant-numeric:tabular-nums}
+.rz-tbl tr.rz-sub td{padding:15px 12px 6px;font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--em);border-bottom:1px solid var(--line);background:transparent}
 .rz-tbl tbody td{padding:13px 12px;border-bottom:1px solid var(--line2);color:var(--ink2);font-weight:600;white-space:nowrap;vertical-align:middle}
 .rz-tbl tbody tr:nth-child(even) td{background:var(--paper2)}
 .rz-proj{font-weight:800;color:var(--ink)}
@@ -429,6 +430,10 @@ body:not(.view-sum) #sumView{display:none}
   body.printing-res *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 }
 .dd-sec-t{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.dd-dchips{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 12px}
+.dd-dchip{border:1px solid var(--line2);background:transparent;color:var(--ink2);font:inherit;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;cursor:pointer;transition:all .15s}
+.dd-dchip:hover{border-color:var(--em);color:var(--em)}
+.dd-dchip.on{background:var(--em);border-color:var(--em);color:#fff}
 .dd-sec-t::before{content:'';width:18px;height:1.5px;background:var(--gold)}
 .dd-map{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);height:230px;background:var(--paper2)}
 .dd-map iframe{width:100%;height:100%;border:0;display:block}
@@ -1631,11 +1636,12 @@ function openCompare(){
 function closeCompare(){document.getElementById('cmpbg').classList.remove('on');document.getElementById('cmp').classList.remove('on');}
 
 /* ---- drill-down ---- */
-var ddSort={col:8,dir:1},ddP=null,ddOpenRow=-1,ddCmpU=[];
+var ddSort={col:8,dir:1},ddP=null,ddOpenRow=-1,ddCmpU=[],ddDorm=null;
 var UCOLS=[['Unidad',0,0],['Dorms',6,0],['Área m²',4,1],['Vista',5,0],['Entrega',9,0],['VIS',10,0],['Banco',12,0],['Cuota/mes',11,1],['Precio',8,1]];
 
-function openDD(i){
+function openDD(i,dorm){
   ddP=P[i];ddSort={col:8,dir:1};ddOpenRow=-1;ddCmpU=[];
+  ddDorm=(typeof dorm==='number')?dorm:null;
   document.getElementById('ddbg').classList.add('on');
   var dd=document.getElementById('dd');dd.classList.add('on');dd.setAttribute('aria-hidden','false');
   buildDD();
@@ -1643,6 +1649,7 @@ function openDD(i){
 function closeDD(){document.getElementById('ddbg').classList.remove('on');var dd=document.getElementById('dd');dd.classList.remove('on');dd.setAttribute('aria-hidden','true');}
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeDD();closeCompare();}});
 function sortDD(c){if(ddSort.col===c)ddSort.dir*=-1;else{ddSort={col:c,dir:1};}ddOpenRow=-1;buildDD();}
+function setDDDorm(d){ddDorm=d;ddOpenRow=-1;buildDD();}
 function toggleRow(idx){ddOpenRow=ddOpenRow===idx?-1:idx;buildDD();}
 function toggleUnitCmp(k){var i=ddCmpU.indexOf(k);if(i>=0)ddCmpU.splice(i,1);else{if(ddCmpU.length>=4)return;ddCmpU.push(k);}buildDD();}
 function clearUnitCmp(){ddCmpU=[];buildDD();}
@@ -1744,6 +1751,8 @@ function buildDD(){
   var dormTxt=dormR.length?dormR.map(dormLabel).join(', ')+' dorm.':'—';
   var ar=p.u.map(function(u){return u[4];}).filter(Boolean);
   var arTxt=ar.length?Math.min.apply(null,ar)+'–'+Math.max.apply(null,ar)+' m²':'—';
+  var shownU=ddDorm===null?p.u.length:p.u.filter(function(u){return u[6]===ddDorm;}).length;
+  var ddDormTxt=ddDorm===null?'':(ddDorm<0?'Por confirmar':(ddDorm===0?'Estudio':dormLabel(ddDorm)+' dorm.'));
   var brocUrl = p.b || BROCHURES[p.n];
   var broc = brocUrl
     ? '<a class="dd-broc" href="'+brocUrl+'" target="_blank" rel="noopener" title="Abrir brochure del proyecto"><svg viewBox="0 0 24 24"><path d="M4 4h10l6 6v10a0 0 0 0 1 0 0H4z"/><path d="M14 4v6h6"/><path d="M8 14h8M8 17h6"/></svg><span>Ver brochure</span></a>'
@@ -1762,7 +1771,7 @@ function buildDD(){
       +'<div class="dd-kpi"><span class="dd-kpi-v num">'+(p.ppm2med?pen(p.ppm2med):'—')+'</span><span class="dd-kpi-k">Precio / m²</span></div>'
       +'<div class="dd-kpi"><span class="dd-kpi-v">'+dormTxt+'</span><span class="dd-kpi-k">Dormitorios</span></div>'
     +'</div></div>'
-    +'<div class="dd-bar"><div class="dd-bar-t"><b>'+p.u.length+'</b> unidades disponibles · marca la columna «Comparar» para verlas lado a lado</div>'
+    +'<div class="dd-bar"><div class="dd-bar-t"><b>'+shownU+'</b> unidades'+(ddDorm===null?' disponibles':' de '+ddDormTxt)+' · marca la columna «Comparar» para verlas lado a lado</div>'
       +'<div class="dd-cmpwrap">'
         +(ddCmpU.length?'<button class="dd-cmpclr" onclick="clearUnitCmp()">Limpiar</button>':'')
         +'<button class="dd-cmpbtn'+(ddCmpU.length>=2?' on':'')+'"'+(ddCmpU.length<2?' disabled':'')+' onclick="openUnitCompare()">Comparar unidades'+(ddCmpU.length?' ('+ddCmpU.length+')':'')+'</button>'
@@ -1780,7 +1789,8 @@ function buildDD(){
     +'<a class="dd-map-go" href="https://www.google.com/maps/search/?api=1&query='+gmapsQ+'" target="_blank" rel="noopener">Ver en Google Maps →</a></div></div>';
 
   // ---- tabla de unidades (filas expandibles) ----
-  var rows=p.u.map(function(u,k){return {u:u,k:k};}).sort(function(a,b){
+  // solo la tipología elegida: cada nº de dormitorios tiene su propio espacio, sin mezclarse
+  var rows=p.u.map(function(u,k){return {u:u,k:k};}).filter(function(o){return ddDorm===null||o.u[6]===ddDorm;}).sort(function(a,b){
     var c=ddSort.col;var va=a.u[c],vb=b.u[c];
     if(c===5||c===9||c===12){va=(c===5?VISTA:c===9?ENT:BANCO)[va];vb=(c===5?VISTA:c===9?ENT:BANCO)[vb];return ddSort.dir*(''+va).localeCompare(''+vb);}
     return ddSort.dir*((va||0)-(vb||0));
@@ -1823,8 +1833,13 @@ function buildDD(){
     }
     return tr;
   }).join('');
+  // chips de tipología: permiten cambiar de nº de dormitorios sin mezclar unos con otros
+  var dset={};p.u.forEach(function(u){dset[u[6]]=(dset[u[6]]||0)+1;});
+  var dkeys=Object.keys(dset).map(Number).sort(function(a,b){return (a<0?99:a)-(b<0?99:b);});
+  var dchips='<div class="dd-dchips"><button class="dd-dchip'+(ddDorm===null?' on':'')+'" onclick="setDDDorm(null)">Todas · '+p.u.length+'</button>'
+    +dkeys.map(function(d){var lb=d<0?'Por confirmar':(d===0?'Estudio':dormLabel(d)+' dorm.');return '<button class="dd-dchip'+(ddDorm===d?' on':'')+'" onclick="setDDDorm('+d+')">'+lb+' · '+dset[d]+'</button>';}).join('')+'</div>';
   var table='<div class="dd-body">'+dormBreakdown(p)+posDD(p)+calcDD(p)+mapSection
-    +'<div class="dd-section"><div class="dd-sec-t">Unidades disponibles</div></div>'
+    +'<div class="dd-section"><div class="dd-sec-t">Unidades disponibles</div>'+dchips+'</div>'
     +'<div style="padding:0 clamp(1.2rem,3vw,2.4rem)"><table class="utable"><thead><tr>'+th+'</tr></thead><tbody>'+body+'</tbody></table></div>';
 
   // ---- desarrolladora (abajo) ----
@@ -2375,7 +2390,7 @@ function renderDevs(){
     var cover=COVERS[p.n];
     var ch=cover?'<div class="ccover"><img src="'+coverThumb(cover,600)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="var c=this.closest(\'.ccover\');if(c)c.style.display=\'none\'"></div>':'';
     var area=it.areaMin?'<small style="color:var(--muted);font-weight:500"> · desde '+it.areaMin+' m²</small>':'';
-    return '<article class="card" style="animation-delay:'+Math.min(i*22,420)+'ms" onclick="openDD('+it._i+')">'
+    return '<article class="card" style="animation-delay:'+Math.min(i*22,420)+'ms" onclick="openDD('+it._i+','+it.dorm+')">'
       +compareBtn(it._i)
       +'<div class="ctop'+(cover?' has-cover':'')+'">'+ch+'<span class="cmono">'+monogram(p)+'</span>'
         +'<div style="display:flex;justify-content:flex-end;align-items:start"><span class="cdist">'+it.distN+'</span></div>'
@@ -2394,7 +2409,7 @@ function renderDevs(){
 
   function rowItem(it,i){
     var p=it.p;
-    return '<div class="lrow" style="animation-delay:'+Math.min(i*12,300)+'ms" onclick="openDD('+it._i+')">'
+    return '<div class="lrow" style="animation-delay:'+Math.min(i*12,300)+'ms" onclick="openDD('+it._i+','+it.dorm+')">'
       +'<div class="lcheck'+(inCmp(it._i)?' on':'')+'" data-cmp="'+it._i+'" onclick="toggleCmp('+it._i+',event)" title="Comparar"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></svg></div>'
       +'<div><div class="lname">'+projName(p)+' <span class="ltype">'+dtypeLabel(it.dorm)+'</span></div><div class="lsub">'+p.devN+' · '+it.distN+' · '+it.count+' unid.</div></div>'
       +'<div class="lcol-hide"><div class="lk">Desde</div><div class="lv em">'+(it.desde?pen(it.desde):'—')+'</div></div>'
@@ -2449,16 +2464,25 @@ function renderDevs(){
       body='<div class="rz-empty">No hay resultados con los filtros actuales. Ajusta los filtros e inténtalo de nuevo.</div>';
     }else{
       body=devNames.map(function(dev,gi){
-        var list=groups[dev].slice().sort(function(a,b){return (a.desde||1e12)-(b.desde||1e12);});
+        var list=groups[dev].slice();
         var count=list.reduce(function(a,it){return a+it.count;},0);
         var idx=('0'+(gi+1)).slice(-2);
-        var rows=list.map(function(it){
+        // cada nº de dormitorios tiene su propio bloque (sin mezclar), ordenado de menor a mayor precio
+        var byDorm={};
+        list.forEach(function(it){(byDorm[it.dorm]=byDorm[it.dorm]||[]).push(it);});
+        var dks=Object.keys(byDorm).map(Number).sort(function(a,b){return (a<0?99:a)-(b<0?99:b);});
+        var rowIt=function(it){
           var areas=it.units?it.units.map(function(u){return u[4];}).filter(Boolean):[];
           var arTxt=areas.length?(Math.min.apply(null,areas)+(Math.max.apply(null,areas)>Math.min.apply(null,areas)?'–'+Math.max.apply(null,areas):'')+' m²'):'—';
           var precio=it.desde?(pen(it.desde)+(it.hasta&&it.hasta>it.desde?' – '+it.hasta.toLocaleString('es-PE'):'')):'—';
           var dorm=it.dorm===0?'Estudio':(dormLabel(it.dorm)+' dorm.');
           var ent=Object.keys(it.ents).length?Object.keys(it.ents).sort().join(', '):'—';
           return '<tr><td class="rz-proj">'+projName(it.p)+'</td><td class="rz-dist">'+it.distN+'</td><td>'+dorm+'</td><td class="r">'+arTxt+'</td><td class="r rz-price">'+precio+'</td><td class="r">'+(it.cuotaMin?pen(it.cuotaMin):'—')+'</td><td class="r">'+ent+'</td></tr>';
+        };
+        var rows=dks.map(function(dk){
+          var sub=byDorm[dk].sort(function(a,b){return (a.desde||1e12)-(b.desde||1e12);});
+          var un=sub.reduce(function(a,it){return a+it.count;},0);
+          return '<tr class="rz-sub"><td colspan="7">'+dtypeLabel(dk)+' · '+un+' unidad'+(un===1?'':'es')+'</td></tr>'+sub.map(rowIt).join('');
         }).join('');
         return '<div class="rz-dev"><div class="rz-dev-h"><span class="rz-idx">'+idx+'</span><span class="rz-dev-n">'+dev+'</span><span class="rz-dev-c">'+list.length+' proyecto'+(list.length===1?'':'s')+' · '+count+' unidades</span></div>'
           +'<table class="rz-tbl"><thead><tr><th>Proyecto</th><th>Distrito</th><th>Tipo</th><th class="r">Área</th><th class="r">Precio desde – hasta</th><th class="r">Cuota/mes</th><th class="r">Entrega</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
