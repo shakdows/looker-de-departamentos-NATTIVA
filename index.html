@@ -927,7 +927,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.6);padding:2.4rem clamp(1re
         <div class="hstat"><span class="hstat-v em num" id="kproj">—</span><span class="hstat-k">Proyectos</span></div>
         <div class="hstat"><span class="hstat-v num" id="kunit">—</span><span class="hstat-k">Unidades</span></div>
         <div class="hstat"><span class="hstat-v num" id="kdist">—</span><span class="hstat-k">Distritos</span></div>
-        <div class="hstat"><span class="hstat-v num" id="kdesde">—</span><span class="hstat-k">Desde</span><span class="hstat-s">cuota desde <b id="kcuota">—</b></span></div>
+        <div class="hstat"><span class="hstat-v num" id="kdevs">—</span><span class="hstat-k">Desarrolladoras</span></div>
       </div>
     </div>
   </div>
@@ -1883,13 +1883,11 @@ function buildDD(){
   P.forEach(function(p,i){p._i=i;});
   // hero stats
   var totalU=P.reduce(function(a,p){return a+p.u.length;},0);
-  var allDesde=P.map(function(p){return p.desde;}).filter(Boolean);
-  var allCuota=[];P.forEach(function(p){if(p.cuotaMin)allCuota.push(p.cuotaMin);});
+  var devSet={};P.forEach(function(p){devSet[p.devN]=1;});
   animateCount('kproj',P.length);
   animateCount('kunit',totalU);
   animateCount('kdist',DIST.length);
-  document.getElementById('kdesde').textContent=pen(Math.min.apply(null,allDesde));
-  document.getElementById('kcuota').textContent=pen(Math.min.apply(null,allCuota))+'/mes';
+  animateCount('kdevs',Object.keys(devSet).length);
   document.getElementById('hsubn').textContent=totalU.toLocaleString('es-PE')+' unidades en '+P.length+' proyectos';
   document.getElementById('yr').textContent=new Date().getFullYear();
   // selects
