@@ -1948,12 +1948,7 @@ function renderDevs(){
     var m=meta[d]||{};
     tiles.push({filter:true,dev:d,name:m.name||titleCase(d),logo:m.logo||'',feat:!!m.feat,count:cnt[d]});
   });
-  // 2) aliados de solo-enlace (Google Drive) que NO están en el portafolio
-  PARTNERS.forEach(function(p){
-    if(p.s==='dev')return;
-    if(cnt[(p.n||'').toUpperCase()])return;
-    tiles.push({filter:false,name:p.n,url:p.u,logo:p.logo||'',s:p.s});
-  });
+  // Solo desarrolladoras presentes en el looker: los aliados de solo-enlace ya no se muestran.
   g.innerHTML=tiles.map(function(t,i){
     var logo=t.logo
       ? '<img class="ptile-img" src="'+t.logo+'" alt="'+t.name+'" loading="lazy" referrerpolicy="no-referrer" data-wm="'+t.name+'" onerror="devWM(this)">'
