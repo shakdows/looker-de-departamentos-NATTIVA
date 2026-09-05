@@ -1938,10 +1938,11 @@ function renderDevs(){
   });
   var tiles=[];
   // 1) TODAS las desarrolladoras con proyectos -> tarjeta que filtra el portafolio
-  //    (las destacadas, ej. EDIFICA, van primero; luego por número de proyectos)
+  //    Las principales van primero, en este orden fijo; el resto por número de proyectos.
+  var FEATURED_ORDER=['EDIFICA','V&V','GRATTO INMOBILIARIA','IMAGINA','CANTABRIA','MARCAN','GDC','INARCO','FRANCA'];
   Object.keys(cnt).sort(function(a,b){
-    var fa=(meta[a]&&meta[a].feat)?1:0,fb=(meta[b]&&meta[b].feat)?1:0;
-    if(fa!==fb)return fb-fa;
+    var fa=FEATURED_ORDER.indexOf(a),fb=FEATURED_ORDER.indexOf(b);
+    if(fa>=0||fb>=0){if(fa<0)return 1;if(fb<0)return -1;return fa-fb;}
     return cnt[b]-cnt[a];
   }).forEach(function(d){
     var m=meta[d]||{};
