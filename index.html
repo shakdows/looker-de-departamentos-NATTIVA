@@ -1960,7 +1960,7 @@ function renderDevs(){
     var srcLabel=t.filter?(t.count+' proyecto'+(t.count===1?'':'s')):(t.s==='dropbox'?'Dropbox':(t.s==='sheet'?'Lista de precios':'Google Drive'));
     var srcIcon=t.filter?'<svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-6h6v6"/></svg>':'<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
     var feat=t.feat?' ptile-feat':'';
-    var badge=t.feat?'<span class="ptile-badge">Principal</span>':'';
+    var badge='';
     var inner='<div class="ptile-logo">'+badge+logo+'</div>'
       +'<div class="ptile-body"><div><div class="ptile-name">'+t.name+'</div>'
       +'<div class="ptile-src">'+srcIcon+srcLabel+'</div></div>'
